@@ -1,0 +1,203 @@
+<!-- ...existing code... -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>MoodyProcess</title>
+    <link rel="stylesheet" href="index.css">
+    <style>
+        /* Barre de navigation améliorée */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(180deg,#f8fff6,#ecfdf5);
+            border-bottom: 1px solid #e6f4ea;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+        #brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        #logo { height: 44px; display:block; }
+        #site-title { font-weight:700; color:#166534; font-size:1.15rem; margin:0; }
+        nav { display:flex; align-items:center; gap:1rem; }
+        nav a {
+            color:#065f46;
+            text-decoration:none;
+            padding:0.45rem 0.7rem;
+            border-radius:8px;
+            font-weight:600;
+        }
+        nav a:hover { background:#ecfdf5; }
+        #login-btn {
+            background:#16a34a;
+            color:white;
+            border:none;
+            padding:0.5rem 0.8rem;
+            border-radius:10px;
+            cursor:pointer;
+            font-weight:700;
+            box-shadow: 0 6px 16px rgba(22,163,74,0.12);
+        }
+        #login-btn:hover { background:#15803d; transform:translateY(-1px); }
+
+        /* Popup modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(2,6,23,0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 80;
+        }
+        .modal {
+            background: linear-gradient(180deg,#ffffff,#f7fff8);
+            border-radius: 12px;
+            width: min(420px, 94%);
+            padding: 1.1rem;
+            box-shadow: 0 20px 50px rgba(2,6,23,0.16);
+            border: 1px solid #e6f4ea;
+        }
+        .modal h3 { margin:0 0 .5rem 0; color:#065f46; }
+        .modal label { font-size:0.85rem; color:#064e3b; display:block; margin-top:0.6rem; }
+        .modal input[type="text"],
+        .modal input[type="password"] {
+            width:100%;
+            padding:0.6rem;
+            margin-top:0.25rem;
+            border-radius:8px;
+            border:1px solid #dbeadc;
+            box-sizing: border-box;
+        }
+        .modal .actions {
+            display:flex;
+            justify-content: flex-end;
+            gap:0.6rem;
+            margin-top:1rem;
+        }
+        .btn-secondary {
+            background: transparent;
+            border:1px solid #cfead6;
+            padding:0.5rem 0.8rem;
+            border-radius:8px;
+            color:#064e3b;
+            cursor:pointer;
+        }
+        .btn-primary {
+            background:#16a34a;
+            color:white;
+            padding:0.5rem 0.9rem;
+            border-radius:8px;
+            border:none;
+            cursor:pointer;
+        }
+
+        /* petit ajustement responsive pour les liens */
+        #page_links { display:flex; flex-direction:column; gap:0.6rem; margin-top:1rem; }
+        @media(min-width:720px) {
+            #page_links { flex-direction:row; gap:1rem; }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div id="brand">
+            <a href="index.html" title="Accueil"><img id="logo" src="../assets/moodyjournal.svg" alt="Logo MoodyJournal"></a>
+            <div>
+                <p id="site-title">MoodyJournal 🌿</p>
+                <small style="color:#064e3b;opacity:.8">Un espace pour réfléchir au quotidien</small>
+            </div>
+        </div>
+
+        <nav aria-label="Navigation principale">
+            <a href="#about">À propos</a>
+            <a href="journal.html">Écrire</a>
+            <a href="view.html">Consulter</a>
+            <a href="settings.html">Paramètres</a>
+            <button id="login-btn" type="button" aria-haspopup="dialog" aria-controls="login-modal">Connexion</button>
+        </nav>
+    </header>
+
+    <main style="padding:1.25rem;">
+        <h2 id="welcome">Bienvenue sur <a href="/index.html">MoodyJournal🌿</a></h2>
+
+        <p>Un endroit sûr pour réfléchir, noter et analyser son quotidien :D</p>
+
+        <div id="page_links">
+            <a href="journal.html">📘 Écrire mon journal ✍🏽</a>
+            <a href="view.html">👁️ Consulter mes données 📄</a>
+            <a href="settings.html">⚙️ Paramètres</a>
+            <a href="index.html">🌐 Accéder au blog</a>
+        </div>
+    </main>
+
+    <footer style="padding:1rem;text-align:center;color:#6b7280;">
+        <p>@2025. Tous droits réservés.</p>
+    </footer>
+
+    <!-- Modal de connexion -->
+    <div id="login-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="modal" role="document" aria-labelledby="login-title">
+            <h3 id="login-title">Se connecter</h3>
+            <form method="post" action="/login" id="login-form">
+                <label for="username">Nom d'utilisateur</label>
+                <input id="username" name="username" type="text" required autocomplete="username" />
+                <label for="password">Mot de passe</label>
+                <input id="password" name="password" type="password" required autocomplete="current-password" />
+                <div style="margin-top:.6rem;font-size:.85rem;color:#475569;">
+                    <p>Utilisateurs test : Alix / Lallie / Emmanuel / Noa</p>
+                </div>
+                <div class="actions">
+                    <button type="button" class="btn-secondary" id="cancel-login">Annuler</button>
+                    <button type="submit" class="btn-primary">Se connecter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Contrôle du modal de connexion
+        (function(){
+            const loginBtn = document.getElementById('login-btn');
+            const modal = document.getElementById('login-modal');
+            const cancelBtn = document.getElementById('cancel-login');
+            const usernameInput = document.getElementById('username');
+
+            function openModal() {
+                modal.style.display = 'flex';
+                modal.setAttribute('aria-hidden', 'false');
+                // focus sur le premier champ
+                setTimeout(()=> usernameInput.focus(), 50);
+                document.addEventListener('keydown', onKeyDown);
+            }
+            function closeModal() {
+                modal.style.display = 'none';
+                modal.setAttribute('aria-hidden', 'true');
+                document.removeEventListener('keydown', onKeyDown);
+            }
+            function onKeyDown(e){
+                if(e.key === 'Escape') closeModal();
+            }
+
+            loginBtn.addEventListener('click', openModal);
+            cancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', function(e){
+                if(e.target === modal) closeModal(); // clic sur le backdrop ferme
+            });
+
+            // accessibilité: ouvrir modal si url contient ?login
+            if(location.search.includes('login')) openModal();
+        })();
+    </script>
+</body>
+</html>
+<!-- ...existing code... -->
