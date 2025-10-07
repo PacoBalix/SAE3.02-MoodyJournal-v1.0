@@ -3,11 +3,114 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Affichage Journal</title>
+  <title>Tableau de Bord - MoodyJournal</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-<body class="bg-gradient-radial min-h-screen p-6">
-  <h1 class="text-4xl font-bold text-emerald-800 mb-6 text-center">Mes Entrées de Journal</h1>
+<body class="bg-gradient-to-br from-emerald-50 to-teal-100 min-h-screen">
+  <!-- Header -->
+  <header class="bg-white shadow-sm border-b border-gray-100 mb-8">
+    <div class="max-w-7xl mx-auto px-6 py-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+          <a href="index.html" class="flex items-center space-x-3">
+            <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-10">
+            <div>
+              <h1 class="text-xl font-bold text-emerald-800">MoodyJournal</h1>
+              <p class="text-sm text-emerald-600">Tableau de bord</p>
+            </div>
+          </a>
+        </div>
+        <nav class="flex items-center space-x-6">
+          <a href="journal.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
+          <a href="settings.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
+          <button id="exportBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            📊 Exporter
+          </button>
+          <a href="index.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <div class="max-w-7xl mx-auto px-6 pb-12">
+    <!-- Stats Overview -->
+    <div class="grid md:grid-cols-4 gap-6 mb-8">
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <div class="flex items-center">
+          <div class="p-3 bg-emerald-100 rounded-lg">
+            <span class="text-2xl">📊</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Total d'entrées</p>
+            <p id="total-entries" class="text-2xl font-bold text-gray-800">0</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <div class="flex items-center">
+          <div class="p-3 bg-blue-100 rounded-lg">
+            <span class="text-2xl">😊</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Moyenne d'humeur</p>
+            <p id="avg-mood" class="text-2xl font-bold text-gray-800">0/10</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <div class="flex items-center">
+          <div class="p-3 bg-purple-100 rounded-lg">
+            <span class="text-2xl">💤</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Sommeil moyen</p>
+            <p id="avg-sleep" class="text-2xl font-bold text-gray-800">0h</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <div class="flex items-center">
+          <div class="p-3 bg-orange-100 rounded-lg">
+            <span class="text-2xl">🔥</span>
+          </div>
+          <div class="ml-4">
+            <p class="text-sm text-gray-600">Série actuelle</p>
+            <p id="current-streak" class="text-2xl font-bold text-gray-800">0 jours</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid lg:grid-cols-2 gap-8 mb-8">
+      <!-- Mood Chart -->
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Évolution de l'humeur</h3>
+        <canvas id="moodChart" width="400" height="200"></canvas>
+      </div>
+      
+      <!-- Sleep Chart -->
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Heures de sommeil</h3>
+        <canvas id="sleepChart" width="400" height="200"></canvas>
+      </div>
+    </div>
+
+    <!-- Mood Distribution -->
+    <div class="bg-white rounded-xl p-6 shadow-lg mb-8">
+      <h3 class="text-lg font-semibold text-gray-800 mb-4">Distribution des humeurs</h3>
+      <div id="mood-distribution" class="grid grid-cols-5 gap-4">
+        <!-- Mood bars will be generated here -->
+      </div>
+    </div>
+
+    <!-- Entries Navigation -->
+    <div class="bg-white rounded-xl p-6 shadow-lg">
+      <h2 class="text-2xl font-bold text-emerald-800 mb-6 text-center">Mes Entrées de Journal</h2>
 
   <div class="max-w-3xl mx-auto bg-white/90 rounded-xl p-6 shadow-lg">
     <div class="flex justify-between mb-4">
@@ -23,9 +126,208 @@
     </div>
   </div>
 
-  <script>
-    let entries = [];
-    let currentIndex = 0;
+<script>
+  let entries = [];
+  let currentIndex = 0;
+  let moodChart = null;
+  let sleepChart = null;
+
+  // Vérifier la session avant de permettre l'accès
+  async function checkSession() {
+    try {
+      const response = await fetch('/api/session');
+      const data = await response.json();
+      
+      if (!data.authenticated) {
+        console.log('❌ Non connecté, redirection vers login');
+        window.location.href = '/login?redirect=view.html';
+      } else {
+        console.log(`✅ Connecté en tant que: ${data.user}`);
+      }
+    } catch (err) {
+      console.error('❌ Erreur de vérification de session:', err);
+      window.location.href = '/login?redirect=view.html';
+    }
+  }
+
+  // Calculer les statistiques
+  function calculateStats(entries) {
+    if (entries.length === 0) return {
+      total: 0,
+      avgMood: 0,
+      avgSleep: 0,
+      streak: 0
+    };
+
+    const total = entries.length;
+    const moods = entries.map(e => parseInt(e.mood) || 0).filter(m => m > 0);
+    const sleeps = entries.map(e => parseFloat(e.sleep) || 0).filter(s => s > 0);
+    
+    const avgMood = moods.length > 0 ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1) : 0;
+    const avgSleep = sleeps.length > 0 ? (sleeps.reduce((a, b) => a + b, 0) / sleeps.length).toFixed(1) : 0;
+    
+    // Calculer la série actuelle (jours consécutifs)
+    let streak = 0;
+    const today = new Date();
+    const sortedEntries = entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    for (let i = 0; i < sortedEntries.length; i++) {
+      const entryDate = new Date(sortedEntries[i].date);
+      const daysDiff = Math.floor((today - entryDate) / (1000 * 60 * 60 * 24));
+      
+      if (daysDiff === i) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+
+    return { total, avgMood, avgSleep, streak };
+  }
+
+  // Mettre à jour les statistiques
+  function updateStats(entries) {
+    const stats = calculateStats(entries);
+    
+    document.getElementById('total-entries').textContent = stats.total;
+    document.getElementById('avg-mood').textContent = `${stats.avgMood}/10`;
+    document.getElementById('avg-sleep').textContent = `${stats.avgSleep}h`;
+    document.getElementById('current-streak').textContent = `${stats.streak} jours`;
+  }
+
+  // Créer le graphique d'humeur
+  function createMoodChart(entries) {
+    const ctx = document.getElementById('moodChart').getContext('2d');
+    
+    if (moodChart) {
+      moodChart.destroy();
+    }
+
+    const sortedEntries = entries.sort((a, b) => new Date(a.date) - new Date(b.date));
+    const labels = sortedEntries.map(e => new Date(e.date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }));
+    const moodData = sortedEntries.map(e => parseInt(e.mood) || 0);
+
+    moodChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Humeur (/10)',
+          data: moodData,
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 10,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  }
+
+  // Créer le graphique de sommeil
+  function createSleepChart(entries) {
+    const ctx = document.getElementById('sleepChart').getContext('2d');
+    
+    if (sleepChart) {
+      sleepChart.destroy();
+    }
+
+    const sortedEntries = entries.sort((a, b) => new Date(a.date) - new Date(b.date));
+    const labels = sortedEntries.map(e => new Date(e.date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }));
+    const sleepData = sortedEntries.map(e => parseFloat(e.sleep) || 0);
+
+    sleepChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Heures de sommeil',
+          data: sleepData,
+          backgroundColor: '#8b5cf6',
+          borderColor: '#7c3aed',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 12,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  }
+
+  // Créer la distribution des humeurs
+  function createMoodDistribution(entries) {
+    const distribution = {};
+    for (let i = 1; i <= 10; i++) {
+      distribution[i] = 0;
+    }
+    
+    entries.forEach(entry => {
+      const mood = parseInt(entry.mood);
+      if (mood >= 1 && mood <= 10) {
+        distribution[mood]++;
+      }
+    });
+
+    const container = document.getElementById('mood-distribution');
+    container.innerHTML = '';
+
+    for (let mood = 1; mood <= 10; mood++) {
+      const count = distribution[mood];
+      const maxCount = Math.max(...Object.values(distribution));
+      const height = maxCount > 0 ? (count / maxCount) * 100 : 0;
+      
+      const moodDiv = document.createElement('div');
+      moodDiv.className = 'flex flex-col items-center';
+      moodDiv.innerHTML = `
+        <div class="w-full bg-gray-200 rounded-t-lg relative" style="height: 100px;">
+          <div class="absolute bottom-0 w-full rounded-t-lg transition-all duration-500" 
+               style="height: ${height}%; background: ${getMoodColor(mood)};"></div>
+        </div>
+        <span class="text-xs text-gray-600 mt-2">${mood}</span>
+        <span class="text-xs text-gray-500">${count}</span>
+      `;
+      container.appendChild(moodDiv);
+    }
+  }
+
+  // Obtenir la couleur selon l'humeur
+  function getMoodColor(mood) {
+    if (mood <= 3) return '#ef4444'; // Rouge
+    if (mood <= 5) return '#f59e0b'; // Orange
+    if (mood <= 7) return '#eab308'; // Jaune
+    if (mood <= 9) return '#22c55e'; // Vert
+    return '#10b981'; // Vert émeraude
+  }
 
     // Convertit la date ISO string en format affichable (ex : 26 septembre 2025)
     function formatDate(dateStr) {
@@ -33,51 +335,214 @@
       return new Date(dateStr).toLocaleDateString('fr-FR', options);
     }
 
-    // Affiche une entrée donnée dans #entryDisplay
-    function displayEntry(entry) {
-      if (!entry) {
-        document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500">Aucune entrée pour cette date</p>';
-        return;
-      }
-      document.getElementById('entryDisplay').innerHTML = `
-        <h2 class="text-xl font-semibold">${formatDate(entry.date)}</h2>
-        <p><strong>Jour :</strong> ${entry.day}</p>
-        <p><strong>Humeur :</strong> ${entry.mood} / 10</p>
-        <p><strong>Mots qui décrivent :</strong> ${entry.feelingWords.join(', ')}</p>
-        <p><strong>Gratitude :</strong> ${entry.gratitude.join(', ')}</p>
-        <p><strong>Meilleur moment :</strong> ${entry.bestMoment}</p>
-        <p><strong>Sommeil :</strong> ${entry.sleep} heures</p>
-        <p><strong>Exercice :</strong> ${entry.exercise}</p>
-        <p><strong>Nutrition :</strong> ${entry.nutrition}</p>
-        <p><strong>Habitudes productives :</strong> ${entry.productiveHabits}</p>
-        <p><strong>Habitudes à améliorer :</strong> ${entry.slippedHabits}</p>
-        <p><strong>Challenges :</strong> ${entry.challenges}</p>
-        <p><strong>Réaction :</strong> ${entry.reaction}</p>
-        <p><strong>Approche différente :</strong> ${entry.differentApproach}</p>
-        <p><strong>Patterns :</strong> ${entry.patterns}</p>
-        <p><strong>Leçons :</strong> ${entry.lessons}</p>
-        <p><strong>Ce qui donne de l'énergie :</strong> ${entry.energyGivers}</p>
-        <p><strong>Ce qui fatigue :</strong> ${entry.energyDrainers}</p>
-        <p><strong>Amélioration souhaitée :</strong> ${entry.improvement}</p>
-        <p><strong>Affirmation :</strong> ${entry.affirmation}</p>
-        <p><strong>Notes extra :</strong> ${entry.extraNotes}</p>
-      `;
+  // Affiche une entrée donnée dans #entryDisplay
+  function displayEntry(entry) {
+    if (!entry) {
+      document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500">Aucune entrée pour cette date</p>';
+      return;
     }
 
-    // Charge les données depuis le serveur
-    async function loadEntries() {
-      try {
-        const res = await fetch('/api/journal-entries');
-        if (!res.ok) throw new Error('Erreur lors du chargement des entrées.');
-        entries = await res.json();
-        entries.sort((a, b) => new Date(a.date) - new Date(b.date));
-        currentIndex = entries.length - 1; // Commencer par la dernière entrée
+    const mood = parseInt(entry.mood) || 0;
+    const moodEmoji = getMoodEmoji(mood);
+    const moodColor = getMoodColor(mood);
+    
+    document.getElementById('entryDisplay').innerHTML = `
+      <div class="bg-white rounded-xl p-6 shadow-lg">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">${formatDate(entry.date)}</h2>
+          <div class="flex items-center space-x-4">
+            <div class="text-center">
+              <div class="text-3xl">${moodEmoji}</div>
+              <div class="text-sm text-gray-600">Humeur</div>
+            </div>
+            <div class="text-center">
+              <div class="text-2xl font-bold" style="color: ${moodColor}">${mood}/10</div>
+              <div class="text-sm text-gray-600">Score</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Section émotions -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">😊 Émotions & Gratitude</h3>
+            ${entry.feelingWords.filter(w => w.trim()).length > 0 ? `
+              <div>
+                <p class="text-sm text-gray-600 mb-2">Mots qui décrivent :</p>
+                <div class="flex flex-wrap gap-2">
+                  ${entry.feelingWords.filter(w => w.trim()).map(word => 
+                    `<span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm">${word}</span>`
+                  ).join('')}
+                </div>
+              </div>
+            ` : ''}
+            
+            ${entry.gratitude.filter(g => g.trim()).length > 0 ? `
+              <div>
+                <p class="text-sm text-gray-600 mb-2">Gratitude :</p>
+                <div class="flex flex-wrap gap-2">
+                  ${entry.gratitude.filter(g => g.trim()).map(item => 
+                    `<span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">${item}</span>`
+                  ).join('')}
+                </div>
+              </div>
+            ` : ''}
+            
+            ${entry.bestMoment ? `
+              <div>
+                <p class="text-sm text-gray-600 mb-2">Meilleur moment :</p>
+                <p class="text-gray-800 bg-green-50 p-3 rounded-lg">${entry.bestMoment}</p>
+              </div>
+            ` : ''}
+          </div>
+
+          <!-- Section bien-être -->
+          <div class="space-y-4">
+            <h3 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">💚 Bien-être</h3>
+            ${entry.sleep ? `
+              <div class="flex items-center space-x-3">
+                <span class="text-2xl">💤</span>
+                <div>
+                  <p class="text-sm text-gray-600">Sommeil</p>
+                  <p class="font-semibold">${entry.sleep} heures</p>
+                </div>
+              </div>
+            ` : ''}
+            
+            ${entry.exercise ? `
+              <div class="flex items-center space-x-3">
+                <span class="text-2xl">🏃</span>
+                <div>
+                  <p class="text-sm text-gray-600">Exercice</p>
+                  <p class="font-semibold">${entry.exercise}</p>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        <!-- Section réflexions -->
+        ${(entry.productiveHabits || entry.slippedHabits || entry.challenges || entry.lessons) ? `
+          <div class="mt-6 space-y-4">
+            <h3 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">🤔 Réflexions</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              ${entry.productiveHabits ? `
+                <div class="bg-green-50 p-4 rounded-lg">
+                  <p class="text-sm font-medium text-green-800 mb-2">✅ Habitudes productives</p>
+                  <p class="text-green-700">${entry.productiveHabits}</p>
+                </div>
+              ` : ''}
+              
+              ${entry.slippedHabits ? `
+                <div class="bg-orange-50 p-4 rounded-lg">
+                  <p class="text-sm font-medium text-orange-800 mb-2">⚠️ Habitudes à améliorer</p>
+                  <p class="text-orange-700">${entry.slippedHabits}</p>
+                </div>
+              ` : ''}
+              
+              ${entry.challenges ? `
+                <div class="bg-blue-50 p-4 rounded-lg">
+                  <p class="text-sm font-medium text-blue-800 mb-2">🎯 Challenges</p>
+                  <p class="text-blue-700">${entry.challenges}</p>
+                </div>
+              ` : ''}
+              
+              ${entry.lessons ? `
+                <div class="bg-purple-50 p-4 rounded-lg">
+                  <p class="text-sm font-medium text-purple-800 mb-2">📚 Leçons apprises</p>
+                  <p class="text-purple-700">${entry.lessons}</p>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Section énergie -->
+        ${(entry.energyGivers || entry.energyDrainers) ? `
+          <div class="mt-6 space-y-4">
+            <h3 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">⚡ Énergie</h3>
+            <div class="grid md:grid-cols-2 gap-4">
+              ${entry.energyGivers ? `
+                <div class="bg-emerald-50 p-4 rounded-lg">
+                  <p class="text-sm font-medium text-emerald-800 mb-2">🔋 Ce qui donne de l'énergie</p>
+                  <p class="text-emerald-700">${entry.energyGivers}</p>
+                </div>
+              ` : ''}
+              
+              ${entry.energyDrainers ? `
+                <div class="bg-red-50 p-4 rounded-lg">
+                  <p class="text-sm font-medium text-red-800 mb-2">🔌 Ce qui fatigue</p>
+                  <p class="text-red-700">${entry.energyDrainers}</p>
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Section notes -->
+        ${(entry.affirmation || entry.improvement || entry.extraNotes) ? `
+          <div class="mt-6 space-y-4">
+            <h3 class="text-lg font-semibold text-gray-800 border-b border-gray-200 pb-2">📝 Notes</h3>
+            ${entry.affirmation ? `
+              <div class="bg-yellow-50 p-4 rounded-lg">
+                <p class="text-sm font-medium text-yellow-800 mb-2">💪 Affirmation</p>
+                <p class="text-yellow-700 italic">"${entry.affirmation}"</p>
+              </div>
+            ` : ''}
+            
+            ${entry.improvement ? `
+              <div class="bg-indigo-50 p-4 rounded-lg">
+                <p class="text-sm font-medium text-indigo-800 mb-2">🎯 Amélioration souhaitée</p>
+                <p class="text-indigo-700">${entry.improvement}</p>
+              </div>
+            ` : ''}
+            
+            ${entry.extraNotes ? `
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <p class="text-sm font-medium text-gray-800 mb-2">📄 Notes supplémentaires</p>
+                <p class="text-gray-700">${entry.extraNotes}</p>
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  // Obtenir l'emoji selon l'humeur
+  function getMoodEmoji(mood) {
+    if (mood <= 2) return '😢';
+    if (mood <= 4) return '😔';
+    if (mood <= 6) return '😐';
+    if (mood <= 8) return '😊';
+    return '😄';
+  }
+
+  // Charge les données depuis le serveur
+  async function loadEntries() {
+    try {
+      const res = await fetch('/api/journal-entries');
+      if (!res.ok) throw new Error('Erreur lors du chargement des entrées.');
+      entries = await res.json();
+      entries.sort((a, b) => new Date(a.date) - new Date(b.date));
+      currentIndex = entries.length - 1; // Commencer par la dernière entrée
+      
+      // Mettre à jour toutes les visualisations
+      updateStats(entries);
+      createMoodChart(entries);
+      createSleepChart(entries);
+      createMoodDistribution(entries);
+      
+      if (entries.length > 0) {
         displayEntry(entries[currentIndex]);
         document.getElementById('datePicker').value = entries[currentIndex].date;
-      } catch (e) {
-        document.getElementById('entryDisplay').innerHTML = `<p class="text-red-600 text-center">${e.message}</p>`;
+      } else {
+        document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500">Aucune entrée trouvée. Commencez à écrire votre journal !</p>';
       }
+    } catch (e) {
+      document.getElementById('entryDisplay').innerHTML = `<p class="text-red-600 text-center">${e.message}</p>`;
     }
+  }
 
     // Gestion des boutons et datePicker
     document.getElementById('prevBtn').addEventListener('click', () => {
@@ -107,8 +572,138 @@
       }
     });
 
-    // Initialisation
-    loadEntries();
+    // Fonction pour charger les paramètres utilisateur
+  async function loadUserSettings() {
+    try {
+      const response = await fetch('/api/user-settings', {
+        credentials: 'same-origin'
+      });
+      
+      if (response.ok) {
+        const settings = await response.json();
+        console.log('📊 Paramètres chargés pour l\'export:', settings);
+        return settings;
+      } else {
+        console.log('📁 Aucun paramètre trouvé, utilisation des valeurs par défaut');
+        return {
+          theme: 'emerald',
+          sections: ['mood', 'goals', 'reflections'],
+          notifications: [],
+          reminderTime: '20:00'
+        };
+      }
+    } catch (err) {
+      console.error('❌ Erreur lors du chargement des paramètres:', err);
+      return {
+        theme: 'emerald',
+        sections: ['mood', 'goals', 'reflections'],
+        notifications: [],
+        reminderTime: '20:00'
+      };
+    }
+  }
+
+  // Fonction d'export filtré
+  async function exportFilteredData() {
+    try {
+      console.log('📊 Début de l\'export filtré...');
+      
+      // Charger les paramètres utilisateur
+      const userSettings = await loadUserSettings();
+      const enabledSections = userSettings.sections || ['mood', 'goals', 'reflections'];
+      
+      console.log('📝 Sections activées pour l\'export:', enabledSections);
+      
+      // Filtrer les données selon les sections activées
+      const filteredEntries = entries.map(entry => {
+        const filteredEntry = {
+          date: entry.date,
+          day: entry.day,
+          savedAt: entry.savedAt
+        };
+        
+        // Ajouter seulement les sections activées
+        if (enabledSections.includes('mood') && entry.mood) {
+          filteredEntry.mood = entry.mood;
+          filteredEntry.feelingWords = entry.feelingWords;
+        }
+        
+        if (enabledSections.includes('gratitude') && (entry.gratitude || entry.bestMoment)) {
+          if (entry.gratitude) filteredEntry.gratitude = entry.gratitude;
+          if (entry.bestMoment) filteredEntry.bestMoment = entry.bestMoment;
+        }
+        
+        if (enabledSections.includes('goals') && (entry.sleep || entry.exercise || entry.nutrition)) {
+          if (entry.sleep) filteredEntry.sleep = entry.sleep;
+          if (entry.exercise) filteredEntry.exercise = entry.exercise;
+          if (entry.nutrition) filteredEntry.nutrition = entry.nutrition;
+          if (entry.productiveHabits) filteredEntry.productiveHabits = entry.productiveHabits;
+          if (entry.slippedHabits) filteredEntry.slippedHabits = entry.slippedHabits;
+        }
+        
+        if (enabledSections.includes('reflections') && (entry.challenges || entry.patterns)) {
+          if (entry.challenges) filteredEntry.challenges = entry.challenges;
+          if (entry.reaction) filteredEntry.reaction = entry.reaction;
+          if (entry.differentApproach) filteredEntry.differentApproach = entry.differentApproach;
+          if (entry.patterns) filteredEntry.patterns = entry.patterns;
+          if (entry.lessons) filteredEntry.lessons = entry.lessons;
+          if (entry.energyGivers) filteredEntry.energyGivers = entry.energyGivers;
+          if (entry.energyDrainers) filteredEntry.energyDrainers = entry.energyDrainers;
+        }
+        
+        if (enabledSections.includes('learnings') && (entry.learnings || entry.newKnowledge)) {
+          if (entry.learnings) filteredEntry.learnings = entry.learnings;
+          if (entry.newKnowledge) filteredEntry.newKnowledge = entry.newKnowledge;
+        }
+        
+        if (enabledSections.includes('tomorrow') && (entry.improvement || entry.affirmation)) {
+          if (entry.improvement) filteredEntry.improvement = entry.improvement;
+          if (entry.affirmation) filteredEntry.affirmation = entry.affirmation;
+        }
+        
+        // Toujours inclure les notes supplémentaires
+        if (entry.extraNotes) filteredEntry.extraNotes = entry.extraNotes;
+        
+        return filteredEntry;
+      });
+      
+      // Créer le fichier JSON
+      const exportData = {
+        exportDate: new Date().toISOString(),
+        userSettings: userSettings,
+        enabledSections: enabledSections,
+        totalEntries: filteredEntries.length,
+        entries: filteredEntries
+      };
+      
+      // Télécharger le fichier
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `moody-journal-export-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      console.log('✅ Export terminé avec succès');
+      alert(`Export terminé ! ${filteredEntries.length} entrées exportées selon vos paramètres.`);
+      
+    } catch (err) {
+      console.error('❌ Erreur lors de l\'export:', err);
+      alert('Erreur lors de l\'export des données.');
+    }
+  }
+
+  // Gestionnaire d'événement pour le bouton d'export
+  document.getElementById('exportBtn').addEventListener('click', exportFilteredData);
+
+  // Initialisation
+    checkSession().then(() => {
+      loadEntries();
+    });
   </script>
+  <script src="/js/theme-manager.js"></script>
 </body>
 </html>

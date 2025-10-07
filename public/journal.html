@@ -213,6 +213,39 @@
             transform: scale(1.1);
         }
 
+        /* Styles pour les thèmes */
+        .theme-blue {
+            --primary-color: #3b82f6;
+            --primary-light: #dbeafe;
+            --primary-dark: #1e40af;
+        }
+
+        .theme-purple {
+            --primary-color: #8b5cf6;
+            --primary-light: #ede9fe;
+            --primary-dark: #6d28d9;
+        }
+
+        .theme-emerald {
+            --primary-color: #10b981;
+            --primary-light: #d1fae5;
+            --primary-dark: #047857;
+        }
+
+        /* Application des couleurs de thème */
+        .theme-blue .text-emerald-700 { color: var(--primary-color) !important; }
+        .theme-blue .bg-emerald-600 { background-color: var(--primary-color) !important; }
+        .theme-blue .bg-emerald-700 { background-color: var(--primary-dark) !important; }
+        .theme-blue .hover\\:bg-emerald-700:hover { background-color: var(--primary-dark) !important; }
+        .theme-blue .focus\\:ring-emerald-500:focus { --tw-ring-color: var(--primary-color) !important; }
+        .theme-blue .border-emerald-500 { border-color: var(--primary-color) !important; }
+
+        .theme-purple .text-emerald-700 { color: var(--primary-color) !important; }
+        .theme-purple .bg-emerald-600 { background-color: var(--primary-color) !important; }
+        .theme-purple .bg-emerald-700 { background-color: var(--primary-dark) !important; }
+        .theme-purple .hover\\:bg-emerald-700:hover { background-color: var(--primary-dark) !important; }
+        .theme-purple .focus\\:ring-emerald-500:focus { --tw-ring-color: var(--primary-color) !important; }
+        .theme-purple .border-emerald-500 { border-color: var(--primary-color) !important; }
 
     </style>
 </head>
@@ -276,7 +309,7 @@
             </div>
 
             <!-- Mood Check-in Section -->
-            <div class="p-6 border-b border-gray-100 section-card" data-aos="fade-up">
+            <div class="p-6 border-b border-gray-100 section-card mood-section" data-aos="fade-up">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="smile" class="mr-2"></i> Mood Check-in
                 </h2>
@@ -335,7 +368,7 @@
             </div>
 
             <!-- Gratitude Section -->
-            <div class="p-6 border-b border-gray-100 section-card" data-aos="fade-up">
+            <div class="p-6 border-b border-gray-100 section-card gratitude-section" data-aos="fade-up">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="sun" class="mr-2"></i> Gratitude & Positives
                 </h2>
@@ -365,7 +398,7 @@
             </div>
 
             <!-- Habits Section -->
-            <div class="p-6 border-b border-gray-100 section-card" data-aos="fade-up">
+            <div class="p-6 border-b border-gray-100 section-card goals-section" data-aos="fade-up">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="activity" class="mr-2"></i> Habits & Actions
                 </h2>
@@ -446,7 +479,7 @@
             </div>
 
             <!-- Reflections Section -->
-            <div class="p-6 border-b border-gray-100 section-card" data-aos="fade-up">
+            <div class="p-6 border-b border-gray-100 section-card reflections-section" data-aos="fade-up">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="eye" class="mr-2"></i> Reflections & Lessons
                 </h2>
@@ -481,7 +514,7 @@
             </div>
 
             <!-- Next Steps Section -->
-            <div class="p-6 border-b border-gray-100 section-card" data-aos="fade-up">
+            <div class="p-6 border-b border-gray-100 section-card tomorrow-section" data-aos="fade-up">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="target" class="mr-2"></i> Next Step / Tomorrow's Intention
                 </h2>
@@ -498,6 +531,27 @@
                         <textarea id="affirmation"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                             rows="2" placeholder="Write your affirmation here..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Learnings Section -->
+            <div class="p-6 border-b border-gray-100 section-card learnings-section" data-aos="fade-up">
+                <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
+                    <i data-feather="book-open" class="mr-2"></i> What I Learned Today
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">What did I learn about myself today?</label>
+                        <textarea id="learnings"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="3" placeholder="What insights did I gain about myself?"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">What new knowledge or skills did I acquire?</label>
+                        <textarea id="new-knowledge"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2" placeholder="Any new information, skills, or perspectives?"></textarea>
                     </div>
                 </div>
             </div>
@@ -530,7 +584,8 @@
         </footer>
     </div>
 </body>
-<script src="./journal.js"></script>
+    <script src="/js/theme-manager.js"></script>
+    <script src="./journal.js"></script>
 <!-- Floating home button -->
 <a id="home-button" href="./index.html" aria-label="Retour à l'accueil" title="Accueil">
         <i data-feather="home"></i>

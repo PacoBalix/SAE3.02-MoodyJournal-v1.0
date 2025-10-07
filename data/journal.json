@@ -1,132 +1,297 @@
-[
-  {
-    "user": "Alix",
-    "day": "Friday",
-    "mood": "7",
-    "date": "2025-09-26",
-    "feelingWords": [
-      "Determined",
-      "Revitalized",
-      "Courageus"
-    ],
-    "gratitude": [
-      "Node.js",
-      "HTML,CSS,JS",
-      "My teamates"
-    ],
-    "bestMoment": "",
-    "sleep": "",
-    "exercise": "",
-    "productiveHabits": "",
-    "slippedHabits": "",
-    "challenges": "",
-    "reaction": "",
-    "differentApproach": "",
-    "patterns": "",
-    "lessons": "",
-    "energyGivers": "",
-    "energyDrainers": "",
-    "improvement": "",
-    "affirmation": "",
-    "extraNotes": "This is a test entry to see if the journal works.",
-    "savedAt": "2025-09-26T12:11:31.790Z"
-  },
-  {
-    "user": "Alix",
-    "date": "2025-09-26",
-    "day": "Friday",
-    "mood": "8",
-    "feelingWords": [
-      "Petit",
-      "Mot",
-      "Doux"
-    ],
-    "gratitude": [
-      "Being a junior developper",
-      "Having AI agents to helps me learn and code",
-      "Ditching Math and Physic class"
-    ],
-    "bestMoment": "Working on this project with my colleagues",
-    "sleep": "7",
-    "exercise": "Sport",
-    "nutrition": "Good",
-    "productiveHabits": "Working on myself, reading, doing sports, learning.",
-    "slippedHabits": "la fleeemmmmeee",
-    "challenges": "la fleeemme",
-    "reaction": "la flemme",
-    "differentApproach": "la flemme",
-    "patterns": "la lfeeeme",
-    "lessons": "la",
-    "energyGivers": "fleemme",
-    "energyDrainers": "nan vrmt",
-    "improvement": "c",
-    "affirmation": "bon?",
-    "extraNotes": "oui c finis :)",
-    "savedAt": "2025-09-26T12:23:08.591Z"
-  },
-  {
-    "user": "Alix",
-    "date": "2025-09-27",
-    "day": "Monday",
-    "mood": "2",
-    "feelingWords": [
-      "Fatigué",
-      "Avachi",
-      "Distrait"
-    ],
-    "gratitude": [
-      "Ma famille qui est là pour moi",
-      "Les librairies Internet qui documente la façon dont on peux créer une page web",
-      "Les repas chaud que j'ai pu mangé aujourd'hui"
-    ],
-    "bestMoment": "Quand je suis sortis promener mon chien",
-    "sleep": "10",
-    "exercise": "Course, pompe, traction",
-    "nutrition": "Average",
-    "productiveHabits": "Apprendre des nouvelles choses",
-    "slippedHabits": "Ruminer sur mon inaction ",
-    "challenges": "Avancer sur ce projet",
-    "reaction": "J'ai perseveré",
-    "differentApproach": "Être plus concentré sur ce que je fais",
-    "patterns": "",
-    "lessons": "",
-    "energyGivers": "",
-    "energyDrainers": "",
-    "improvement": "",
-    "affirmation": "",
-    "extraNotes": "",
-    "savedAt": "2025-09-27T21:40:31.264Z"
-  },
-  {
-    "user": "Alix",
-    "date": "2025-09-28",
-    "day": "Thursday",
-    "mood": "5",
-    "feelingWords": [
-      "",
-      "",
-      ""
-    ],
-    "gratitude": [
-      "",
-      "",
-      ""
-    ],
-    "bestMoment": "",
-    "sleep": "",
-    "exercise": "",
-    "productiveHabits": "",
-    "slippedHabits": "",
-    "challenges": "",
-    "reaction": "",
-    "differentApproach": "",
-    "patterns": "",
-    "lessons": "",
-    "energyGivers": "",
-    "energyDrainers": "",
-    "improvement": "",
-    "affirmation": "",
-    "extraNotes": "",
-    "savedAt": "2025-09-28T07:06:02.888Z"
-  }
-]
+{
+  "Alix": [
+    {
+      "entry": {
+        "day": "Friday",
+        "mood": "7",
+        "date": "2025-09-26",
+        "feelingWords": [
+          "Determined",
+          "Revitalized",
+          "Courageus"
+        ],
+        "gratitude": [
+          "Node.js",
+          "HTML,CSS,JS",
+          "My teamates"
+        ],
+        "bestMoment": "",
+        "sleep": "",
+        "exercise": "",
+        "productiveHabits": "",
+        "slippedHabits": "",
+        "challenges": "",
+        "reaction": "",
+        "differentApproach": "",
+        "patterns": "",
+        "lessons": "",
+        "energyGivers": "",
+        "energyDrainers": "",
+        "improvement": "",
+        "affirmation": "",
+        "extraNotes": "This is a test entry to see if the journal works.",
+        "savedAt": "2025-09-26T12:11:31.790Z"
+      }
+    },
+    {
+      "date": "2025-09-26",
+      "day": "Friday",
+      "mood": "8",
+      "feelingWords": [
+        "Petit",
+        "Mot",
+        "Doux"
+      ],
+      "gratitude": [
+        "Being a junior developper",
+        "Having AI agents to helps me learn and code",
+        "Ditching Math and Physic class"
+      ],
+      "bestMoment": "Working on this project with my colleagues",
+      "sleep": "7",
+      "exercise": "Sport",
+      "nutrition": "Good",
+      "productiveHabits": "Working on myself, reading, doing sports, learning.",
+      "slippedHabits": "la fleeemmmmeee",
+      "challenges": "la fleeemme",
+      "reaction": "la flemme",
+      "differentApproach": "la flemme",
+      "patterns": "la lfeeeme",
+      "lessons": "la",
+      "energyGivers": "fleemme",
+      "energyDrainers": "nan vrmt",
+      "improvement": "c",
+      "affirmation": "bon?",
+      "extraNotes": "oui c finis :)",
+      "savedAt": "2025-09-26T12:23:08.591Z"
+    },
+    {
+      "date": "2025-09-27",
+      "day": "Monday",
+      "mood": "2",
+      "feelingWords": [
+        "Fatigué",
+        "Avachi",
+        "Distrait"
+      ],
+      "gratitude": [
+        "Ma famille qui est là pour moi",
+        "Les librairies Internet qui documente la façon dont on peux créer une page web",
+        "Les repas chaud que j'ai pu mangé aujourd'hui"
+      ],
+      "bestMoment": "Quand je suis sortis promener mon chien",
+      "sleep": "10",
+      "exercise": "Course, pompe, traction",
+      "nutrition": "Average",
+      "productiveHabits": "Apprendre des nouvelles choses",
+      "slippedHabits": "Ruminer sur mon inaction ",
+      "challenges": "Avancer sur ce projet",
+      "reaction": "J'ai perseveré",
+      "differentApproach": "Être plus concentré sur ce que je fais",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "improvement": "",
+      "affirmation": "",
+      "extraNotes": "",
+      "savedAt": "2025-09-27T21:40:31.264Z"
+    },
+    {
+      "date": "2025-10-06",
+      "day": "Monday",
+      "mood": "3",
+      "feelingWords": [
+        "Déprimé",
+        "Aménuisé",
+        "Extenué"
+      ],
+      "gratitude": [
+        "les collègues qui font les efforts de travailler avec moi",
+        "le personnel de l'IUT qui est dévoué dans son travail",
+        "mes colocs qui font leurs vies tranquillement"
+      ],
+      "bestMoment": "Les regards complices avec mes camarades.",
+      "sleep": "6",
+      "exercise": "Marche, Vélo, Pompe, Abdos",
+      "nutrition": "Average",
+      "productiveHabits": "working, trying to get the shit out of me, doing sport, going out",
+      "slippedHabits": "thinking of her, i should focus on myself and my everyday comportements",
+      "challenges": "Focusing on myself\nDoing things for me",
+      "reaction": "I tried, but most of the time I did not think about it\nI let my feeling choose for me",
+      "differentApproach": "Sortir des schémas, penser en dehors de la boite",
+      "patterns": "Quand je sens l'abandon arriver, mon cerveau primitif panique et active tout les comportements qu'il connait pour récuperer la personne que j'ai perdu",
+      "lessons": "Que je ne suis pas aussi gentil que j'aurais pu le croire. Je me cache derrière de beaux idéaux, derrière une construction d'enfant pourri gâté qui m'enferme dans des pensées destructrices, qui n'apporte rien de bon\n",
+      "energyGivers": "L'espoir d'un monde meilleure\nD'une vie qui en vaux la peine",
+      "energyDrainers": "Les cours inutiles\nLes proffesseurs pas impliqués\nLes administrations et les règles qui conditionnent nos avancements",
+      "improvement": "Ne pas regarder sa loc, ne pas aller stalk son Insta, enfaite par pour elle, mais pour moi",
+      "affirmation": "Je suis quelqu'un de bien. J'ai mes casserolles, je veux faire les efforts pour que ça s'améliore, pour moi, pour les autres surtout, pour ne plus qu'ils aient à subir mon comportement.",
+      "extraNotes": "Ce qui m'L'inconscient plus fort que la volonté\nVous n'êtes pas consciemment manipulateur. Vos comportements viennent de mécanismes de survie psychologique développés dans l'enfance. Quand vous sentez l'abandon arriver, votre cerveau primitif panique et active tous les comportements qu'il connaît pour \"récupérer\" la personne.\n\nLa boucle addiction-manque\nVotre cerveau traite la perte de Clem comme un sevrage. Chaque message que vous lui envoyez vous donne un petit shoot de dopamine (\"j'ai fait quelque chose\"), même si rationnellement vous savez que c'est destructeur.\n\nComment casser ces schémas toxiques\n1. Identifier vos triggers en temps réel\nCréez une \"carte de vos déclencheurs\" :\n\nTrigger : \"Je vois qu'elle a vu ma story\"\n\nÉmotion : Panique de l'abandon\n\nPensée automatique : \"Je dois lui écrire sinon je vais la perdre définitivement\"\n\nComportement : J'écris un message\n\nNouveau réflexe : Dès que vous identifiez le trigger, pausez 24h avant toute action.\n\n2. Couper la boucle de validation externe\nLe problème : Vous cherchez chez elle la validation que vous ne vous donnez pas.\n\nExercice concret : Chaque matin, écrivez 3 choses que vous appréciez chez vous, sans rapport avec elle ou une relation. \"Je suis fier d'avoir réussi cet examen\", \"J'ai aidé mon ami hier\", \"J'ai bien cuisiné\".\n\n3. Transformer la possessivité en respect\nLe piège mental : \"Si elle fait sa vie sans moi, c'est qu'elle ne m'a jamais aimé\"\n\nNouvelle programmation : \"Si elle fait sa vie sans moi, c'est qu'elle prend soin d'elle. C'est exactement ce que je veux pour quelqu'un que j'aime.\"\n\nRépétez cette phrase 10 fois par jour jusqu'à ce qu'elle devienne automatique.\n\n4. Gérer l'impulsion de contact\nTechnique des 5 questions avant tout contact :\n\nEst-ce que je lui écris pour ELLE ou pour MOI ?\n\nQu'est-ce que j'attends comme réponse ?\n\nComment elle va probablement réagir ?\n\nEst-ce que ça respecte ce qu'elle m'a demandé ?\n\nDans 6 mois, je serai fier de cette action ?\n\nSi vous ne pouvez pas répondre honnêtement \"pour elle\" à la première question, n'envoyez pas.\n\nTechniques pour ne plus se faire \"materner\"\nDévelopper l'auto-soutien\nQuand vous voulez du réconfort, écrivez d'abord à vous-même ce que vous auriez voulu qu'elle vous dise\n\nCréez un \"kit de réconfort\" personnel : playlist, activité physique, ami(e) de confiance qui n'est PAS elle\n\nPractice de l'autonomie émotionnelle\nPrenez UNE décision par jour sans demander l'avis de personne\n\nRésolvez UN problème par jour seul, même petit\n\nCélébrez vos victoires tout seul\n\nNe plus retourner les confidences\nLa règle d'or : Tout ce qu'on vous confie dans l'intimité doit rester sacré, même en cas de conflit.\n\nExercice : Relisez vos anciens messages et identifiez chaque fois où vous avez utilisé quelque chose qu'elle vous avait confié. Écrivez-lui des excuses (que vous n'enverrez PAS) pour chacune.\n\nPourquoi c'est si dur de résister\nVotre cerveau confond amour et obsession\nL'amour véritable veut le bonheur de l'autre, même sans soi. L'obsession veut l'autre pour se sentir mieux soi.\n\nVous êtes en sevrage\nComme toute addiction, les premiers jours/semaines sont les plus durs. Votre cerveau va vous harceler d'envies de contact. C'est NORMAL et temporaire.\n\nLe travail de fond nécessaire\nThérapie : Vous avez besoin d'aide professionnelle pour comprendre d'où viennent ces schémas (enfance, attachement, estime de soi).\n\nTravail quotidien :\n\nJournal de gratitude (3 choses positives par jour qui n'ont rien à voir avec elle)\n\nMéditation (10 min par jour pour observer vos pensées sans les suivre)\n\nSport (évacuer l'énergie négative)\n\nProjets personnels (reconstruire une identité qui n'est pas centrée sur elle)\n\nLa dure réalité : Ce processus prend des mois, pas des semaines. Mais chaque jour où vous résistez à l'impulsion de la contacter, vous reprenez un peu de votre pouvoir personnel.\n\nVous n'êtes pas condamné à être cette personne toxique. Mais ça demande un travail constant et probablement de l'aide professionnelle.a été ressorti par Perplexity :"
+    },
+    {
+      "date": "2025-09-28",
+      "day": "Sunday",
+      "mood": "7",
+      "feelingWords": [
+        "Drowned",
+        "Frozen",
+        "Windy"
+      ],
+      "gratitude": [
+        "Music",
+        "Sun",
+        "Moon"
+      ],
+      "bestMoment": "Seeing my best friend.",
+      "sleep": "8",
+      "exercise": "Run",
+      "nutrition": "Average",
+      "productiveHabits": "Go out, working on projects",
+      "slippedHabits": "Scroll less and act more",
+      "challenges": "Waking up, helping my family and working on this project",
+      "reaction": "I tried to do things, even if it wasn't easy.\nI must be able to do act as an adult if I want to take care of my own responsabilities.",
+      "differentApproach": "Being more enthusiast about changing could bring me joy and energy to focus on what really counts",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "improvement": "Mon repos",
+      "affirmation": "Nous sommes tous en capacités d'atteindre ce que nous voudrions être, mais c'est à nous de trouver les moyens pour y arriver, et pour vaincre les différentes épreuves qui seront présentes dans nos vie.",
+      "extraNotes": "",
+      "savedAt": "2025-09-28T17:35:24.308Z"
+    },
+    {
+      "date": "2025-09-30",
+      "day": "Tuesday",
+      "mood": "6",
+      "feelingWords": [
+        "Attristé",
+        "Fatigué",
+        "Résigné à changer"
+      ],
+      "gratitude": [
+        "les gens sympas avec qui j'ai pu discuté",
+        "l'addiction qui me permets de tenir, malgré le mal que ça me fais ",
+        "mes parents qui m'aident au quotidien, et qui supporte mes sauts d'humeurs"
+      ],
+      "bestMoment": "Quand j'ai rigolé en classe cette après-midi, avec mon professeur et ma camarade, en écoutant les conneries que mes camarades en R&T pouvait raconter",
+      "sleep": "6",
+      "exercise": "Marche, Pompe",
+      "nutrition": "Average",
+      "productiveHabits": "Travailler, rester en classe concentré, me tenir à mes rendez-vous important.",
+      "slippedHabits": "Utilisation de l'IA pour simplifier mon travail, mais réduisant mes efforts (intellectuel) au détriment de la consolidation de mes connaissances",
+      "challenges": "Les transports en commun, genre me déplacer enfaite.\nLes cours recyclés, utilisant des exercices trouvés sur Internet.",
+      "reaction": "Je me suis résigné à tenir mes engagement, à faire ce que je devais faire, et j'ai pas abandonné face à l'effort.",
+      "differentApproach": "Moins voir le mal pour réduire ma frustration et mon sentiment d'injustice, et me concentrer sur les solutions.\nEn agissant pour réduire la perception négative. En me concentrant sur ce que m'apportera cette expérience, et la vivre de la meilleure manière pour en apprendre, et retenir les éléments qui me serviront dans mon ascencion.",
+      "patterns": "Le négatif, tout ce qui t'apportes une émotion négative, un goût amer de défaite au fond de la gorge.\n",
+      "lessons": "Que je dépends trop des autres. Par l'échange avec les autres, je comble mon besoin de me prouver que je suis une bonne personne.",
+      "energyGivers": "L'espoir. Le diplôme. Les potes. La nature et la vie ;)",
+      "energyDrainers": "Les écrans, la bétise humaine, les transports.",
+      "improvement": "Être plus concentré sur ce qui me fera avancer. Move on, try harder, try better, but do something.",
+      "affirmation": "Je choisis la réussite. J'ai de la chance. Sûrement beaucoup plus que la plupart des gens de ce monde.\nJe ne mérite pas d'être là où je suis, mais je m'assure chaque jour de devenir une meilleure personne.\nJe suis capable d'apprendre et de m'améliorer. Je suis une personne ambitieuse et talentueuse.\nJe m'autorise à réussir dès maintenant. Je suis reconnaissant pour les défis qui m'aident à grandir",
+      "extraNotes": "Entre temps je suis allé mangé, je me rends compte que ça m'a fait du bien de pouvoir sortir un peu tout ça et j'approuve encore plus l'initiative d'un site web de réflexion sur soit, qui permettrais aux gens de déceler leur rumination quotidienne, pour mieux s'adapter dans leur comportement de tout les jours ;)\nGrosse éval demain, j'ai pas encore envoyé le projet personnel jvais me faire niqqueeeer ☠️",
+      "savedAt": "2025-09-30T17:43:54.629Z"
+    },
+    {
+      "date": "2025-10-01",
+      "day": "Wednesday",
+      "mood": "3",
+      "feelingWords": [
+        "Extenué",
+        "Démotivé",
+        "Croyant"
+      ],
+      "gratitude": [
+        "les transports en communs",
+        "les cours donné à l'IUT",
+        "les gens qui sont là pour moi chaque jour"
+      ],
+      "bestMoment": "Quand j'ai vu Noa",
+      "sleep": "6",
+      "exercise": "Marche, Pompe",
+      "nutrition": "Good",
+      "productiveHabits": "La même flemme que chaque jour\nLe travail et le plaisir en un seul moment",
+      "slippedHabits": "Scrolling, Smoking, and stopping doing what I need",
+      "challenges": "Being a good guy",
+      "reaction": "I tried my best, but not everytime...",
+      "differentApproach": "Je dois mieux adapter mon comportement  aux gens qui m'entourent",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "improvement": "Mon estime de moi, ma résilience, ma détermination",
+      "affirmation": "Je suis capable d'atteindre des sommets. Je suis en capacité de réussir. Je suis à l'aise avec les autres.\nJ'ai confiance en moi, en ma capacité à changer, et à m'améliorer de jour en jour.",
+      "extraNotes": "J'ai beaucoup pensé à elle malgré mes efforts. J'ai finis pas trop tard mais quand même, les transports en commun c'est fatiguant, j'ai hâte d'emménager et de me sentir mieux d'ici quelques jours, semaines, années :)",
+      "savedAt": "2025-10-01T18:08:33.772Z"
+    },
+    {
+      "date": "2025-10-07",
+      "day": "Thursday",
+      "savedAt": "2025-10-07T08:42:00.144Z",
+      "enabledSections": [
+        "mood",
+        "goals",
+        "gratitude",
+        "reflections",
+        "learnings",
+        "tomorrow"
+      ],
+      "mood": "7",
+      "feelingWords": [
+        "",
+        "",
+        ""
+      ],
+      "gratitude": [
+        "",
+        "",
+        ""
+      ],
+      "bestMoment": "",
+      "sleep": "",
+      "exercise": "",
+      "productiveHabits": "",
+      "slippedHabits": "",
+      "challenges": "",
+      "reaction": "",
+      "differentApproach": "",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "learnings": "",
+      "newKnowledge": "",
+      "improvement": "",
+      "affirmation": "",
+      "extraNotes": ""
+    }
+  ],
+  "Emmanuel": [
+    {
+      "date": "2025-10-07",
+      "savedAt": "2025-10-07T07:11:00.683Z",
+      "enabledSections": [
+        "mood",
+        "goals",
+        "reflections"
+      ],
+      "feelingWords": [
+        "",
+        "",
+        ""
+      ],
+      "sleep": "",
+      "exercise": "",
+      "productiveHabits": "",
+      "slippedHabits": "",
+      "challenges": "",
+      "reaction": "",
+      "differentApproach": "",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "extraNotes": ""
+    }
+  ]
+}

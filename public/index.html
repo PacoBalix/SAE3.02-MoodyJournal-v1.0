@@ -1,147 +1,204 @@
 <!-- ...existing code... -->
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
-    <title>MoodyProcess</title>
-    <link rel="stylesheet" href="index.css">
+    <title>MoodyJournal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Barre de navigation améliorée */
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 1rem;
-            padding: 1rem 1.25rem;
-            background: linear-gradient(180deg,#f8fff6,#ecfdf5);
-            border-bottom: 1px solid #e6f4ea;
-            position: sticky;
-            top: 0;
-            z-index: 40;
-        }
-        #brand {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        #logo { height: 44px; display:block; }
-        #site-title { font-weight:700; color:#166534; font-size:1.15rem; margin:0; }
-        nav { display:flex; align-items:center; gap:1rem; }
-        nav a {
-            color:#065f46;
-            text-decoration:none;
-            padding:0.45rem 0.7rem;
-            border-radius:8px;
-            font-weight:600;
-        }
-        nav a:hover { background:#ecfdf5; }
-        #login-btn {
-            background:#16a34a;
-            color:white;
-            border:none;
-            padding:0.5rem 0.8rem;
-            border-radius:10px;
-            cursor:pointer;
-            font-weight:700;
-            box-shadow: 0 6px 16px rgba(22,163,74,0.12);
-        }
-        #login-btn:hover { background:#15803d; transform:translateY(-1px); }
-
-        /* Popup modal */
+        /* Modal styles */
         .modal-backdrop {
             position: fixed;
             inset: 0;
-            background: rgba(2,6,23,0.45);
+            background: rgba(2, 6, 23, 0.45);
             display: none;
             align-items: center;
             justify-content: center;
             z-index: 80;
         }
+
         .modal {
-            background: linear-gradient(180deg,#ffffff,#f7fff8);
+            background: linear-gradient(180deg, #ffffff, #f7fff8);
             border-radius: 12px;
             width: min(420px, 94%);
             padding: 1.1rem;
-            box-shadow: 0 20px 50px rgba(2,6,23,0.16);
+            box-shadow: 0 20px 50px rgba(2, 6, 23, 0.16);
             border: 1px solid #e6f4ea;
         }
-        .modal h3 { margin:0 0 .5rem 0; color:#065f46; }
-        .modal label { font-size:0.85rem; color:#064e3b; display:block; margin-top:0.6rem; }
-        .modal input[type="text"],
-        .modal input[type="password"] {
-            width:100%;
-            padding:0.6rem;
-            margin-top:0.25rem;
-            border-radius:8px;
-            border:1px solid #dbeadc;
-            box-sizing: border-box;
-        }
-        .modal .actions {
-            display:flex;
-            justify-content: flex-end;
-            gap:0.6rem;
-            margin-top:1rem;
-        }
-        .btn-secondary {
-            background: transparent;
-            border:1px solid #cfead6;
-            padding:0.5rem 0.8rem;
-            border-radius:8px;
-            color:#064e3b;
-            cursor:pointer;
-        }
-        .btn-primary {
-            background:#16a34a;
-            color:white;
-            padding:0.5rem 0.9rem;
-            border-radius:8px;
-            border:none;
-            cursor:pointer;
+
+        .modal h3 {
+            margin: 0 0 .5rem 0;
+            color: #065f46;
         }
 
-        /* petit ajustement responsive pour les liens */
-        #page_links { display:flex; flex-direction:column; gap:0.6rem; margin-top:1rem; }
-        @media(min-width:720px) {
-            #page_links { flex-direction:row; gap:1rem; }
+        .modal label {
+            font-size: 0.85rem;
+            color: #064e3b;
+            display: block;
+            margin-top: 0.6rem;
+        }
+
+        .modal input[type="text"],
+        .modal input[type="password"] {
+            width: 100%;
+            padding: 0.6rem;
+            margin-top: 0.25rem;
+            border-radius: 8px;
+            border: 1px solid #dbeadc;
+            box-sizing: border-box;
+        }
+
+        .modal .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid #cfead6;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+            color: #064e3b;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: #16a34a;
+            color: white;
+            padding: 0.5rem 0.9rem;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
-    <header>
-        <div id="brand">
-            <a href="index.html" title="Accueil"><img id="logo" src="../assets/moodyjournal.svg" alt="Logo MoodyJournal"></a>
-            <div>
-                <p id="site-title">MoodyJournal 🌿</p>
-                <small style="color:#064e3b;opacity:.8">Un espace pour réfléchir au quotidien</small>
+    <header class="bg-white shadow-sm border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-3">
+                        <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-16">
+                    </a>
+                    <div class="text-center">
+                        <p style="padding-left: 15em; font-weight: bold;" class="text-sm text-emerald-600">Votre espace de réflexion quotidien</p>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="journal.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
+                    <a href="view.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
+                    <a href="settings.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
+                    
+                    <div id="user-info" class="hidden items-center space-x-4">
+                        <a href="/logout" id="logout-link" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
+                    </div>
+                </nav>
+
+                <!-- Mobile menu button -->
+                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
             </div>
         </div>
-
-        <nav aria-label="Navigation principale">
-            <a href="#about">À propos</a>
-            <a href="journal.html">Écrire</a>
-            <a href="view.html">Consulter</a>
-            <a href="settings.html">Paramètres</a>
-            <button id="login-btn" type="button" aria-haspopup="dialog" aria-controls="login-modal">Connexion</button>
-        </nav>
     </header>
 
-    <main style="padding:1.25rem;">
-        <h2 id="welcome">Bienvenue sur <a href="/index.html">MoodyJournal🌿</a></h2>
+    <main class="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-100 py-12">
+        <div class="max-w-6xl mx-auto px-6">
+            <!-- Hero Section -->
+            <div class="text-center mb-16">
+                <h1 id="welcome-title" class="text-5xl font-bold text-emerald-800 mb-6">
+                    Bienvenue sur MoodyJournal🌿
+                </h1>
+                <p class="text-xl text-emerald-600 mb-8 max-w-2xl mx-auto">
+                    Un endroit sûr pour réfléchir, noter et analyser son quotidien
+                </p>
+                <div class="flex justify-center mb-8">
+                    <button id="login-btn" type="button" aria-haspopup="dialog" aria-controls="login-modal" 
+                            class="hidden bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-4 px-12 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-emerald-500/25 text-lg">
+                        🔐 Se connecter
+                    </button>
+                </div>
+            </div>
 
-        <p>Un endroit sûr pour réfléchir, noter et analyser son quotidien :D</p>
+            <!-- Features Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-4xl mb-4">📘</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Écrire mon journal</h3>
+                    <p class="text-gray-600 mb-4">Capturez vos pensées, émotions et réflexions quotidiennes</p>
+                    <a href="journal.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
+                        Commencer à écrire →
+                    </a>
+                </div>
 
-        <div id="page_links">
-            <a href="journal.html">📘 Écrire mon journal ✍🏽</a>
-            <a href="view.html">👁️ Consulter mes données 📄</a>
-            <a href="settings.html">⚙️ Paramètres</a>
-            <a href="index.html">🌐 Accéder au blog</a>
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-4xl mb-4">👁️</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Consulter mes données</h3>
+                    <p class="text-gray-600 mb-4">Explorez vos entrées passées et suivez votre évolution</p>
+                    <a href="view.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
+                        Voir mes entrées →
+                    </a>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-4xl mb-4">⚙️</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Paramètres</h3>
+                    <p class="text-gray-600 mb-4">Personnalisez votre expérience de journaling</p>
+                    <a href="settings.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
+                        Gérer mon compte →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Benefits Section -->
+            <div class="bg-white rounded-3xl p-12 shadow-xl">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Pourquoi tenir un journal ?</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">🧠</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Clarté mentale</h3>
+                        <p class="text-gray-600">Organisez vos pensées et réduisez le stress</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">📈</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Suivi personnel</h3>
+                        <p class="text-gray-600">Observez vos progrès et vos patterns</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">💚</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Bien-être</h3>
+                        <p class="text-gray-600">Améliorez votre santé mentale au quotidien</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
-    <footer style="padding:1rem;text-align:center;color:#6b7280;">
-        <p>@2025. Tous droits réservés.</p>
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center mb-4">
+                <img src="../assets/moodyjournal.svg" alt="Logo" class="h-8 mr-3">
+                <span class="text-xl font-semibold">MoodyJournal</span>
+            </div>
+            <p class="text-gray-400 mb-4">Votre compagnon quotidien pour la réflexion et le bien-être</p>
+            <div class="border-t border-gray-700 pt-4">
+                <p class="text-gray-500 text-sm">© 2025 MoodyJournal. Tous droits réservés.</p>
+            </div>
+        </div>
     </footer>
 
     <!-- Modal de connexion -->
@@ -166,7 +223,7 @@
 
     <script>
         // Contrôle du modal de connexion
-        (function(){
+        (function () {
             const loginBtn = document.getElementById('login-btn');
             const modal = document.getElementById('login-modal');
             const cancelBtn = document.getElementById('cancel-login');
@@ -176,7 +233,7 @@
                 modal.style.display = 'flex';
                 modal.setAttribute('aria-hidden', 'false');
                 // focus sur le premier champ
-                setTimeout(()=> usernameInput.focus(), 50);
+                setTimeout(() => usernameInput.focus(), 50);
                 document.addEventListener('keydown', onKeyDown);
             }
             function closeModal() {
@@ -184,20 +241,23 @@
                 modal.setAttribute('aria-hidden', 'true');
                 document.removeEventListener('keydown', onKeyDown);
             }
-            function onKeyDown(e){
-                if(e.key === 'Escape') closeModal();
+            function onKeyDown(e) {
+                if (e.key === 'Escape') closeModal();
             }
 
             loginBtn.addEventListener('click', openModal);
             cancelBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', function(e){
-                if(e.target === modal) closeModal(); // clic sur le backdrop ferme
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) closeModal(); // clic sur le backdrop ferme
             });
 
             // accessibilité: ouvrir modal si url contient ?login
-            if(location.search.includes('login')) openModal();
+            if (location.search.includes('login')) openModal();
         })();
     </script>
+    <script src="/js/theme-manager.js"></script>
+    <script src="/js/session-check.js"></script>
 </body>
+
 </html>
 <!-- ...existing code... -->
