@@ -47,5 +47,12 @@
     "username": "Emmanuel",
     "text": "Salut les amis :)",
     "timestamp": "2025-10-15T11:04:06.972Z"
+  },
+  {
+    "id": 1760527225715,
+    "userId": 4,
+    "username": "Noa",
+    "text": "Bonjour à vous les gars",
+    "timestamp": "2025-10-15T11:20:25.715Z"
   }
 ]

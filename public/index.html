@@ -79,17 +79,16 @@
     <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
         <div class="max-w-7xl mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-                        <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
-                        <span class="text-xl font-bold text-emerald-800">MoodyJournal</span>
-                    </a>
-                </div>
+                <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                    <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
+                    <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
+                </a>
 
                 <nav class="hidden md:flex items-center space-x-6">
                     <a href="index.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Accueil</a>
                     <a href="journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
                     <a href="view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Blog</a>
                     <a href="chat.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
                     <a href="settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
                     <a href="/logout" id="logout-btn-nav" class="text-red-600 hover:text-red-700 font-medium transition-colors hidden">Déconnexion</a>
@@ -109,16 +108,19 @@
         <div class="max-w-6xl mx-auto px-6">
             <!-- Hero Section -->
             <div class="text-center mb-16">
-                <h1 id="welcome-title" class="text-5xl font-bold text-emerald-800 mb-6">
-                    Bienvenue sur MoodyJournal🪴
+                <h1 id="welcome-title" class="text-5xl md:text-6xl font-bold text-emerald-800 mb-6">
+                    Bienvenue sur MoodyJournal 🌿
                 </h1>
-                <p class="text-xl text-emerald-600 mb-8 max-w-2xl mx-auto">
-                    Un endroit sûr pour réfléchir, noter et analyser son quotidien avec un suivi personnalisé de vos habitudes
+                <p class="text-xl md:text-2xl text-gray-700 mb-4 max-w-3xl mx-auto">
+                    Votre compagnon digital pour le <span class="text-emerald-600 font-semibold">bien-être mental</span> et <span class="text-blue-600 font-semibold">émotionnel</span>
+                </p>
+                <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                    Réfléchissez, notez, analysez et progressez avec un suivi personnalisé de vos habitudes
                 </p>
                 <div class="flex flex-col items-center justify-center mb-8">
                     <button id="login-btn" type="button" aria-haspopup="dialog" aria-controls="login-modal"
-                            class="hidden bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-4 px-12 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-emerald-500/25 text-lg mb-4">
-                        🔐 Se connecter
+                            class="hidden bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-4 px-12 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-105 hover:shadow-emerald-500/25 text-lg mb-4">
+                        🔐 Se connecter pour commencer
                     </button>
                     <p id="login-message" class="hidden text-gray-700 text-base max-w-lg mx-auto bg-amber-50 border-2 border-amber-200 rounded-lg px-6 py-3 shadow-sm">
                         ⚠️ Veuillez vous connecter si vous souhaitez accéder aux fonctionnalités de cette application
@@ -126,42 +128,118 @@
                 </div>
             </div>
 
-            <!-- Features Grid -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="text-4xl mb-4">📘</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Journal personnalisé</h3>
-                    <p class="text-gray-600 mb-4">Suivez vos habitudes, addictions et votre évolution personnelle</p>
-                    <a href="journal.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
-                        Commencer à écrire →
-                    </a>
-                </div>
+            <!-- Features principales en avant -->
+            <div class="mb-16">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">
+                    ✨ Fonctionnalités Principales
+                </h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Journal -->
+                    <div class="group bg-gradient-to-br from-emerald-50 to-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-2 border-emerald-100 hover:border-emerald-300">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-6xl">📘</div>
+                            <div class="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                                <svg class="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Journal Personnalisé</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Créez vos entrées quotidiennes avec un suivi adapté à vos besoins : humeur, habitudes, addictions, TCA et plus encore
+                        </p>
+                        <a href="journal.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-bold text-lg group">
+                            Commencer à écrire
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
 
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="text-4xl mb-4">👁️</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Analyse des données</h3>
-                    <p class="text-gray-600 mb-4">Visualisez vos progrès et patterns comportementaux</p>
-                    <a href="view.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
-                        Voir mes données →
-                    </a>
-                </div>
+                    <!-- Analyse -->
+                    <div class="group bg-gradient-to-br from-blue-50 to-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-2 border-blue-100 hover:border-blue-300">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-6xl">📊</div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Analyse & Insights</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Visualisez vos progrès avec des graphiques intuitifs, identifiez vos patterns et recevez des insights personnalisés
+                        </p>
+                        <a href="view.html" class="inline-flex items-center text-blue-600 hover:text-blue-700 font-bold text-lg group">
+                            Voir mes statistiques
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
 
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="text-4xl mb-4">⚙️</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Paramètres</h3>
-                    <p class="text-gray-600 mb-4">Configurez vos préférences personnalisées</p>
-                    <a href="settings.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
-                        Gérer mes paramètres →
-                    </a>
-                </div>
+                    <!-- Blog -->
+                    <div class="group bg-gradient-to-br from-purple-50 to-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-2 border-purple-100 hover:border-purple-300">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-6xl">📚</div>
+                            <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center group-hover:bg-purple-200 transition-colors">
+                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Blog & Ressources</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Découvrez des guides, articles et techniques pour améliorer votre bien-être mental au quotidien
+                        </p>
+                        <a href="blog.html" class="inline-flex items-center text-purple-600 hover:text-purple-700 font-bold text-lg group">
+                            Lire les articles
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
 
-                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                    <div class="text-4xl mb-4">💬</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Discuter</h3>
-                    <p class="text-gray-600 mb-4">Chat global et conversations privées avec vos contacts</p>
-                    <a href="chat.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
-                        Accéder au chat →
-                    </a>
+                    <!-- Communauté -->
+                    <div class="group bg-gradient-to-br from-orange-50 to-white rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-3 border-2 border-orange-100 hover:border-orange-300">
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="text-6xl">💬</div>
+                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center group-hover:bg-orange-200 transition-colors">
+                                <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3">Communauté</h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Échangez avec d'autres utilisateurs, partagez vos expériences en toute bienveillance via le chat global ou privé
+                        </p>
+                        <a href="chat.html" class="inline-flex items-center text-orange-600 hover:text-orange-700 font-bold text-lg group">
+                            Rejoindre la communauté
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Autres fonctionnalités -->
+            <div class="mb-16">
+                <h2 class="text-2xl font-bold text-center text-gray-800 mb-8">
+                    🔧 Autres Fonctionnalités
+                </h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300">
+                        <div class="flex items-center mb-4">
+                            <div class="text-3xl mr-4">⚙️</div>
+                            <h3 class="text-lg font-semibold text-gray-800">Paramètres Personnalisés</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4 text-sm">Configurez votre expérience selon vos besoins spécifiques</p>
+                        <a href="settings.html" class="text-emerald-600 hover:text-emerald-700 font-medium text-sm">
+                            Configurer →
+                        </a>
+                    </div>
                 </div>
             </div>
 

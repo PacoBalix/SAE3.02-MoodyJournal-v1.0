@@ -1,0 +1,20 @@
+[
+  {
+    "from": 1,
+    "to": 4,
+    "text": "Tu penses ça marche ducoup ?",
+    "timestamp": 1760527183523
+  },
+  {
+    "from": 4,
+    "to": 1,
+    "text": "On dirait bien hein",
+    "timestamp": 1760527249345
+  },
+  {
+    "from": 1,
+    "to": 4,
+    "text": "Aaah c'est cool alors :)",
+    "timestamp": 1760527276284
+  }
+]
