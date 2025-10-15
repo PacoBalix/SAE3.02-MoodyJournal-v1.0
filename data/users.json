@@ -1,21 +1,21 @@
 [
   {
-    "user_id": 1,
+    "id": 1,
     "username": "Alix",
     "password": "alixpassword"
   },
   {
-    "user_id": 2,
+    "id": 2,
     "username": "Lallie", 
     "password": "lalliepassword"
   },
   {
-    "user_id": 3,
+    "id": 3,
     "username": "Emmanuel",
     "password": "emmanuelpassword"
   },
   {
-    "user_id": 4,
+    "id": 4,
     "username": "Noa",
     "password": "noapassword"
   }

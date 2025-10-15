@@ -51,21 +51,112 @@ const ensureDir = async () => {
   await fs.mkdir(path.dirname(USERS_FILE), { recursive: true });
 };
 
+// === Système de Chat (inspiré de Chat-main) ===
+const CONTACTS_FILE = path.join(__dirname, 'data', 'contacts.json');
+const CHATS_DIR = path.join(__dirname, 'data', 'chats');
+const GLOBAL_CHAT_FILE = path.join(__dirname, 'data', 'global-chat.json');
+
+// Helpers pour le chat
+function loadContacts() {
+  try {
+    return JSON.parse(require('fs').readFileSync(CONTACTS_FILE, 'utf8'));
+  } catch (err) {
+    return [];
+  }
+}
+
+function saveContacts(contacts) {
+  require('fs').writeFileSync(CONTACTS_FILE, JSON.stringify(contacts, null, 2));
+}
+
+function getChatFile(userId1, userId2) {
+  const f1 = path.join(CHATS_DIR, `chat-${userId1}-${userId2}.json`);
+  const f2 = path.join(CHATS_DIR, `chat-${userId2}-${userId1}.json`);
+  if (require('fs').existsSync(f1)) return f1;
+  if (require('fs').existsSync(f2)) return f2;
+  return userId1 < userId2 ? f1 : f2;
+}
+
+function loadChatMessages(userId1, userId2) {
+  const chatFile = getChatFile(userId1, userId2);
+  if (!require('fs').existsSync(chatFile)) return [];
+  const data = require('fs').readFileSync(chatFile, 'utf8');
+  if (!data) return [];
+  try {
+    return JSON.parse(data);
+  } catch (e) {
+    console.error('Erreur parsing chat file', chatFile, e);
+    return [];
+  }
+}
+
+function saveChatMessages(userId1, userId2, messages) {
+  const chatFile = getChatFile(userId1, userId2);
+  require('fs').writeFileSync(chatFile, JSON.stringify(messages, null, 2));
+}
+
+function loadGlobalChat() {
+  try {
+    if (!require('fs').existsSync(GLOBAL_CHAT_FILE)) {
+      require('fs').writeFileSync(GLOBAL_CHAT_FILE, '[]');
+      return [];
+    }
+    const data = require('fs').readFileSync(GLOBAL_CHAT_FILE, 'utf8');
+    return JSON.parse(data);
+  } catch (err) {
+    console.error('Erreur chargement chat global:', err);
+    return [];
+  }
+}
+
+function saveGlobalChat(messages) {
+  require('fs').writeFileSync(GLOBAL_CHAT_FILE, JSON.stringify(messages, null, 2));
+}
+
+// Créer le dossier chats s'il n'existe pas
+async function ensureChatDir() {
+  try {
+    await fs.mkdir(CHATS_DIR, { recursive: true });
+  } catch (err) {
+    if (err.code !== 'EEXIST') {
+      console.error('Erreur création dossier chats:', err);
+    }
+  }
+}
+ensureChatDir();
+
 // Charger les utilisateurs depuis users.json
 let users = [];
+const usernameToId = new Map(); // Mapping username -> userId pour Socket.IO
+
 async function loadUsers() {
   try {
     const data = await fs.readFile(USERS_FILE, 'utf-8');
     users = JSON.parse(data);
     console.log('✅ Utilisateurs chargés depuis users.json');
+    
+    // Initialiser le mapping username -> id après chargement
+    users.forEach(u => {
+      if (u.id && u.username) {
+        usernameToId.set(u.username, u.id);
+      }
+    });
+    console.log('✅ Mapping username->id initialisé:', usernameToId.size, 'utilisateurs');
   } catch (err) {
     console.log('⚠️ Fichier users.json non trouvé, utilisation des utilisateurs par défaut');
     users = [
-      { username: 'Alix', password: 'alixpassword' },
-      { username: 'Lallie', password: 'lalliepassword' },
-      { username: 'Emmanuel', password: 'emmanuelpassword'},
-      { username: 'Noa', password: 'noapassword' }
+      { id: 1, username: 'Alix', password: 'alixpassword' },
+      { id: 2, username: 'Lallie', password: 'lalliepassword' },
+      { id: 3, username: 'Emmanuel', password: 'emmanuelpassword'},
+      { id: 4, username: 'Noa', password: 'noapassword' }
     ];
+    
+    // Initialiser le mapping pour les utilisateurs par défaut aussi
+    users.forEach(u => {
+      if (u.id && u.username) {
+        usernameToId.set(u.username, u.id);
+      }
+    });
   }
 }
 
@@ -83,8 +174,7 @@ app.use(session({
   name: 'sessionId' // Nom de cookie personnalisé
 }));
 
-// Initialiser les utilisateurs au démarrage
-loadUsers();
+// Initialiser les utilisateurs au démarrage (await dans la fonction de démarrage)
 
 // Routes principales
 app.get('/', (req, res) => {
@@ -496,64 +586,224 @@ app.post('/api/add-friend', requireAuth, async (req, res) => {
   }
 });
 
+// === Routes API pour le Chat ===
+
+// Récupérer les contacts d'un utilisateur
+app.get('/api/contacts/:userId', requireAuth, async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const contactsData = loadContacts();
+    const userContacts = contactsData.find(c => c.userId === userId);
+    
+    if (!userContacts) {
+      return res.json([]);
+    }
+    
+    const usersList = users.filter(u => userContacts.contacts.includes(u.id))
+                          .map(u => ({ id: u.id, username: u.username }));
+    res.json(usersList);
+  } catch (err) {
+    console.error('❌ Erreur récupération contacts:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Ajouter un contact
+app.post('/api/contacts/:userId/add', requireAuth, async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const { contactId } = req.body;
+    
+    if (!contactId) {
+      return res.status(400).json({ error: 'contactId manquant' });
+    }
+    
+    const contactExists = users.find(u => u.id === contactId);
+    if (!contactExists) {
+      return res.status(400).json({ error: 'Contact inconnu' });
+    }
+    
+    let contactsData = loadContacts();
+    let userContacts = contactsData.find(c => c.userId === userId);
+    
+    if (!userContacts) {
+      userContacts = { userId, contacts: [] };
+      contactsData.push(userContacts);
+    }
+    
+    if (userContacts.contacts.includes(contactId)) {
+      return res.status(400).json({ error: 'Contact déjà ajouté' });
+    }
+    
+    userContacts.contacts.push(contactId);
+    saveContacts(contactsData);
+    
+    // Créer fichier chat vide
+    const chatFile = getChatFile(userId, contactId);
+    if (!require('fs').existsSync(chatFile)) {
+      require('fs').writeFileSync(chatFile, '[]');
+    }
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('❌ Erreur ajout contact:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Récupérer l'ID utilisateur à partir du username
+app.get('/api/user-id/:username', requireAuth, (req, res) => {
+  const username = req.params.username;
+  const user = users.find(u => u.username === username);
+  if (user) {
+    res.json({ id: user.id, username: user.username });
+  } else {
+    res.status(404).json({ error: 'Utilisateur non trouvé' });
+  }
+});
+
+// Récupérer les messages du chat global
+app.get('/api/global-chat', requireAuth, (req, res) => {
+  const messages = loadGlobalChat();
+  res.json(messages);
+});
+
 // === Socket.IO pour le chat en temps réel ===
-const onlineUsers = new Map(); // Map<socketId, username>
+const usersSockets = new Map(); // userId => socket.id
 
 io.on('connection', (socket) => {
   console.log('🔌 Nouvelle connexion Socket.IO:', socket.id);
   
-  // Utilisateur se connecte
+  // Utilisateur se connecte avec username
   socket.on('user-online', (username) => {
-    onlineUsers.set(socket.id, username);
-    console.log(`👤 ${username} est en ligne (${socket.id})`);
-    
-    // Envoyer la liste des utilisateurs en ligne
-    const usersOnline = Array.from(onlineUsers.values());
-    io.emit('users-online', usersOnline);
-    
-    // Notifier les autres utilisateurs
-    socket.broadcast.emit('user-connected', username);
+    const userId = usernameToId.get(username);
+    if (userId) {
+      usersSockets.set(userId, socket.id);
+      socket.userId = userId;
+      socket.username = username;
+      console.log(`👤 ${username} (ID: ${userId}) est en ligne`);
+      
+      // Envoyer la liste des utilisateurs en ligne
+      const usersOnline = Array.from(usernameToId.keys()).filter(name => {
+        const id = usernameToId.get(name);
+        return usersSockets.has(id);
+      });
+      io.emit('users-online', usersOnline);
+      socket.broadcast.emit('user-connected', username);
+    }
   });
   
-  // Envoi de message
-  socket.on('send-message', (data) => {
-    const { to, message, from } = data;
-    console.log(`💬 Message de ${from} vers ${to}: ${message}`);
-    
-    // Trouver le socket du destinataire
-    for (const [socketId, username] of onlineUsers.entries()) {
-      if (username === to) {
-        io.to(socketId).emit('receive-message', {
-          from: from,
-          message: message,
-          timestamp: new Date().toISOString()
-        });
-        console.log(`✅ Message envoyé à ${to}`);
-        break;
-      }
+  // Login avec userId (pour compatibilité)
+  socket.on('login', ({ userId }) => {
+    usersSockets.set(userId, socket.id);
+    socket.userId = userId;
+    const user = users.find(u => u.id === userId);
+    if (user) {
+      socket.username = user.username;
+      usernameToId.set(user.username, userId);
     }
+    console.log(`Utilisateur connecté en socket: ${userId}`);
+    socket.emit('login-success', { userId });
+  });
+  
+  // Récupérer l'historique des messages privés
+  socket.on('get-messages', ({ withUserId }) => {
+    if (!socket.userId) return;
+    const messages = loadChatMessages(socket.userId, withUserId);
+    socket.emit('message-history', messages);
+  });
+  
+  // Envoyer un message privé
+  socket.on('send-message', ({ toUserId, text }) => {
+    if (!socket.userId) return;
+    if (!toUserId || !text) return;
+    
+    const messages = loadChatMessages(socket.userId, toUserId);
+    
+    const message = {
+      from: socket.userId,
+      to: toUserId,
+      text,
+      timestamp: Date.now()
+    };
+    
+    messages.push(message);
+    saveChatMessages(socket.userId, toUserId, messages);
+    
+    console.log(`💬 Message de ${socket.username} vers user ${toUserId}: ${text}`);
+    
+    // Émettre à l'envoyeur
+    socket.emit('new-message', message);
+    
+    // Émettre au destinataire si connecté
+    const recipientSocketId = usersSockets.get(toUserId);
+    if (recipientSocketId) {
+      io.to(recipientSocketId).emit('new-message', message);
+    }
+  });
+  
+  // 🌍 CHAT GLOBAL - Récupérer l'historique
+  socket.on('get-global-messages', () => {
+    const messages = loadGlobalChat();
+    socket.emit('global-message-history', messages);
+  });
+  
+  // 🌍 CHAT GLOBAL - Envoyer un message
+  socket.on('send-global-message', ({ text }) => {
+    if (!socket.userId || !text) return;
+    
+    const messages = loadGlobalChat();
+    const message = {
+      id: Date.now(),
+      userId: socket.userId,
+      username: socket.username,
+      text,
+      timestamp: new Date().toISOString()
+    };
+    
+    messages.push(message);
+    saveGlobalChat(messages);
+    
+    console.log(`🌍 Message global de ${socket.username}: ${text}`);
+    
+    // Diffuser à tous les utilisateurs connectés
+    io.emit('new-global-message', message);
   });
   
   // Déconnexion
   socket.on('disconnect', () => {
-    const username = onlineUsers.get(socket.id);
-    if (username) {
-      onlineUsers.delete(socket.id);
-      console.log(`👋 ${username} s'est déconnecté (${socket.id})`);
+    if (socket.userId) {
+      usersSockets.delete(socket.userId);
+      console.log(`👋 ${socket.username || socket.userId} s'est déconnecté`);
       
       // Mettre à jour la liste des utilisateurs en ligne
-      const usersOnline = Array.from(onlineUsers.values());
+      const usersOnline = Array.from(usernameToId.keys()).filter(name => {
+        const id = usernameToId.get(name);
+        return usersSockets.has(id);
+      });
       io.emit('users-online', usersOnline);
       
-      // Notifier les autres utilisateurs
-      socket.broadcast.emit('user-disconnected', username);
+      if (socket.username) {
+        socket.broadcast.emit('user-disconnected', socket.username);
+      }
     }
   });
 });
 
 // === Démarrage du serveur ===
-server.listen(PORT, () => {
-  console.log(`🚀 Serveur en cours sur http://localhost:${PORT}`);
-  console.log(`📂 Assure-toi que les pages HTML soit dans /public`);
-  console.log(`💬 Socket.IO activé pour le chat en temps réel`);
+async function startServer() {
+  await loadUsers(); // Charger les utilisateurs AVANT de démarrer le serveur
+  await ensureDir();
+  
+  server.listen(PORT, () => {
+    console.log(`🚀 Serveur en cours sur http://localhost:${PORT}`);
+    console.log(`📂 Assure-toi que les pages HTML soit dans /public`);
+    console.log(`💬 Socket.IO activé pour le chat en temps réel`);
+    console.log(`👥 ${users.length} utilisateurs chargés`);
+  });
+}
+
+startServer().catch(err => {
+  console.error('❌ Erreur au démarrage:', err);
+  process.exit(1);
 });

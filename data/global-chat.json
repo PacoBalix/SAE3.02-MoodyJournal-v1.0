@@ -1,0 +1,51 @@
+[
+  {
+    "id": 1760526167026,
+    "userId": 2,
+    "username": "Lallie",
+    "text": "On teste ?",
+    "timestamp": "2025-10-15T11:02:47.026Z"
+  },
+  {
+    "id": 1760526170226,
+    "userId": 1,
+    "username": "Alix",
+    "text": "Ouuaiiii",
+    "timestamp": "2025-10-15T11:02:50.226Z"
+  },
+  {
+    "id": 1760526173150,
+    "userId": 1,
+    "username": "Alix",
+    "text": "ça à l'air de marcher hein",
+    "timestamp": "2025-10-15T11:02:53.150Z"
+  },
+  {
+    "id": 1760526179060,
+    "userId": 1,
+    "username": "Alix",
+    "text": "Donc on peux discuter ????",
+    "timestamp": "2025-10-15T11:02:59.060Z"
+  },
+  {
+    "id": 1760526184579,
+    "userId": 2,
+    "username": "Lallie",
+    "text": "Ouiii mais là tu parles solo",
+    "timestamp": "2025-10-15T11:03:04.579Z"
+  },
+  {
+    "id": 1760526188249,
+    "userId": 1,
+    "username": "Alix",
+    "text": "Ah miiince",
+    "timestamp": "2025-10-15T11:03:08.249Z"
+  },
+  {
+    "id": 1760526246972,
+    "userId": 3,
+    "username": "Emmanuel",
+    "text": "Salut les amis :)",
+    "timestamp": "2025-10-15T11:04:06.972Z"
+  }
+]

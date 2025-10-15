@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - MoodyJournal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        .friend-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .friend-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.2);
+        }
+        
+        .friend-card.active {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        
+        .chat-message {
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .offline-indicator {
+            width: 10px;
+            height: 10px;
+            background: #6b7280;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 6px;
+        }
+
+        .chat-container {
+            height: calc(100vh - 400px);
+            min-height: 400px;
+        }
+
+        .messages-container {
+            height: calc(100% - 80px);
+            overflow-y: auto;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .tab-button {
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
+    <!-- Header -->
+    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                        <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
+                        <span class="text-xl font-bold text-emerald-800">MoodyJournal</span>
+                    </a>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
+                    <a href="journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
+                    <a href="view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
+                    <a href="chat.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Discuter</a>
+                    <a href="settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
+                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
+                </nav>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-emerald-100 transition-colors">
+                    <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-emerald-800 mb-3">💬 Messagerie MoodyJournal</h1>
+            <p class="text-gray-600 text-lg">Échangez avec votre communauté</p>
+        </div>
+
+        <!-- Tabs pour choisir entre Chat Global et Chats Privés -->
+        <div class="flex justify-center mb-6">
+            <div class="bg-white rounded-2xl p-2 shadow-lg flex gap-2">
+                <button id="tab-global" class="tab-button active px-6 py-3 rounded-lg font-semibold transition-all">
+                    🌍 Chat Global
+                </button>
+                <button id="tab-private" class="tab-button px-6 py-3 rounded-lg font-semibold text-gray-600 transition-all">
+                    👤 Chats Privés
+                </button>
+            </div>
+        </div>
+
+        <!-- Chat Global -->
+        <div id="global-chat-section" class="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 p-4">
+                <h2 class="text-white text-xl font-bold flex items-center">
+                    <span class="mr-2">🌍</span>
+                    <span>Chat Global - Tous les utilisateurs</span>
+                    <span id="online-count" class="ml-auto text-sm bg-white/20 px-3 py-1 rounded-full">0 en ligne</span>
+                </h2>
+            </div>
+
+            <div class="chat-container p-6">
+                <!-- Messages globaux -->
+                <div id="global-messages" class="messages-container mb-4 space-y-3 bg-gray-50 rounded-lg p-4">
+                    <!-- Messages apparaîtront ici -->
+                </div>
+
+                <!-- Input message global -->
+                <form id="global-message-form" class="flex gap-2">
+                    <input type="text" id="global-message-input" 
+                           placeholder="Envoyez un message à tout le monde..." 
+                           class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                           autocomplete="off">
+                    <button type="submit" 
+                            class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                        Envoyer
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Chats Privés -->
+        <div id="private-chat-section" class="hidden">
+            <div class="grid lg:grid-cols-3 gap-6">
+                <!-- Section Contacts -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-2xl shadow-xl p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">Mes Contacts</h2>
+                            <button id="add-contact-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+                                + Ajouter
+                            </button>
+                        </div>
+
+                        <!-- Statut utilisateur -->
+                        <div class="mb-6 p-4 bg-emerald-50 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="online-indicator"></div>
+                                    <span id="current-user" class="font-semibold text-gray-800">Utilisateur</span>
+                                </div>
+                                <span class="text-xs text-gray-600">En ligne</span>
+                            </div>
+                        </div>
+
+                        <!-- Liste des contacts -->
+                        <div id="contacts-list" class="space-y-3">
+                            <!-- Les contacts seront ajoutés ici dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Chat Privé -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-2xl shadow-xl p-6 chat-container">
+                        <div id="no-chat-selected" class="flex items-center justify-center h-full text-gray-400">
+                            <div class="text-center">
+                                <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                                    </path>
+                                </svg>
+                                <p class="text-xl font-semibold">Sélectionnez un contact pour commencer</p>
+                            </div>
+                        </div>
+
+                        <div id="private-chat-window" class="hidden h-full flex flex-col">
+                            <!-- Header du chat -->
+                            <div class="flex items-center justify-between pb-4 border-b-2 border-gray-200 mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                        <span id="chat-user-initial">?</span>
+                                    </div>
+                                    <div>
+                                        <h3 id="chat-user-name" class="text-xl font-bold text-gray-800">Nom du contact</h3>
+                                        <p id="chat-user-status" class="text-sm text-gray-600">
+                                            <span class="offline-indicator"></span>
+                                            Hors ligne
+                                        </p>
+                                    </div>
+                                </div>
+                                <button id="close-private-chat" class="text-gray-500 hover:text-gray-700">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Messages privés -->
+                            <div id="private-messages" class="messages-container flex-1 overflow-y-auto mb-4 space-y-3">
+                                <!-- Messages apparaîtront ici -->
+                            </div>
+
+                            <!-- Input message privé -->
+                            <form id="private-message-form" class="flex gap-2">
+                                <input type="text" id="private-message-input" 
+                                       placeholder="Tapez votre message..." 
+                                       class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                       autocomplete="off">
+                                <button type="submit" 
+                                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                    Envoyer
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal d'ajout de contact -->
+    <div id="add-contact-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Ajouter un contact</h3>
+            <input type="text" id="contact-username" 
+                   placeholder="Nom d'utilisateur" 
+                   class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mb-4">
+            <div class="flex gap-3">
+                <button id="cancel-add-contact" 
+                        class="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg font-medium hover:bg-gray-100 transition-colors">
+                    Annuler
+                </button>
+                <button id="confirm-add-contact" 
+                        class="flex-1 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
+                    Ajouter
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center mb-4">
+                <img src="../assets/moodyjournal.svg" alt="Logo" class="h-8 mr-3">
+                <span class="text-xl font-semibold">MoodyJournal</span>
+            </div>
+            <p class="text-gray-400 mb-4">Votre compagnon quotidien pour la réflexion et le bien-être</p>
+            <div class="border-t border-gray-700 pt-4">
+                <p class="text-gray-500 text-sm">© 2025 MoodyJournal. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let socket;
+        let currentUser = null;
+        let currentUserId = null;
+        let currentChatUser = null;
+        let currentChatUserId = null;
+        let contacts = [];
+        let onlineUsers = new Set();
+
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async function() {
+            await checkSession();
+            initializeSocket();
+            loadContacts();
+            setupEventListeners();
+        });
+
+        async function checkSession() {
+            try {
+                const response = await fetch('/api/session');
+                const data = await response.json();
+                
+                if (!data.authenticated) {
+                    window.location.href = '/index.html?login';
+                    return;
+                }
+                
+                currentUser = data.user;
+                document.getElementById('current-user').textContent = currentUser;
+                
+                // Récupérer l'ID utilisateur
+                const userIdResponse = await fetch(`/api/user-id/${currentUser}`);
+                const userData = await userIdResponse.json();
+                currentUserId = userData.id;
+                
+                console.log('✅ Connecté:', currentUser, 'ID:', currentUserId);
+            } catch (err) {
+                console.error('❌ Erreur de session:', err);
+                window.location.href = '/index.html?login';
+            }
+        }
+
+        function initializeSocket() {
+            socket = io();
+            
+            socket.on('connect', () => {
+                console.log('✅ Socket.IO connecté');
+                socket.emit('user-online', currentUser);
+                
+                // Charger l'historique du chat global
+                socket.emit('get-global-messages');
+            });
+            
+            socket.on('users-online', (users) => {
+                onlineUsers = new Set(users);
+                updateOnlineCount();
+                updateContactsStatus();
+            });
+            
+            socket.on('user-connected', (username) => {
+                onlineUsers.add(username);
+                updateOnlineCount();
+                updateContactsStatus();
+                showNotification(`${username} est en ligne`, 'info');
+            });
+            
+            socket.on('user-disconnected', (username) => {
+                onlineUsers.delete(username);
+                updateOnlineCount();
+                updateContactsStatus();
+            });
+            
+            // Chat global - Historique
+            socket.on('global-message-history', (messages) => {
+                displayGlobalMessages(messages);
+            });
+            
+            // Chat global - Nouveau message
+            socket.on('new-global-message', (message) => {
+                addGlobalMessage(message);
+            });
+            
+            // Chat privé - Historique
+            socket.on('message-history', (messages) => {
+                displayPrivateMessages(messages);
+            });
+            
+            // Chat privé - Nouveau message
+            socket.on('new-message', (message) => {
+                if (currentChatUserId === message.from || currentChatUserId === message.to) {
+                    addPrivateMessage(message);
+                }
+            });
+            
+            socket.on('disconnect', () => {
+                console.log('❌ Socket.IO déconnecté');
+            });
+        }
+
+        function setupEventListeners() {
+            // Tabs
+            document.getElementById('tab-global').addEventListener('click', () => {
+                document.getElementById('tab-global').classList.add('active');
+                document.getElementById('tab-private').classList.remove('active');
+                document.getElementById('global-chat-section').classList.remove('hidden');
+                document.getElementById('private-chat-section').classList.add('hidden');
+            });
+            
+            document.getElementById('tab-private').addEventListener('click', () => {
+                document.getElementById('tab-private').classList.add('active');
+                document.getElementById('tab-global').classList.remove('active');
+                document.getElementById('private-chat-section').classList.remove('hidden');
+                document.getElementById('global-chat-section').classList.add('hidden');
+            });
+            
+            // Chat global - Envoyer message
+            document.getElementById('global-message-form').addEventListener('submit', sendGlobalMessage);
+            
+            // Chat privé - Boutons
+            document.getElementById('add-contact-btn').addEventListener('click', () => {
+                document.getElementById('add-contact-modal').classList.remove('hidden');
+                document.getElementById('add-contact-modal').classList.add('flex');
+            });
+            
+            document.getElementById('cancel-add-contact').addEventListener('click', () => {
+                document.getElementById('add-contact-modal').classList.add('hidden');
+            });
+            
+            document.getElementById('confirm-add-contact').addEventListener('click', addContact);
+            
+            document.getElementById('close-private-chat').addEventListener('click', closePrivateChat);
+            
+            document.getElementById('private-message-form').addEventListener('submit', sendPrivateMessage);
+        }
+
+        // === CHAT GLOBAL ===
+        function sendGlobalMessage(e) {
+            e.preventDefault();
+            
+            const input = document.getElementById('global-message-input');
+            const text = input.value.trim();
+            
+            if (!text) return;
+            
+            socket.emit('send-global-message', { text });
+            input.value = '';
+        }
+
+        function displayGlobalMessages(messages) {
+            const container = document.getElementById('global-messages');
+            container.innerHTML = '';
+            messages.forEach(msg => addGlobalMessage(msg, false));
+            scrollToBottom(container);
+        }
+
+        function addGlobalMessage(message, scroll = true) {
+            const container = document.getElementById('global-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            const isOwn = message.username === currentUser;
+            const time = new Date(message.timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="${isOwn ? 'text-right' : 'text-left'} mb-2">
+                    <div class="inline-block ${isOwn ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-800'} rounded-2xl px-4 py-2 max-w-md">
+                        <p class="text-xs font-semibold mb-1 ${isOwn ? 'text-emerald-100' : 'text-gray-600'}">${message.username}</p>
+                        <p>${message.text}</p>
+                        <p class="text-xs mt-1 ${isOwn ? 'text-emerald-100' : 'text-gray-500'}">${time}</p>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            if (scroll) scrollToBottom(container);
+        }
+
+        // === CHAT PRIVÉ ===
+        async function loadContacts() {
+            try {
+                const response = await fetch(`/api/contacts/${currentUserId}`);
+                if (response.ok) {
+                    contacts = await response.json();
+                    displayContacts();
+                }
+            } catch (err) {
+                console.error('❌ Erreur chargement contacts:', err);
+            }
+        }
+
+        function displayContacts() {
+            const container = document.getElementById('contacts-list');
+            container.innerHTML = '';
+            
+            contacts.forEach(contact => {
+                const isOnline = onlineUsers.has(contact.username);
+                const contactCard = document.createElement('div');
+                contactCard.className = 'friend-card p-4 bg-gray-50 rounded-lg border-2 border-gray-200';
+                contactCard.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold">
+                                ${contact.username.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">${contact.username}</p>
+                                <p class="text-xs text-gray-600">
+                                    ${isOnline ? '<span class="online-indicator"></span>En ligne' : '<span class="offline-indicator"></span>Hors ligne'}
+                                </p>
+                            </div>
+                        </div>
+                        <button class="text-emerald-600 hover:text-emerald-700 font-medium text-sm">
+                            Chat
+                        </button>
+                    </div>
+                `;
+                
+                contactCard.addEventListener('click', () => openPrivateChat(contact));
+                container.appendChild(contactCard);
+            });
+        }
+
+        function openPrivateChat(contact) {
+            currentChatUser = contact.username;
+            currentChatUserId = contact.id;
+            
+            document.getElementById('no-chat-selected').classList.add('hidden');
+            document.getElementById('private-chat-window').classList.remove('hidden');
+            
+            document.getElementById('chat-user-name').textContent = contact.username;
+            document.getElementById('chat-user-initial').textContent = contact.username.charAt(0).toUpperCase();
+            
+            const isOnline = onlineUsers.has(contact.username);
+            document.getElementById('chat-user-status').innerHTML = isOnline 
+                ? '<span class="online-indicator"></span>En ligne'
+                : '<span class="offline-indicator"></span>Hors ligne';
+            
+            // Charger l'historique
+            socket.emit('get-messages', { withUserId: contact.id });
+            
+            // Marquer comme actif
+            document.querySelectorAll('.friend-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+        }
+
+        function closePrivateChat() {
+            currentChatUser = null;
+            currentChatUserId = null;
+            document.getElementById('private-chat-window').classList.add('hidden');
+            document.getElementById('no-chat-selected').classList.remove('hidden');
+            
+            document.querySelectorAll('.friend-card').forEach(card => {
+                card.classList.remove('active');
+            });
+        }
+
+        function sendPrivateMessage(e) {
+            e.preventDefault();
+            
+            const input = document.getElementById('private-message-input');
+            const text = input.value.trim();
+            
+            if (!text || !currentChatUserId) return;
+            
+            socket.emit('send-message', {
+                toUserId: currentChatUserId,
+                text: text
+            });
+            
+            input.value = '';
+        }
+
+        function displayPrivateMessages(messages) {
+            const container = document.getElementById('private-messages');
+            container.innerHTML = '';
+            messages.forEach(msg => addPrivateMessage(msg, false));
+            scrollToBottom(container);
+        }
+
+        function addPrivateMessage(message, scroll = true) {
+            const container = document.getElementById('private-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'chat-message';
+            
+            const isSent = message.from === currentUserId;
+            const time = new Date(message.timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            
+            messageDiv.innerHTML = `
+                <div class="${isSent ? 'text-right' : 'text-left'}">
+                    <div class="inline-block ${isSent ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-800'} rounded-2xl px-4 py-2 max-w-xs">
+                        <p>${message.text}</p>
+                        <p class="text-xs mt-1 ${isSent ? 'text-emerald-100' : 'text-gray-500'}">${time}</p>
+                    </div>
+                </div>
+            `;
+            
+            container.appendChild(messageDiv);
+            if (scroll) scrollToBottom(container);
+        }
+
+        async function addContact() {
+            const username = document.getElementById('contact-username').value.trim();
+            
+            if (!username) {
+                showNotification('Veuillez entrer un nom d\'utilisateur', 'error');
+                return;
+            }
+            
+            if (username === currentUser) {
+                showNotification('Vous ne pouvez pas vous ajouter', 'error');
+                return;
+            }
+            
+            try {
+                // Récupérer l'ID du contact
+                const userIdResponse = await fetch(`/api/user-id/${username}`);
+                if (!userIdResponse.ok) {
+                    showNotification('Utilisateur non trouvé', 'error');
+                    return;
+                }
+                
+                const userData = await userIdResponse.json();
+                
+                // Ajouter le contact
+                const response = await fetch(`/api/contacts/${currentUserId}/add`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contactId: userData.id })
+                });
+                
+                if (response.ok) {
+                    contacts.push(userData);
+                    displayContacts();
+                    showNotification(`${username} ajouté !`, 'success');
+                    document.getElementById('add-contact-modal').classList.add('hidden');
+                    document.getElementById('contact-username').value = '';
+                } else {
+                    const error = await response.json();
+                    showNotification(error.error || 'Erreur', 'error');
+                }
+            } catch (err) {
+                console.error('❌ Erreur:', err);
+                showNotification('Erreur réseau', 'error');
+            }
+        }
+
+        // === UTILS ===
+        function updateOnlineCount() {
+            document.getElementById('online-count').textContent = `${onlineUsers.size} en ligne`;
+        }
+
+        function updateContactsStatus() {
+            displayContacts();
+            if (currentChatUser) {
+                const isOnline = onlineUsers.has(currentChatUser);
+                document.getElementById('chat-user-status').innerHTML = isOnline 
+                    ? '<span class="online-indicator"></span>En ligne'
+                    : '<span class="offline-indicator"></span>Hors ligne';
+            }
+        }
+
+        function scrollToBottom(container) {
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 ${
+                type === 'success' ? 'bg-emerald-600' : 
+                type === 'error' ? 'bg-red-600' : 
+                'bg-blue-600'
+            }`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+    <script src="/js/session-check.js"></script>
+</body>
+</html>
+
