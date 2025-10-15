@@ -1,0 +1,18 @@
+{
+  "Alix": [
+    "Lallie",
+    "Emmanuel",
+    "Noa"
+  ],
+  "Lallie": [
+    "Alix",
+    "Noa"
+  ],
+  "Emmanuel": [
+    "Alix"
+  ],
+  "Noa": [
+    "Lallie",
+    "Alix"
+  ]
+}

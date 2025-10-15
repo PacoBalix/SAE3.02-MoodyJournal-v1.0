@@ -2,9 +2,13 @@ const express = require('express');
 const session = require('express-session');
 const fs = require('fs').promises;
 const path = require('path');
+const http = require('http');
+const socketIO = require('socket.io');
 
 const PORT = 3000;
 const app = express();
+const server = http.createServer(app);
+const io = socketIO(server);
 
 // === Middleware ===
 app.use(express.json({ limit: '10mb' })); // pour parser le JSON
@@ -21,9 +25,26 @@ app.use(express.static(path.join(__dirname, 'public'))); // sert le dossier /pub
 // Servir les assets
 app.use('/assets', express.static('assets'));
 
+// Middleware pour injecter les données utilisateur dans toutes les vues
+app.use(async (req, res, next) => {
+  try {
+    // Injecter les données utilisateur dans toutes les vues
+    res.locals.user = req.session ? req.session.user : null;
+    res.locals.authenticated = !!(req.session && req.session.user);
+    
+    next();
+  } catch (err) {
+    console.error('Erreur middleware utilisateur:', err);
+    res.locals.user = null;
+    res.locals.authenticated = false;
+    next();
+  }
+});
+
 // Définition des chemins des fichiers
 const DATA_FILE = path.join(__dirname, 'public', 'data', 'journal.json');
 const USERS_FILE = path.join(__dirname, 'data', 'users.json');
+const FRIENDS_FILE = path.join(__dirname, 'data', 'friends.json');
 
 const ensureDir = async () => {
   await fs.mkdir(path.dirname(DATA_FILE), { recursive: true });
@@ -65,41 +86,39 @@ app.use(session({
 // Initialiser les utilisateurs au démarrage
 loadUsers();
 
+// Routes principales
+app.get('/', (req, res) => {
+  res.redirect('/index.html');
+});
+
+app.get('/journal', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/index.html?login');
+  }
+  res.redirect('/journal.html');
+});
+
+app.get('/view', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/index.html?login');
+  }
+  res.redirect('/view.html');
+});
+
+app.get('/settings', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/index.html?login');
+  }
+  res.redirect('/settings.html');
+});
+
 // Routes d'authentification simples
+// plus de page /login, on ouvre le modal sur /index.html
 app.get('/login', (req, res) => {
   if (req.session.user) {
     return res.redirect('/journal');
   }
-  res.send(`
-    <!DOCTYPE html>
-    <html lang="fr">
-    <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Connexion - MoodyJournal</title>
-      <style>
-        body { font-family: system-ui; max-width: 500px; margin: 2rem auto; padding: 0 1rem; }
-        .error { color: #dc2626; margin: 1rem 0; }
-        form { display: flex; flex-direction: column; gap: 1rem; }
-        input { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; }
-        button { padding: 0.5rem; background: #16a34a; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #15803d; }
-      </style>
-    </head>
-    <body>
-      <h1>Connexion</h1>
-      ${req.query.error ? '<p class="error">Identifiants invalides</p>' : ''}
-      <form method="post">
-        <input name="username" placeholder="Nom d'utilisateur" required autocomplete="username"/>
-        <input name="password" type="password" placeholder="Mot de passe" required autocomplete="current-password"/>
-        <button type="submit">Se connecter</button>
-      </form>
-      <p style="margin-top: 1rem">
-        <small>Utilisateurs de test : Alix, Lallie, Emmanuel, Noa</small>
-      </p>
-    </body>
-    </html>
-  `);
+  res.redirect('/index.html?login');
 });
 
 app.post('/login', express.urlencoded({ extended: true }), (req, res) => {
@@ -239,9 +258,9 @@ app.get('/api/user-settings', requireAuth, async (req, res) => {
   try {
     const username = req.session.user;
     const settingsFile = path.join(__dirname, 'data', 'user-settings.json');
-    
+
     console.log(`📖 Récupération des paramètres pour: ${username}`);
-    
+
     let allSettings = {};
     try {
       const data = await fs.readFile(settingsFile, 'utf-8');
@@ -250,23 +269,24 @@ app.get('/api/user-settings', requireAuth, async (req, res) => {
     } catch (err) {
       console.log('📁 Fichier de paramètres non trouvé, utilisation des valeurs par défaut');
     }
-    
+
     const userSettings = allSettings[username] || {
-      theme: 'emerald',
-      background: 'gradient',
+      trackingCategories: [],
+      trackingOptions: {},
       sections: ['mood', 'goals', 'reflections'],
       notifications: [],
       reminderTime: '20:00'
     };
-    
+
     console.log(`📖 Paramètres récupérés pour: ${username}`, userSettings);
     res.json(userSettings);
-    
+
   } catch (err) {
     console.error('❌ Erreur lors de la récupération des paramètres:', err);
     res.status(500).json({ error: 'Impossible de récupérer les paramètres' });
   }
 });
+
 
 // Middleware pour les routes qui nécessitent une authentification
 function requireAuth(req, res, next) {
@@ -274,7 +294,7 @@ function requireAuth(req, res, next) {
     if (req.xhr || req.headers.accept?.includes('application/json')) {
       res.status(401).json({ error: 'Authentification requise' });
     } else {
-      res.redirect('/login');
+      res.redirect('/index.html?login');
     }
   } else {
     next();
@@ -390,8 +410,150 @@ app.get('/api/journal-entries', requireAuth, async (req, res) => {
   }
 });
 
+// === Routes pour la gestion des amis ===
+
+// Récupérer la liste des amis
+app.get('/api/friends', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    console.log(`👥 Récupération des amis pour: ${username}`);
+    
+    let friendsData = {};
+    try {
+      const data = await fs.readFile(FRIENDS_FILE, 'utf-8');
+      friendsData = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Fichier friends.json non trouvé, création...');
+    }
+    
+    const userFriends = friendsData[username] || [];
+    console.log(`📋 ${userFriends.length} amis trouvés pour ${username}`);
+    res.json(userFriends);
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de la récupération des amis:', err);
+    res.status(500).json({ error: 'Impossible de charger les amis' });
+  }
+});
+
+// Ajouter un ami
+app.post('/api/add-friend', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const { friendUsername } = req.body;
+    
+    console.log(`👥 ${username} veut ajouter ${friendUsername}`);
+    
+    if (!friendUsername) {
+      return res.status(400).json({ error: 'Nom d\'utilisateur requis' });
+    }
+    
+    // Vérifier que l'ami existe
+    const friendExists = users.find(u => u.username === friendUsername);
+    if (!friendExists) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+    
+    // Charger les amis
+    let friendsData = {};
+    try {
+      const data = await fs.readFile(FRIENDS_FILE, 'utf-8');
+      friendsData = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Création du fichier friends.json');
+    }
+    
+    // Initialiser la liste d'amis si nécessaire
+    if (!friendsData[username]) {
+      friendsData[username] = [];
+    }
+    
+    // Vérifier si déjà ami
+    if (friendsData[username].includes(friendUsername)) {
+      return res.status(409).json({ error: 'Déjà ami' });
+    }
+    
+    // Ajouter l'ami
+    friendsData[username].push(friendUsername);
+    
+    // Ajouter réciproquement (optionnel)
+    if (!friendsData[friendUsername]) {
+      friendsData[friendUsername] = [];
+    }
+    if (!friendsData[friendUsername].includes(username)) {
+      friendsData[friendUsername].push(username);
+    }
+    
+    // Sauvegarder
+    await fs.writeFile(FRIENDS_FILE, JSON.stringify(friendsData, null, 2));
+    
+    console.log(`✅ ${username} et ${friendUsername} sont maintenant amis`);
+    res.json({ success: true, message: 'Ami ajouté avec succès' });
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de l\'ajout d\'ami:', err);
+    res.status(500).json({ error: 'Impossible d\'ajouter l\'ami' });
+  }
+});
+
+// === Socket.IO pour le chat en temps réel ===
+const onlineUsers = new Map(); // Map<socketId, username>
+
+io.on('connection', (socket) => {
+  console.log('🔌 Nouvelle connexion Socket.IO:', socket.id);
+  
+  // Utilisateur se connecte
+  socket.on('user-online', (username) => {
+    onlineUsers.set(socket.id, username);
+    console.log(`👤 ${username} est en ligne (${socket.id})`);
+    
+    // Envoyer la liste des utilisateurs en ligne
+    const usersOnline = Array.from(onlineUsers.values());
+    io.emit('users-online', usersOnline);
+    
+    // Notifier les autres utilisateurs
+    socket.broadcast.emit('user-connected', username);
+  });
+  
+  // Envoi de message
+  socket.on('send-message', (data) => {
+    const { to, message, from } = data;
+    console.log(`💬 Message de ${from} vers ${to}: ${message}`);
+    
+    // Trouver le socket du destinataire
+    for (const [socketId, username] of onlineUsers.entries()) {
+      if (username === to) {
+        io.to(socketId).emit('receive-message', {
+          from: from,
+          message: message,
+          timestamp: new Date().toISOString()
+        });
+        console.log(`✅ Message envoyé à ${to}`);
+        break;
+      }
+    }
+  });
+  
+  // Déconnexion
+  socket.on('disconnect', () => {
+    const username = onlineUsers.get(socket.id);
+    if (username) {
+      onlineUsers.delete(socket.id);
+      console.log(`👋 ${username} s'est déconnecté (${socket.id})`);
+      
+      // Mettre à jour la liste des utilisateurs en ligne
+      const usersOnline = Array.from(onlineUsers.values());
+      io.emit('users-online', usersOnline);
+      
+      // Notifier les autres utilisateurs
+      socket.broadcast.emit('user-disconnected', username);
+    }
+  });
+});
+
 // === Démarrage du serveur ===
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Serveur en cours sur http://localhost:${PORT}`);
   console.log(`📂 Assure-toi que les pages HTML soit dans /public`);
+  console.log(`💬 Socket.IO activé pour le chat en temps réel`);
 });

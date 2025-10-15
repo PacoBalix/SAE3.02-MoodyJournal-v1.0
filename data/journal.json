@@ -225,18 +225,7 @@
       "savedAt": "2025-10-01T18:08:33.772Z"
     },
     {
-      "date": "2025-10-07",
-      "day": "Thursday",
-      "savedAt": "2025-10-07T08:42:00.144Z",
-      "enabledSections": [
-        "mood",
-        "goals",
-        "gratitude",
-        "reflections",
-        "learnings",
-        "tomorrow"
-      ],
-      "mood": "7",
+      "date": "2025-10-08",
       "feelingWords": [
         "",
         "",
@@ -248,22 +237,34 @@
         ""
       ],
       "bestMoment": "",
-      "sleep": "",
-      "exercise": "",
-      "productiveHabits": "",
-      "slippedHabits": "",
-      "challenges": "",
-      "reaction": "",
-      "differentApproach": "",
-      "patterns": "",
-      "lessons": "",
-      "energyGivers": "",
-      "energyDrainers": "",
-      "learnings": "",
-      "newKnowledge": "",
-      "improvement": "",
-      "affirmation": "",
-      "extraNotes": ""
+      "selfDiscovery": "",
+      "thoughtPatterns": "",
+      "challengesReaction": "",
+      "tomorrowQuality": "",
+      "personalAffirmation": "",
+      "extraNotes": "",
+      "savedAt": "2025-10-08T04:52:10.764Z"
+    },
+    {
+      "date": "2025-10-15",
+      "day": "Wednesday",
+      "mood": "7",
+      "primaryEmotion": "contentment",
+      "emotionIntensity": "3",
+      "positiveElements": [
+        "Je me suis levé (pas à l'heure)",
+        "J'ai osé aller vers quelqu'un en voiture, ce qui m'a permis d'arriver plus vite",
+        "Abnégation au travail"
+      ],
+      "positiveEmotion": "satisfaction",
+      "copingStrategies": "Discuter avec un proche",
+      "emotionalTriggers": "Parler de sujets qui me trigger",
+      "socialActivity": "moderate",
+      "tomorrowPriorities": "Rendre mon travail\nAvancer sur mes projets\n",
+      "resourceMobilization": "",
+      "sleepGoal": "5",
+      "extraNotes": "Mauvaise idée - Orelsan",
+      "savedAt": "2025-10-15T06:59:14.454Z"
     }
   ],
   "Emmanuel": [

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -11,17 +11,11 @@
     <!-- Scripts UI avec chargement optimisé -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    
+
     <!-- Scripts de VANTA.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
-    
-    <!-- Configuration des fonctionnalités -->
-    <script>
-        // Configuration des fonctionnalités optionnelles
-        window.VANTA_ENABLED = true; // Activé par défaut, sera configuré par les préférences utilisateur
-        window.ANIMATIONS_ENABLED = true; // peut être configuré selon les préférences
-    </script>
+
     <style>
         .bg-gradient-radial {
             background: radial-gradient(circle at center, #f0fdf4 0%, #ecfdf5 50%, #e0f2fe 100%);
@@ -106,13 +100,11 @@
 
         #vanta-bg {
             position: fixed;
-            /* Fixe dans la fenêtre */
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            /* Placé derrière tout le contenu */
         }
 
         @-webkit-keyframes fadein {
@@ -213,54 +205,122 @@
             transform: scale(1.1);
         }
 
-        /* Styles pour les thèmes */
-        .theme-blue {
-            --primary-color: #3b82f6;
-            --primary-light: #dbeafe;
-            --primary-dark: #1e40af;
+        /* Nouveaux styles pour les catégories de suivi */
+        .tracking-category {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
 
-        .theme-purple {
-            --primary-color: #8b5cf6;
-            --primary-light: #ede9fe;
-            --primary-dark: #6d28d9;
+        .tracking-category:hover {
+            border-color: #10b981;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
         }
 
-        .theme-emerald {
-            --primary-color: #10b981;
-            --primary-light: #d1fae5;
-            --primary-dark: #047857;
+        .tracking-category.selected {
+            border-color: #10b981;
+            background: #ecfdf5;
         }
 
-        /* Application des couleurs de thème */
-        .theme-blue .text-emerald-700 { color: var(--primary-color) !important; }
-        .theme-blue .bg-emerald-600 { background-color: var(--primary-color) !important; }
-        .theme-blue .bg-emerald-700 { background-color: var(--primary-dark) !important; }
-        .theme-blue .hover\\:bg-emerald-700:hover { background-color: var(--primary-dark) !important; }
-        .theme-blue .focus\\:ring-emerald-500:focus { --tw-ring-color: var(--primary-color) !important; }
-        .theme-blue .border-emerald-500 { border-color: var(--primary-color) !important; }
+        .tracking-category h4 {
+            color: #1f2937;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-        .theme-purple .text-emerald-700 { color: var(--primary-color) !important; }
-        .theme-purple .bg-emerald-600 { background-color: var(--primary-color) !important; }
-        .theme-purple .bg-emerald-700 { background-color: var(--primary-dark) !important; }
-        .theme-purple .hover\\:bg-emerald-700:hover { background-color: var(--primary-dark) !important; }
-        .theme-purple .focus\\:ring-emerald-500:focus { --tw-ring-color: var(--primary-color) !important; }
-        .theme-purple .border-emerald-500 { border-color: var(--primary-color) !important; }
+        .category-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
 
+        .category-tca { background: #ef4444; color: white; }
+        .category-addiction { background: #f59e0b; color: white; }
+        .category-mental-health { background: #3b82f6; color: white; }
+        .category-physical-health { background: #10b981; color: white; }
+        .category-social { background: #8b5cf6; color: white; }
+        .category-productivity { background: #f97316; color: white; }
+
+        .tracking-options {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .tracking-category.selected .tracking-options {
+            display: grid;
+        }
+
+        .tracking-option {
+            background: #f9fafb;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .tracking-option:hover {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
     </style>
 </head>
 
-<body class="min-h-screen bg-gradient-radial">
-    <div id="vanta-bg" class="fixed inset-0 z-0" style="width: 100%; height: 100vh;"></div>
-    <div class="relative z-10 container mx-auto px-4 py-8">
-        <header class="text-center mb-12" data-aos="fade-down">
-            <h1 class="text-4xl md:text-5xl font-bold text-emerald-800 mb-4">🌱 Mindful Journal</h1>
-            <p class="text-lg text-emerald-600">Capture your thoughts, reflect, and grow</p>
-        </header>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
+    <!-- Header avec navbar -->
+    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                        <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
+                        <span class="text-xl font-bold text-emerald-800">MoodyJournal</span>
+                    </a>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
+                    <a href="journal.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Écrire</a>
+                    <a href="view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
+                    <a href="friends.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
+                    <a href="settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
+                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
+                </nav>
+
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-emerald-100 transition-colors">
+                    <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="text-center mb-12" data-aos="fade-down">
+            <h1 class="text-4xl md:text-5xl font-bold text-emerald-800 mb-4">📊 Journal d'Analyse Comportementale</h1>
+            <p class="text-lg text-emerald-600">Analysez vos émotions, comportements et stratégies d'adaptation de manière scientifique</p>
+        </div>
 
         <div class="max-w-4xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
             <!-- Date Section -->
-            <div class="p-6 border-b border-gray-100" data-aos="fade-right">
+            <div class="p-6 border-b border-gray-100">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                     <div class="mb-4 md:mb-0">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
@@ -274,7 +334,7 @@
                                 <input type="radio" name="day" value="Monday" class="hidden">
                                 <span>Monday</span>
                             </label>
-                            <label    
+                            <label
                             class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
                                 <input type="radio" name="day" value="Tuesday" class="hidden">
                                 <span>Tuesday</span>
@@ -295,7 +355,8 @@
                                 <span>Friday</span>
                             </label>
                             <label
-                                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">                                <input type="radio" name="day" value="Saturday" class="hidden">
+                                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer day-selector">
+                                <input type="radio" name="day" value="Saturday" class="hidden">
                                 <span>Saturday</span>
                             </label>
                             <label
@@ -308,14 +369,14 @@
                 </div>
             </div>
 
-            <!-- Mood Check-in Section -->
-            <div class="p-6 border-b border-gray-100 section-card mood-section" data-aos="fade-up">
+            <!-- Évaluation émotionnelle Section -->
+            <div class="p-6 border-b border-gray-100 section-card mood-section">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
-                    <i data-feather="smile" class="mr-2"></i> Mood Check-in
+                    <i data-feather="activity" class="mr-2"></i> Évaluation émotionnelle
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Current mood (1–10)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Évaluation globale de l'humeur (1-10)</label>
                         <div class="mood-selector flex justify-between">
                             <input type="radio" id="mood-1" name="mood" value="1" class="hidden">
                             <label for="mood-1"
@@ -349,285 +410,238 @@
                                 class="w-8 h-8 flex items-center justify-center rounded-full bg-green-400 text-green-900 cursor-pointer">10</label>
                         </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">3 words to describe how I
-                            feel</label>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                            <input type="text"
-                                class="mood-checkin w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="Word 1">
-                            <input type="text"
-                                class="mood-checkin w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="Word 2">
-                            <input type="text"
-                                class="mood-checkin w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="Word 3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Émotion principale ressentie</label>
+                            <select id="primary-emotion"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="">Sélectionnez une émotion</option>
+                                <option value="joy">Joie</option>
+                                <option value="sadness">Tristesse</option>
+                                <option value="anger">Colère</option>
+                                <option value="fear">Peur</option>
+                                <option value="disgust">Dégoût</option>
+                                <option value="surprise">Surprise</option>
+                                <option value="anxiety">Anxiété</option>
+                                <option value="contentment">Contentement</option>
+                                <option value="frustration">Frustration</option>
+                                <option value="neutral">Neutre</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Intensité émotionnelle (1-5)</label>
+                            <select id="emotion-intensity"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                                <option value="">Évaluez l'intensité</option>
+                                <option value="1">1 - Très faible</option>
+                                <option value="2">2 - Faible</option>
+                                <option value="3">3 - Modérée</option>
+                                <option value="4">4 - Forte</option>
+                                <option value="5">5 - Très forte</option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Gratitude Section -->
-            <div class="p-6 border-b border-gray-100 section-card gratitude-section" data-aos="fade-up">
+            <!-- Évaluation positive Section -->
+            <div class="p-6 border-b border-gray-100 section-card gratitude-section">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
-                    <i data-feather="sun" class="mr-2"></i> Gratitude & Positives
+                    <i data-feather="sun" class="mr-2"></i> Évaluation positive
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Today, I'm grateful for:</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Éléments positifs identifiés aujourd'hui :</label>
                         <div class="space-y-2">
                             <input type="text"
                                 class="gratitude-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="1.">
+                                placeholder="1. Accomplissement ou réussite">
                             <input type="text"
                                 class="gratitude-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="2.">
+                                placeholder="2. Moment de connexion sociale">
                             <input type="text"
                                 class="gratitude-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                placeholder="3.">
+                                placeholder="3. Ressource personnelle mobilisée">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Best moment / highlight of the
-                            day</label>
-                        <textarea id="bestmoment"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2" placeholder="Describe your best moment..."></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Habits Section -->
-            <div class="p-6 border-b border-gray-100 section-card goals-section" data-aos="fade-up">
-                <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
-                    <i data-feather="activity" class="mr-2"></i> Habits & Actions
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Sleep (hours)</label>
-                        <input type="number" id="sleep" min="0" max="24"
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Émotion positive dominante du jour</label>
+                        <select id="positive-emotion"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Exercise / movement</label>
-                        <input type="text" id="exercice"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            placeholder="What did you do?">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Nutrition</label>
-                        <div class="flex gap-3">
-                            <label
-                                class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full cursor-pointer">
-                                <input type="radio" name="nutrition" value="Good" class="hidden">
-                                <span>🍎 Good</span>
-                            </label>
-                            <label
-                                class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full cursor-pointer">
-                                <input type="radio" name="nutrition" value="Average" class="hidden">
-                                <span>⚡ Average</span>
-                            </label>
-                            <label
-                                class="inline-flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full cursor-pointer">
-                                <input type="radio" name="nutrition" value="Poor" class="hidden">
-                                <span>💤 Poor</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Productive habits I followed
-                            today</label>
-                        <textarea id="good-habits"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2" placeholder="What went well?"></textarea>
-                    </div>
-                    <div class="md:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Habits I slipped on</label>
-                        <textarea id="bad-habits"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2" placeholder="What could be improved?"></textarea>
+                            <option value="">Sélectionnez une émotion</option>
+                            <option value="joy">Joie</option>
+                            <option value="satisfaction">Satisfaction</option>
+                            <option value="gratitude">Gratitude</option>
+                            <option value="pride">Fierté</option>
+                            <option value="love">Amour</option>
+                            <option value="amusement">Amusement</option>
+                            <option value="hope">Espoir</option>
+                            <option value="serenity">Sérénité</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-            <!-- Challenges Section -->
-            <div class="p-6 border-b border-gray-100 section-card" data-aos="fade-up">
+            <!-- Analyse comportementale Section -->
+            <div class="p-6 border-b border-gray-100 section-card">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
-                    <i data-feather="alert-triangle" class="mr-2"></i> Challenges & Problems
+                    <i data-feather="users" class="mr-2"></i> Analyse comportementale
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What challenged me today?</label>
-                        <textarea id="challenges"
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quelles stratégies d'adaptation ai-je utilisées aujourd'hui ?</label>
+                        <textarea id="coping-strategies"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2"></textarea>
+                            rows="3" placeholder="Décrivez les méthodes utilisées pour gérer le stress ou les difficultés (ex: respiration, activité physique, discussion avec un proche)..."></textarea>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">How did I react?</label>
-                        <textarea id="reaction"
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Ai-je identifié des déclencheurs émotionnels aujourd'hui ?</label>
+                        <textarea id="emotional-triggers"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2"></textarea>
+                            rows="3" placeholder="Notez les situations, personnes ou pensées qui ont influencé votre état émotionnel de manière significative..."></textarea>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What could I try differently next
-                            time?</label>
-                        <textarea id="approach"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Reflections Section -->
-            <div class="p-6 border-b border-gray-100 section-card reflections-section" data-aos="fade-up">
-                <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
-                    <i data-feather="eye" class="mr-2"></i> Reflections & Lessons
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Did I notice any patterns in my
-                            thoughts/behaviors?</label>
-                        <textarea id="patterns"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="3"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What did I learn about myself
-                            today?</label>
-                        <textarea id="lessons"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="3"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What gave me energy?</label>
-                        <textarea id="energyGivers"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What drained my energy?</label>
-                        <textarea id="energyDrainers"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Next Steps Section -->
-            <div class="p-6 border-b border-gray-100 section-card tomorrow-section" data-aos="fade-up">
-                <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
-                    <i data-feather="target" class="mr-2"></i> Next Step / Tomorrow's Intention
-                </h2>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">One thing I want to improve
-                            tomorrow</label>
-                        <input type="text" id="improve"
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quel a été mon niveau d'activité sociale aujourd'hui ?</label>
+                        <select id="social-activity"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">A reminder or affirmation for
-                            myself</label>
-                        <textarea id="affirmation"
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2" placeholder="Write your affirmation here..."></textarea>
+                            <option value="">Sélectionnez un niveau</option>
+                            <option value="very-low">Très faible (isolement complet)</option>
+                            <option value="low">Faible (contacts limités)</option>
+                            <option value="moderate">Modéré (quelques interactions)</option>
+                            <option value="high">Élevé (nombreuses interactions)</option>
+                            <option value="very-high">Très élevé (activités sociales intenses)</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-            <!-- Learnings Section -->
-            <div class="p-6 border-b border-gray-100 section-card learnings-section" data-aos="fade-up">
+            <!-- Planification proactive Section -->
+            <div class="p-6 border-b border-gray-100 section-card">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
-                    <i data-feather="book-open" class="mr-2"></i> What I Learned Today
+                    <i data-feather="target" class="mr-2"></i> Planification proactive
                 </h2>
                 <div class="space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What did I learn about myself today?</label>
-                        <textarea id="learnings"
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quelles sont mes priorités pour demain ?</label>
+                        <textarea id="tomorrow-priorities"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="3" placeholder="What insights did I gain about myself?"></textarea>
+                            rows="2" placeholder="Listez 2-3 objectifs concrets et réalisables pour demain..."></textarea>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What new knowledge or skills did I acquire?</label>
-                        <textarea id="new-knowledge"
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quelle ressource vais-je mobiliser ?</label>
+                        <select id="resource-mobilization"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                            <option value="">Choisissez une ressource</option>
+                            <option value="energy">Gestion de l'énergie</option>
+                            <option value="time">Gestion du temps</option>
+                            <option value="social">Soutien social</option>
+                            <option value="cognitive">Ressources cognitives</option>
+                            <option value="emotional">Régulation émotionnelle</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Objectif de sommeil (heures prévues)</label>
+                        <input type="number" id="sleep-goal" min="0" max="12" step="0.5"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                            rows="2" placeholder="Any new information, skills, or perspectives?"></textarea>
+                            placeholder="7.5">
                     </div>
                 </div>
             </div>
 
             <!-- Extra Notes Section -->
-            <div class="p-6 section-card" data-aos="fade-up">
+            <div class="p-6 section-card">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
-                    <i data-feather="edit-3" class="mr-2"></i> Extra Notes
+                    <i data-feather="edit-3" class="mr-2"></i> Notes libres
                 </h2>
                 <textarea id="extra-notes"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                    rows="5" placeholder="Free writing space for anything on your mind..."></textarea>
+                    rows="5" placeholder="Espace libre pour toutes vos pensées, intuitions, rêves..."></textarea>
             </div>
 
             <!-- Submit Button -->
-            <div class="p-6 bg-gray-50 rounded-b-2xl flex justify-end" data-aos="fade-up">
+            <div class="p-6 bg-gray-50 rounded-b-2xl flex justify-end">
                 <button id="save-journal"
                     class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-md transition duration-300 flex items-center">
-                    <i data-feather="save" class="mr-2"></i> Save Journal Entry
+                    <i data-feather="save" class="mr-2"></i> Sauvegarder ce journal
                 </button>
             </div>
         </div>
 
         <div id="snackbar"
             class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg shadow-md transition duration-300 flex items-center">
-            Journal entry saved successfully!</div>
+            Journal sauvegardée avec succès !</div>
 
-        <footer class="mt-12 text-center text-gray-600 text-sm" data-aos="fade-up">
-            <p>Your mindful journey starts here. Reflect daily for personal growth.</p>
+        <footer class="mt-12 text-center text-gray-600 text-sm">
+            <p>Votre voyage de conscience commence ici. Explorez, observez, grandissez.</p>
         </footer>
     </div>
-</body>
-    <script src="/js/theme-manager.js"></script>
-    <script src="./journal.js"></script>
-<!-- Floating home button -->
-<a id="home-button" href="./index.html" aria-label="Retour à l'accueil" title="Accueil">
-        <i data-feather="home"></i>
-</a>
-<!--script>
-  document.addEventListener("DOMContentLoaded", async function () {
-    // Initialisation des icônes et animations
-    if (typeof feather !== 'undefined') {
-        feather.replace();
-    }
 
-    // Vérification des préférences utilisateur pour Vanta
-    try {
-        const response = await fetch('/api/user-preferences');
-        const prefs = await response.json();
-        
-        if (prefs.enableVanta) {
-            // Chargement dynamique des scripts Vanta nécessaires
-            await Promise.all([
-                loadScript('https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js'),
-                loadScript('https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js')
-            ]);
-
-            // Initialisation de Vanta avec une configuration optimisée
-            if (typeof VANTA !== 'undefined') {
-                VANTA.TOPOLOGY({
-                    el: "#vanta-bg",
-                    mouseControls: true,
-                    touchControls: true,
-                    gyroControls: false,
-                    minHeight: 200.0,
-                    minWidth: 200.0,
-                    scale: 1.0,
-                    scaleMobile: 1.0,
-                    color: 0x85a53b,
-                    backgroundColor: 0xffffff,
-                });
-            }
+    <script>
+        // Utilitaires
+        function info_popup() {
+            var toaster = document.getElementById("snackbar");
+            toaster.className = "show";
+            setTimeout(function () {
+                toaster.className = toaster.className.replace("show", "");
+            }, 3000);
         }
-    } catch (err) {
-        console.log('Vanta désactivé ou erreur de chargement des préférences');
-    }
-});
-</script-->
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Définir la date du jour
+            const today = new Date().toISOString().split("T")[0];
+            const dateInput = document.getElementById("journal-date");
+            if (dateInput) {
+                dateInput.value = today;
+            }
+
+            // Gestion de la sauvegarde
+            document.getElementById("save-journal").addEventListener("click", async function () {
+                try {
+                    // Collecter les données du formulaire
+                    const journalData = {
+                        date: document.getElementById("journal-date").value,
+                        day: document.querySelector('input[name="day"]:checked')?.value,
+                        mood: document.querySelector('input[name="mood"]:checked')?.value,
+                        primaryEmotion: document.getElementById("primary-emotion")?.value || "",
+                        emotionIntensity: document.getElementById("emotion-intensity")?.value || "",
+                        positiveElements: Array.from(document.querySelectorAll(".gratitude-input")).map(input => input.value),
+                        positiveEmotion: document.getElementById("positive-emotion")?.value || "",
+                        copingStrategies: document.getElementById("coping-strategies")?.value || "",
+                        emotionalTriggers: document.getElementById("emotional-triggers")?.value || "",
+                        socialActivity: document.getElementById("social-activity")?.value || "",
+                        tomorrowPriorities: document.getElementById("tomorrow-priorities")?.value || "",
+                        resourceMobilization: document.getElementById("resource-mobilization")?.value || "",
+                        sleepGoal: document.getElementById("sleep-goal")?.value || "",
+                        extraNotes: document.getElementById("extra-notes")?.value || "",
+                        savedAt: new Date().toISOString()
+                    };
+
+                    console.log("💾 Sauvegarde du journal:", journalData);
+
+                    // Envoyer au serveur
+                    const response = await fetch("/api/save-journal", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify(journalData),
+                    });
+
+                    if (response.ok) {
+                        console.log("✅ Journal sauvegardé !");
+                        info_popup();
+                    } else {
+                        console.error("❌ Échec de la sauvegarde");
+                        const error = await response.json();
+                        console.error("Erreur:", error);
+                    }
+
+                } catch (err) {
+                    console.error("❌ Erreur lors de la sauvegarde:", err);
+                }
+            });
+        });
+    </script>
+</body>
 </html>

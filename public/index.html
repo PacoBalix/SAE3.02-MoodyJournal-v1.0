@@ -1,7 +1,5 @@
-<!-- ...existing code... -->
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
@@ -78,31 +76,28 @@
 </head>
 
 <body>
-    <header class="bg-white shadow-sm border-b border-gray-100">
-        <div class="max-w-6xl mx-auto px-6 py-4">
+    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <a href="index.html" class="flex items-center space-x-3">
-                        <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-16">
+                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                        <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
+                        <span class="text-xl font-bold text-emerald-800">MoodyJournal</span>
                     </a>
-                    <div class="text-center">
-                        <p style="padding-left: 15em; font-weight: bold;" class="text-sm text-emerald-600">Votre espace de réflexion quotidien</p>
-                    </div>
                 </div>
 
-                <nav class="hidden md:flex items-center space-x-8">
-                    <a href="journal.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
-                    <a href="view.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
-                    <a href="settings.html" class="text-gray-600 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
-                    
-                    <div id="user-info" class="hidden items-center space-x-4">
-                        <a href="/logout" id="logout-link" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
-                    </div>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Accueil</a>
+                    <a href="journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
+                    <a href="view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
+                    <a href="friends.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
+                    <a href="settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
+                    <a href="/logout" id="logout-btn-nav" class="text-red-600 hover:text-red-700 font-medium transition-colors hidden">Déconnexion</a>
                 </nav>
 
                 <!-- Mobile menu button -->
-                <button class="md:hidden p-2 rounded-lg hover:bg-gray-100">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-emerald-100 transition-colors">
+                    <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
@@ -110,21 +105,24 @@
         </div>
     </header>
 
-    <main class="min-h-screen bg-gradient-to-br from-emerald-50 to-teal-100 py-12">
+    <main class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 py-12">
         <div class="max-w-6xl mx-auto px-6">
             <!-- Hero Section -->
             <div class="text-center mb-16">
                 <h1 id="welcome-title" class="text-5xl font-bold text-emerald-800 mb-6">
-                    Bienvenue sur MoodyJournal🌿
+                    Bienvenue sur MoodyJournal🪴
                 </h1>
                 <p class="text-xl text-emerald-600 mb-8 max-w-2xl mx-auto">
-                    Un endroit sûr pour réfléchir, noter et analyser son quotidien
+                    Un endroit sûr pour réfléchir, noter et analyser son quotidien avec un suivi personnalisé de vos habitudes
                 </p>
-                <div class="flex justify-center mb-8">
-                    <button id="login-btn" type="button" aria-haspopup="dialog" aria-controls="login-modal" 
-                            class="hidden bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-4 px-12 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-emerald-500/25 text-lg">
+                <div class="flex flex-col items-center justify-center mb-8">
+                    <button id="login-btn" type="button" aria-haspopup="dialog" aria-controls="login-modal"
+                            class="hidden bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-bold py-4 px-12 rounded-2xl shadow-2xl transition-all duration-300 transform hover:scale-110 hover:shadow-emerald-500/25 text-lg mb-4">
                         🔐 Se connecter
                     </button>
+                    <p id="login-message" class="hidden text-gray-700 text-base max-w-lg mx-auto bg-amber-50 border-2 border-amber-200 rounded-lg px-6 py-3 shadow-sm">
+                        ⚠️ Veuillez vous connecter si vous souhaitez accéder aux fonctionnalités de cette application
+                    </p>
                 </div>
             </div>
 
@@ -132,8 +130,8 @@
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
                 <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="text-4xl mb-4">📘</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Écrire mon journal</h3>
-                    <p class="text-gray-600 mb-4">Capturez vos pensées, émotions et réflexions quotidiennes</p>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Journal personnalisé</h3>
+                    <p class="text-gray-600 mb-4">Suivez vos habitudes, addictions et votre évolution personnelle</p>
                     <a href="journal.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
                         Commencer à écrire →
                     </a>
@@ -141,47 +139,84 @@
 
                 <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="text-4xl mb-4">👁️</div>
-                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Consulter mes données</h3>
-                    <p class="text-gray-600 mb-4">Explorez vos entrées passées et suivez votre évolution</p>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Analyse des données</h3>
+                    <p class="text-gray-600 mb-4">Visualisez vos progrès et patterns comportementaux</p>
                     <a href="view.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
-                        Voir mes entrées →
+                        Voir mes données →
                     </a>
                 </div>
 
                 <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
                     <div class="text-4xl mb-4">⚙️</div>
                     <h3 class="text-xl font-semibold text-gray-800 mb-3">Paramètres</h3>
-                    <p class="text-gray-600 mb-4">Personnalisez votre expérience de journaling</p>
+                    <p class="text-gray-600 mb-4">Configurez vos préférences personnalisées</p>
                     <a href="settings.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
-                        Gérer mon compte →
+                        Gérer mes paramètres →
                     </a>
+                </div>
+
+                <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="text-4xl mb-4">💬</div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-3">Discuter</h3>
+                    <p class="text-gray-600 mb-4">Échangez en temps réel avec vos contacts</p>
+                    <a href="friends.html" class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium">
+                        Accéder au chat →
+                    </a>
+                </div>
+            </div>
+
+            <!-- Nouvelles fonctionnalités -->
+            <div class="bg-white rounded-3xl p-12 shadow-xl mb-16">
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Nouveautés : Suivi personnalisé des habitudes</h2>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">🍎</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">TCA & Alimentation</h3>
+                        <p class="text-gray-600">Suivez vos repas, envies et relation à la nourriture</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">⚠️</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Addictions</h3>
+                        <p class="text-gray-600">Identifiez les déclencheurs et suivez vos progrès</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl">🧠</span>
+                        </div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Santé Mentale</h3>
+                        <p class="text-gray-600">Notez votre humeur, anxiété et bien-être émotionnel</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Benefits Section -->
             <div class="bg-white rounded-3xl p-12 shadow-xl">
-                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Pourquoi tenir un journal ?</h2>
+                <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Pourquoi utiliser MoodyJournal ?</h2>
                 <div class="grid md:grid-cols-3 gap-8">
                     <div class="text-center">
                         <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <span class="text-2xl">🧠</span>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Clarté mentale</h3>
-                        <p class="text-gray-600">Organisez vos pensées et réduisez le stress</p>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Conscience de soi</h3>
+                        <p class="text-gray-600">Développez une meilleure compréhension de vos patterns et comportements</p>
                     </div>
                     <div class="text-center">
                         <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <span class="text-2xl">📈</span>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Suivi personnel</h3>
-                        <p class="text-gray-600">Observez vos progrès et vos patterns</p>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Suivi personnalisé</h3>
+                        <p class="text-gray-600">Adaptez votre journal à vos besoins spécifiques (TCA, addictions, etc.)</p>
                     </div>
                     <div class="text-center">
                         <div class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <span class="text-2xl">💚</span>
                         </div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Bien-être</h3>
-                        <p class="text-gray-600">Améliorez votre santé mentale au quotidien</p>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Croissance personnelle</h3>
+                        <p class="text-gray-600">Observez vos progrès et célébrez vos victoires</p>
                     </div>
                 </div>
             </div>
@@ -254,10 +289,36 @@
             // accessibilité: ouvrir modal si url contient ?login
             if (location.search.includes('login')) openModal();
         })();
+
+        // Vérifier la session et afficher/masquer le bouton de déconnexion
+        async function checkSessionAndUpdateNav() {
+            try {
+                const response = await fetch('/api/session');
+                const data = await response.json();
+                
+                const logoutBtn = document.getElementById('logout-btn-nav');
+                const loginBtn = document.getElementById('login-btn');
+                const loginMessage = document.getElementById('login-message');
+                
+                if (data.authenticated) {
+                    // Utilisateur connecté
+                    logoutBtn.classList.remove('hidden');
+                    loginBtn.classList.add('hidden');
+                    loginMessage.classList.add('hidden');
+                } else {
+                    // Utilisateur non connecté
+                    logoutBtn.classList.add('hidden');
+                    loginBtn.classList.remove('hidden');
+                    loginMessage.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error('Erreur vérification session:', err);
+            }
+        }
+
+        // Appeler au chargement de la page
+        document.addEventListener('DOMContentLoaded', checkSessionAndUpdateNav);
     </script>
-    <script src="/js/theme-manager.js"></script>
     <script src="/js/session-check.js"></script>
 </body>
-
 </html>
-<!-- ...existing code... -->

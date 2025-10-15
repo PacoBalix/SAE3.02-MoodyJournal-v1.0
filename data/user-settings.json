@@ -1,34 +1,32 @@
 {
   "Alix": {
-    "theme": "purple",
-    "background": "vanta",
-    "vantaType": "topology",
-    "vantaColor": "#45d37c",
-    "vantaInteractive": false,
+    "trackingCategories": [
+      "addiction",
+      "physical-health"
+    ],
     "sections": [
       "mood",
       "goals",
       "gratitude",
-      "reflections",
-      "learnings",
-      "tomorrow"
+      "consciousness",
+      "intention",
+      "notes"
     ],
-    "notifications": [],
     "reminderTime": "20:00",
-    "lastUpdated": "2025-10-07T09:01:20.165Z"
+    "savedAt": "2025-10-15T09:29:29.290Z",
+    "lastUpdated": "2025-10-15T09:29:29.292Z"
   },
   "Emmanuel": {
-    "theme": "purple",
+    "trackingCategories": [
+      "physical-health"
+    ],
     "sections": [
       "mood",
       "goals",
-      "gratitude",
-      "reflections",
-      "learnings",
-      "tomorrow"
+      "gratitude"
     ],
-    "notifications": [],
     "reminderTime": "20:00",
-    "lastUpdated": "2025-10-07T07:11:56.832Z"
+    "savedAt": "2025-10-15T07:44:29.424Z",
+    "lastUpdated": "2025-10-15T07:44:32.211Z"
   }
 }
