@@ -114,7 +114,7 @@
                 <p class="text-xl md:text-2xl text-gray-700 mb-4 max-w-3xl mx-auto">
                     Votre compagnon digital pour le <span class="text-emerald-600 font-semibold">bien-être mental</span> et <span class="text-blue-600 font-semibold">émotionnel</span>
                 </p>
-                <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                <p class="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
                     Réfléchissez, notez, analysez et progressez avec un suivi personnalisé de vos habitudes
                 </p>
                 <div class="flex flex-col items-center justify-center mb-8">
@@ -125,6 +125,103 @@
                     <p id="login-message" class="hidden text-gray-700 text-base max-w-lg mx-auto bg-amber-50 border-2 border-amber-200 rounded-lg px-6 py-3 shadow-sm">
                         ⚠️ Veuillez vous connecter si vous souhaitez accéder aux fonctionnalités de cette application
                     </p>
+                </div>
+            </div>
+
+            <!-- Dashboard Personnalisé (affiché uniquement si connecté) -->
+            <div id="personal-dashboard" class="hidden mb-16">
+                <!-- En-tête personnalisé -->
+                <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl p-8 shadow-2xl text-white mb-8">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-3xl font-bold mb-2">👋 Bonjour <span id="user-name">!</span></h2>
+                            <p class="text-emerald-100 text-lg" id="dashboard-greeting">Prêt à continuer votre chemin vers le bien-être ?</p>
+                        </div>
+                        <div class="text-6xl opacity-50">🌱</div>
+                    </div>
+                </div>
+
+                <!-- Stats rapides -->
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl p-6 shadow-lg border-l-4 border-emerald-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-3xl">🔥</span>
+                            <span class="text-xs text-gray-500">Série</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-800" id="dash-streak">0</p>
+                        <p class="text-sm text-gray-600">jours consécutifs</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-3xl">😊</span>
+                            <span class="text-xs text-gray-500">Humeur</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-800" id="dash-mood">--</p>
+                        <p class="text-sm text-gray-600">moyenne sur 7 jours</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg border-l-4 border-purple-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-3xl">📝</span>
+                            <span class="text-xs text-gray-500">Entrées</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-800" id="dash-entries">0</p>
+                        <p class="text-sm text-gray-600">ce mois-ci</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 shadow-lg border-l-4 border-orange-500">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-3xl">📈</span>
+                            <span class="text-xs text-gray-500">Tendance</span>
+                        </div>
+                        <p class="text-3xl font-bold text-gray-800" id="dash-trend">→</p>
+                        <p class="text-sm text-gray-600" id="dash-trend-text">stable</p>
+                    </div>
+                </div>
+
+                <!-- Insights personnalisés -->
+                <div class="grid md:grid-cols-2 gap-6 mb-8">
+                    <!-- Encouragements -->
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-6 shadow-lg border-l-4 border-green-500">
+                        <div class="flex items-center mb-4">
+                            <span class="text-3xl mr-3">💪</span>
+                            <h3 class="text-xl font-bold text-gray-800">Vos forces</h3>
+                        </div>
+                        <div id="strengths-container">
+                            <p class="text-gray-600">Chargement...</p>
+                        </div>
+                    </div>
+
+                    <!-- Points d'attention -->
+                    <div class="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-xl p-6 shadow-lg border-l-4 border-amber-500">
+                        <div class="flex items-center mb-4">
+                            <span class="text-3xl mr-3">🎯</span>
+                            <h3 class="text-xl font-bold text-gray-800">Points d'attention</h3>
+                        </div>
+                        <div id="attention-container">
+                            <p class="text-gray-600">Chargement...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions suggérées -->
+                <div class="bg-white rounded-xl p-8 shadow-lg mb-8">
+                    <div class="flex items-center mb-6">
+                        <span class="text-4xl mr-3">💡</span>
+                        <h3 class="text-2xl font-bold text-gray-800">Actions suggérées pour aujourd'hui</h3>
+                    </div>
+                    <div id="suggested-actions" class="grid md:grid-cols-3 gap-4">
+                        <!-- Les actions seront générées dynamiquement -->
+                    </div>
+                </div>
+
+                <!-- Catégories de suivi actives -->
+                <div id="tracking-summary" class="bg-white rounded-xl p-8 shadow-lg hidden">
+                    <div class="flex items-center mb-6">
+                        <span class="text-4xl mr-3">📊</span>
+                        <h3 class="text-2xl font-bold text-gray-800">Vos suivis actifs</h3>
+                    </div>
+                    <div id="tracking-categories-summary" class="grid md:grid-cols-3 gap-4">
+                        <!-- Les catégories seront générées dynamiquement -->
+                    </div>
                 </div>
             </div>
 
@@ -377,21 +474,291 @@
                 const logoutBtn = document.getElementById('logout-btn-nav');
                 const loginBtn = document.getElementById('login-btn');
                 const loginMessage = document.getElementById('login-message');
+                const personalDashboard = document.getElementById('personal-dashboard');
                 
                 if (data.authenticated) {
                     // Utilisateur connecté
                     logoutBtn.classList.remove('hidden');
                     loginBtn.classList.add('hidden');
                     loginMessage.classList.add('hidden');
+                    personalDashboard.classList.remove('hidden');
+                    
+                    // Charger le dashboard personnalisé
+                    await loadPersonalDashboard(data.username);
                 } else {
                     // Utilisateur non connecté
                     logoutBtn.classList.add('hidden');
                     loginBtn.classList.remove('hidden');
                     loginMessage.classList.remove('hidden');
+                    personalDashboard.classList.add('hidden');
                 }
             } catch (err) {
                 console.error('Erreur vérification session:', err);
             }
+        }
+
+        // Charger le dashboard personnalisé
+        async function loadPersonalDashboard(username) {
+            try {
+                // Afficher le nom de l'utilisateur
+                document.getElementById('user-name').textContent = username;
+                
+                // Salutation personnalisée selon l'heure
+                const hour = new Date().getHours();
+                let greeting = 'Bonjour';
+                if (hour < 12) greeting = 'Bon matin';
+                else if (hour < 18) greeting = 'Bon après-midi';
+                else greeting = 'Bonsoir';
+                
+                const greetings = [
+                    `${greeting} ${username} ! Prêt à continuer votre chemin vers le bien-être ?`,
+                    `${greeting} ${username} ! Chaque jour est une nouvelle opportunité de progresser 🌱`,
+                    `${greeting} ${username} ! Prenez un moment pour vous aujourd'hui 💚`,
+                    `${greeting} ${username} ! Votre bien-être est une priorité ✨`
+                ];
+                document.getElementById('dashboard-greeting').textContent = greetings[Math.floor(Math.random() * greetings.length)];
+                
+                // Charger les données du journal
+                const journalRes = await fetch('/api/journal-entries');
+                const entries = await journalRes.json();
+                
+                // Charger les paramètres utilisateur
+                const settingsRes = await fetch('/api/user-settings');
+                const settings = await settingsRes.json();
+                
+                // Calculer les stats
+                calculateDashboardStats(entries);
+                
+                // Générer les insights
+                generateInsights(entries, settings);
+                
+                // Afficher le résumé des catégories de suivi
+                if (settings.trackingCategories && settings.trackingCategories.length > 0) {
+                    displayTrackingSummary(settings.trackingCategories, entries);
+                }
+                
+            } catch (err) {
+                console.error('Erreur chargement dashboard:', err);
+            }
+        }
+
+        // Calculer les statistiques du dashboard
+        function calculateDashboardStats(entries) {
+            if (!entries || entries.length === 0) return;
+            
+            // Série de jours consécutifs
+            const streak = calculateStreak(entries);
+            document.getElementById('dash-streak').textContent = streak;
+            
+            // Humeur moyenne sur 7 jours
+            const last7Days = entries.slice(-7);
+            const avgMood = last7Days.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / last7Days.length;
+            document.getElementById('dash-mood').textContent = avgMood ? avgMood.toFixed(1) + '/10' : '--';
+            
+            // Entrées ce mois-ci
+            const thisMonth = entries.filter(e => {
+                const entryDate = new Date(e.date);
+                const now = new Date();
+                return entryDate.getMonth() === now.getMonth() && entryDate.getFullYear() === now.getFullYear();
+            });
+            document.getElementById('dash-entries').textContent = thisMonth.length;
+            
+            // Tendance
+            if (entries.length >= 2) {
+                const recent = entries.slice(-3);
+                const older = entries.slice(-6, -3);
+                const recentAvg = recent.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / recent.length;
+                const olderAvg = older.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / older.length;
+                
+                const diff = recentAvg - olderAvg;
+                if (diff > 0.5) {
+                    document.getElementById('dash-trend').textContent = '📈';
+                    document.getElementById('dash-trend-text').textContent = 'en hausse';
+                } else if (diff < -0.5) {
+                    document.getElementById('dash-trend').textContent = '📉';
+                    document.getElementById('dash-trend-text').textContent = 'en baisse';
+                } else {
+                    document.getElementById('dash-trend').textContent = '→';
+                    document.getElementById('dash-trend-text').textContent = 'stable';
+                }
+            }
+        }
+
+        // Calculer la série de jours consécutifs
+        function calculateStreak(entries) {
+            if (!entries || entries.length === 0) return 0;
+            
+            const sortedEntries = entries.sort((a, b) => new Date(b.date) - new Date(a.date));
+            let streak = 0;
+            let currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0);
+            
+            for (const entry of sortedEntries) {
+                const entryDate = new Date(entry.date);
+                entryDate.setHours(0, 0, 0, 0);
+                
+                const diffDays = Math.floor((currentDate - entryDate) / (1000 * 60 * 60 * 24));
+                
+                if (diffDays === streak || (streak === 0 && diffDays <= 1)) {
+                    streak++;
+                    currentDate = entryDate;
+                } else {
+                    break;
+                }
+            }
+            
+            return streak;
+        }
+
+        // Générer les insights personnalisés
+        function generateInsights(entries, settings) {
+            const strengthsContainer = document.getElementById('strengths-container');
+            const attentionContainer = document.getElementById('attention-container');
+            const suggestedActions = document.getElementById('suggested-actions');
+            
+            const strengths = [];
+            const attentionPoints = [];
+            const actions = [];
+            
+            if (entries && entries.length > 0) {
+                const last7Days = entries.slice(-7);
+                const avgMood = last7Days.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / last7Days.length;
+                
+                // Identifier les forces
+                if (avgMood >= 7) {
+                    strengths.push('Votre humeur est globalement positive ces derniers jours ! 😊');
+                }
+                
+                const streak = calculateStreak(entries);
+                if (streak >= 3) {
+                    strengths.push(`Vous êtes régulier dans votre pratique (${streak} jours consécutifs) ! 🔥`);
+                }
+                
+                // Analyser les patterns
+                const lastEntry = entries[entries.length - 1];
+                if (lastEntry.gratitude && lastEntry.gratitude.filter(g => g.trim()).length > 0) {
+                    strengths.push('Vous pratiquez activement la gratitude 🙏');
+                }
+                
+                if (lastEntry.sleep && parseFloat(lastEntry.sleep) >= 7) {
+                    strengths.push('Vous prenez soin de votre sommeil 💤');
+                }
+                
+                // Points d'attention
+                if (avgMood < 5) {
+                    attentionPoints.push('Votre humeur semble basse récemment. Pensez à contacter un proche ou un professionnel 💚');
+                    actions.push({
+                        icon: '🤝',
+                        title: 'Demander du soutien',
+                        desc: 'Contactez un ami ou un professionnel',
+                        link: 'chat.html'
+                    });
+                }
+                
+                if (!lastEntry.sleep || parseFloat(lastEntry.sleep) < 6) {
+                    attentionPoints.push('Le sommeil semble être un défi. Essayez d\'établir une routine 🌙');
+                    actions.push({
+                        icon: '😴',
+                        title: 'Améliorer le sommeil',
+                        desc: 'Fixez un objectif de sommeil',
+                        link: 'journal.html'
+                    });
+                }
+                
+                if (streak === 0) {
+                    attentionPoints.push('Votre pratique du journal est irrégulière. La régularité est la clé ! 📝');
+                }
+            }
+            
+            // Actions par défaut
+            actions.push({
+                icon: '📝',
+                title: 'Écrire dans mon journal',
+                desc: 'Prenez 5 minutes pour noter votre journée',
+                link: 'journal.html'
+            });
+            
+            actions.push({
+                icon: '📊',
+                title: 'Voir mes progrès',
+                desc: 'Consultez vos statistiques détaillées',
+                link: 'view.html'
+            });
+            
+            if (settings.trackingCategories && settings.trackingCategories.length > 0) {
+                actions.push({
+                    icon: '🎯',
+                    title: 'Suivre mes objectifs',
+                    desc: 'Remplissez vos suivis personnalisés',
+                    link: 'journal.html'
+                });
+            }
+            
+            // Afficher les forces
+            if (strengths.length > 0) {
+                strengthsContainer.innerHTML = `
+                    <ul class="space-y-2">
+                        ${strengths.map(s => `<li class="flex items-start"><span class="mr-2">✓</span><span class="text-gray-700">${s}</span></li>`).join('')}
+                    </ul>
+                `;
+            } else {
+                strengthsContainer.innerHTML = '<p class="text-gray-600">Continuez à écrire régulièrement pour découvrir vos forces !</p>';
+            }
+            
+            // Afficher les points d'attention
+            if (attentionPoints.length > 0) {
+                attentionContainer.innerHTML = `
+                    <ul class="space-y-2">
+                        ${attentionPoints.map(p => `<li class="flex items-start"><span class="mr-2">⚠️</span><span class="text-gray-700">${p}</span></li>`).join('')}
+                    </ul>
+                `;
+            } else {
+                attentionContainer.innerHTML = '<p class="text-gray-600">Tout va bien ! Continuez sur cette voie 🌟</p>';
+            }
+            
+            // Afficher les actions suggérées
+            suggestedActions.innerHTML = actions.map(action => `
+                <a href="${action.link}" class="block bg-gradient-to-br from-white to-gray-50 rounded-lg p-6 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-2 border-gray-100 hover:border-emerald-300">
+                    <div class="text-4xl mb-3">${action.icon}</div>
+                    <h4 class="font-bold text-gray-800 mb-2">${action.title}</h4>
+                    <p class="text-sm text-gray-600">${action.desc}</p>
+                </a>
+            `).join('');
+        }
+
+        // Afficher le résumé des catégories de suivi
+        function displayTrackingSummary(categories, entries) {
+            const trackingSummary = document.getElementById('tracking-summary');
+            const container = document.getElementById('tracking-categories-summary');
+            
+            if (!categories || categories.length === 0) return;
+            
+            trackingSummary.classList.remove('hidden');
+            
+            const categoryInfo = {
+                'tca': { name: 'TCA', icon: '🍎', color: '#ef4444' },
+                'addiction': { name: 'Addictions', icon: '⚠️', color: '#f59e0b' },
+                'mental-health': { name: 'Santé Mentale', icon: '🧠', color: '#3b82f6' },
+                'physical-health': { name: 'Santé Physique', icon: '💪', color: '#10b981' },
+                'social': { name: 'Relations', icon: '👥', color: '#8b5cf6' },
+                'productivity': { name: 'Productivité', icon: '📈', color: '#f97316' }
+            };
+            
+            container.innerHTML = categories.map(cat => {
+                const info = categoryInfo[cat] || { name: cat, icon: '📊', color: '#6b7280' };
+                const recentEntries = entries.slice(-7).filter(e => e.trackingCategories && e.trackingCategories.includes(cat));
+                
+                return `
+                    <div class="bg-white rounded-lg p-4 shadow-md border-l-4" style="border-color: ${info.color}">
+                        <div class="flex items-center mb-2">
+                            <span class="text-3xl mr-2">${info.icon}</span>
+                            <h4 class="font-semibold text-gray-800">${info.name}</h4>
+                        </div>
+                        <p class="text-sm text-gray-600">${recentEntries.length} entrées sur 7 jours</p>
+                        <a href="journal.html" class="text-sm font-medium mt-2 inline-block" style="color: ${info.color}">Continuer le suivi →</a>
+                    </div>
+                `;
+            }).join('');
         }
 
         // Appeler au chargement de la page

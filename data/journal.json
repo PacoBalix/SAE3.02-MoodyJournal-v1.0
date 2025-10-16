@@ -265,6 +265,98 @@
       "sleepGoal": "5",
       "extraNotes": "Mauvaise idée - Orelsan",
       "savedAt": "2025-10-15T06:59:14.454Z"
+    },
+    {
+      "date": "2025-10-16",
+      "day": "Jeudi",
+      "moodWords": [
+        "",
+        "",
+        ""
+      ],
+      "primaryEmotion": "",
+      "emotionIntensity": "",
+      "positiveElements": [
+        "",
+        "",
+        ""
+      ],
+      "bestMoment": "",
+      "positiveEmotion": "",
+      "sleep": "",
+      "exercise": "",
+      "nutrition": "",
+      "goodHabits": "",
+      "badHabits": "",
+      "challenges": "",
+      "reaction": "",
+      "approach": "",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "copingStrategies": "",
+      "emotionalTriggers": "",
+      "socialActivity": "",
+      "tomorrowPriorities": "",
+      "improve": "",
+      "affirmation": "",
+      "resourceMobilization": "",
+      "sleepGoal": "",
+      "extraNotes": "",
+      "savedAt": "2025-10-16T18:35:07.229Z",
+      "trackingData": {
+        "tca": {
+          "tca-meals": "3",
+          "tca-feeling": "Bien",
+          "tca-triggers": "",
+          "tca-coping": "",
+          "tca-support": ""
+        },
+        "addiction": {
+          "addiction-abstinence": "4",
+          "addiction-cravings": "",
+          "addiction-triggers": "",
+          "addiction-strategies": "",
+          "addiction-wins": ""
+        },
+        "mental-health": {
+          "mental-anxiety": "",
+          "mental-depression": "",
+          "mental-therapy": "",
+          "mental-medication": "",
+          "mental-selfcare": ""
+        },
+        "physical-health": {
+          "physical-symptoms": "",
+          "physical-medication": "",
+          "physical-doctor": "",
+          "physical-energy": "",
+          "physical-hydration": ""
+        },
+        "social": {
+          "social-interactions": "",
+          "social-quality": "",
+          "social-people": "",
+          "social-conflicts": "",
+          "social-positive": ""
+        },
+        "productivity": {
+          "productivity-tasks": "",
+          "productivity-focus": "",
+          "productivity-distractions": "",
+          "productivity-wins": "",
+          "productivity-obstacles": ""
+        }
+      },
+      "trackingCategories": [
+        "tca",
+        "addiction",
+        "mental-health",
+        "physical-health",
+        "social",
+        "productivity"
+      ]
     }
   ],
   "Emmanuel": [

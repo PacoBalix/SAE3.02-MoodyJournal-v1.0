@@ -330,47 +330,258 @@
         }
       }
       
-      // Générer un insight personnalisé
+      // Générer des insights personnalisés avancés
       function generateInsight(stats, moodTrend, entries) {
         const insightsContainer = document.getElementById('insights-text');
         let insights = [];
+        let recommendations = [];
         
-        // Insight sur la tendance
+        // Analyser les patterns d'humeur
+        const recentEntries = entries.slice(-7);
+        const moodValues = recentEntries.map(e => parseInt(e.mood) || 0);
+        const variance = calculateVariance(moodValues);
+        
+        // 1. Insight sur la tendance avec recommandations
         if (moodTrend > 0.5) {
-          insights.push(`✨ Excellent ! Votre humeur s'améliore avec une progression de ${moodTrend.toFixed(1)} points.`);
+          insights.push(`✨ <strong>Excellente progression !</strong> Votre humeur s'améliore (+${moodTrend.toFixed(1)} pts).`);
+          recommendations.push(`Identifiez ce qui contribue à cette amélioration pour le reproduire.`);
         } else if (moodTrend < -0.5) {
-          insights.push(`💪 Votre humeur a légèrement baissé ces derniers jours. N'oubliez pas de prendre soin de vous.`);
+          insights.push(`💙 <strong>Période difficile détectée</strong> (-${Math.abs(moodTrend).toFixed(1)} pts).`);
+          recommendations.push(`Considérez parler à un proche ou un professionnel de ce que vous vivez.`);
+          recommendations.push(`Revisitez vos stratégies d'adaptation qui ont fonctionné par le passé.`);
+        } else {
+          insights.push(`➡️ <strong>Humeur stable</strong>, c'est une forme de constance positive.`);
         }
         
-        // Insight sur le sommeil
+        // 2. Analyse de la variabilité émotionnelle
+        if (variance > 6) {
+          insights.push(`📊 <strong>Variations émotionnelles importantes</strong> détectées.`);
+          recommendations.push(`Essayez d'identifier les déclencheurs de ces variations dans vos entrées.`);
+        } else if (variance < 2 && stats.avgMood > 5) {
+          insights.push(`🎯 <strong>Grande stabilité émotionnelle</strong>, continuez vos bonnes pratiques !`);
+        }
+        
+        // 3. Insight sur le sommeil avec corrélations
         if (stats.avgSleep > 0) {
+          const sleepMoodCorrelation = analyzeSleepMoodCorrelation(entries);
           if (stats.avgSleep < 6) {
-            insights.push(`😴 Votre sommeil moyen est de ${stats.avgSleep}h. Essayez d'améliorer votre temps de repos.`);
+            insights.push(`😴 <strong>Sommeil insuffisant</strong> (${stats.avgSleep}h/nuit en moyenne).`);
+            recommendations.push(`Établissez une routine de coucher fixe et évitez les écrans 1h avant de dormir.`);
+            if (sleepMoodCorrelation > 0.3) {
+              recommendations.push(`⚠️ Votre sommeil impacte directement votre humeur - priorité absolue !`);
+            }
           } else if (stats.avgSleep >= 7 && stats.avgSleep <= 9) {
-            insights.push(`✅ Excellent ! Vous dormez en moyenne ${stats.avgSleep}h, c'est optimal pour votre bien-être.`);
+            insights.push(`✅ <strong>Sommeil optimal</strong> (${stats.avgSleep}h) - excellent pour le bien-être !`);
+          } else if (stats.avgSleep > 9) {
+            insights.push(`😮 <strong>Sommeil important</strong> (${stats.avgSleep}h). Si c'est inhabituel, consultez un professionnel.`);
           }
         }
         
-        // Insight sur la régularité
-        if (stats.streak >= 7) {
-          insights.push(`🔥 Impressionnant ! Vous avez tenu votre journal pendant ${stats.streak} jours consécutifs. Continuez ainsi !`);
+        // 4. Analyse des catégories de suivi
+        const trackingInsights = analyzeTrackingCategories(entries);
+        if (trackingInsights.length > 0) {
+          insights.push(...trackingInsights.map(i => `📊 ${i}`));
+        }
+        
+        // 5. Insight sur la régularité
+        if (stats.streak >= 14) {
+          insights.push(`🔥 <strong>Série exceptionnelle !</strong> ${stats.streak} jours consécutifs - vous êtes un champion de la régularité !`);
+        } else if (stats.streak >= 7) {
+          insights.push(`🔥 <strong>Belle série !</strong> ${stats.streak} jours consécutifs. La constance paie !`);
         } else if (stats.streak >= 3) {
-          insights.push(`👍 Vous êtes sur une bonne lancée avec ${stats.streak} jours consécutifs !`);
+          insights.push(`👍 <strong>Bonne lancée</strong> avec ${stats.streak} jours consécutifs !`);
+          recommendations.push(`Continuez sur cette voie pour développer une habitude durable.`);
+        } else if (stats.streak === 0) {
+          recommendations.push(`📝 Essayez de tenir votre journal quotidiennement, même brièvement.`);
         }
         
-        // Insight sur la moyenne d'humeur
-        if (stats.avgMood >= 7) {
-          insights.push(`😊 Votre humeur moyenne est excellente (${stats.avgMood}/10). Vous semblez être dans une bonne période.`);
-        } else if (stats.avgMood < 5) {
-          insights.push(`💙 Votre humeur moyenne est de ${stats.avgMood}/10. N'hésitez pas à en parler à quelqu'un en qui vous avez confiance.`);
-        }
-        
-        // Afficher les insights
-        if (insights.length > 0) {
-          insightsContainer.innerHTML = `<p class="text-gray-700">${insights.join(' ')}</p>`;
+        // 6. Insight sur la moyenne d'humeur
+        if (stats.avgMood >= 7.5) {
+          insights.push(`😊 <strong>Humeur excellente</strong> (${stats.avgMood}/10) ! Profitez de cette belle énergie.`);
+        } else if (stats.avgMood >= 6 && stats.avgMood < 7.5) {
+          insights.push(`🙂 <strong>Humeur globalement positive</strong> (${stats.avgMood}/10).`);
+        } else if (stats.avgMood >= 4 && stats.avgMood < 6) {
+          insights.push(`😐 <strong>Humeur mitigée</strong> (${stats.avgMood}/10).`);
+          recommendations.push(`Identifiez les moments positifs de vos journées et amplifiez-les.`);
         } else {
-          insightsContainer.innerHTML = '<p class="text-gray-700">Continuez à tenir votre journal pour obtenir des insights personnalisés !</p>';
+          insights.push(`💙 <strong>Humeur basse</strong> (${stats.avgMood}/10). Votre bien-être est important.`);
+          recommendations.push(`🆘 N'hésitez vraiment pas à chercher du soutien professionnel.`);
+          recommendations.push(`Contactez un proche de confiance ou utilisez notre chat communautaire.`);
         }
+        
+        // 7. Patterns de jour de la semaine
+        const weekdayPattern = analyzeWeekdayPatterns(entries);
+        if (weekdayPattern.best && weekdayPattern.worst && weekdayPattern.best !== weekdayPattern.worst) {
+          insights.push(`📅 Pattern détecté : votre humeur est meilleure le <strong>${weekdayPattern.best}</strong>, plus difficile le <strong>${weekdayPattern.worst}</strong>.`);
+          recommendations.push(`Planifiez des activités ressourçantes le ${weekdayPattern.worst}.`);
+        }
+        
+        // 8. Pratique de la gratitude
+        const gratitudePractice = analyzeGratitudePractice(entries);
+        if (gratitudePractice.consistency > 0.7) {
+          insights.push(`🙏 <strong>Excellente pratique de la gratitude</strong> (${Math.round(gratitudePractice.consistency * 100)}% des entrées).`);
+        } else if (gratitudePractice.consistency < 0.3 && gratitudePractice.consistency > 0) {
+          recommendations.push(`💡 Essayez de pratiquer la gratitude plus régulièrement - effet prouvé sur le bien-être.`);
+        }
+        
+        // Formater l'affichage
+        let html = '';
+        if (insights.length > 0) {
+          html += `<div class="mb-3"><p class="text-gray-800 leading-relaxed">${insights.join(' ')}</p></div>`;
+        }
+        
+        if (recommendations.length > 0) {
+          html += `
+            <div class="mt-4 pt-4 border-t border-amber-200">
+              <p class="font-semibold text-amber-900 mb-2">💡 Recommandations personnalisées :</p>
+              <ul class="space-y-1 text-sm text-gray-700">
+                ${recommendations.map(r => `<li class="flex items-start"><span class="mr-2">→</span><span>${r}</span></li>`).join('')}
+              </ul>
+            </div>
+          `;
+        }
+        
+        insightsContainer.innerHTML = html || '<p class="text-gray-700">Continuez à tenir votre journal pour obtenir des insights personnalisés !</p>';
+      }
+
+      // Calculer la variance (stabilité émotionnelle)
+      function calculateVariance(values) {
+        if (values.length === 0) return 0;
+        const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
+        const squareDiffs = values.map(val => Math.pow(val - mean, 2));
+        return Math.sqrt(squareDiffs.reduce((sum, val) => sum + val, 0) / values.length);
+      }
+
+      // Analyser la corrélation sommeil-humeur
+      function analyzeSleepMoodCorrelation(entries) {
+        const validEntries = entries.filter(e => e.sleep && e.mood);
+        if (validEntries.length < 5) return 0;
+        
+        const sleepValues = validEntries.map(e => parseFloat(e.sleep));
+        const moodValues = validEntries.map(e => parseInt(e.mood));
+        
+        const meanSleep = sleepValues.reduce((a, b) => a + b, 0) / sleepValues.length;
+        const meanMood = moodValues.reduce((a, b) => a + b, 0) / moodValues.length;
+        
+        let correlation = 0;
+        let sleepVariance = 0;
+        let moodVariance = 0;
+        
+        for (let i = 0; i < validEntries.length; i++) {
+          const sleepDiff = sleepValues[i] - meanSleep;
+          const moodDiff = moodValues[i] - meanMood;
+          correlation += sleepDiff * moodDiff;
+          sleepVariance += sleepDiff * sleepDiff;
+          moodVariance += moodDiff * moodDiff;
+        }
+        
+        return correlation / Math.sqrt(sleepVariance * moodVariance) || 0;
+      }
+
+      // Analyser les patterns par jour de la semaine
+      function analyzeWeekdayPatterns(entries) {
+        const weekdays = {};
+        const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
+        
+        entries.forEach(entry => {
+          if (!entry.date || !entry.mood) return;
+          const day = new Date(entry.date).getDay();
+          const dayName = dayNames[day];
+          if (!weekdays[dayName]) {
+            weekdays[dayName] = { total: 0, count: 0 };
+          }
+          weekdays[dayName].total += parseInt(entry.mood);
+          weekdays[dayName].count++;
+        });
+        
+        let bestDay = null;
+        let worstDay = null;
+        let bestAvg = 0;
+        let worstAvg = 10;
+        
+        for (const [day, data] of Object.entries(weekdays)) {
+          if (data.count < 2) continue;
+          const avg = data.total / data.count;
+          if (avg > bestAvg) {
+            bestAvg = avg;
+            bestDay = day;
+          }
+          if (avg < worstAvg) {
+            worstAvg = avg;
+            worstDay = day;
+          }
+        }
+        
+        return { best: bestDay, worst: worstDay };
+      }
+
+      // Analyser la pratique de la gratitude
+      function analyzeGratitudePractice(entries) {
+        let count = 0;
+        entries.forEach(entry => {
+          if (entry.gratitude && entry.gratitude.filter(g => g.trim()).length > 0) {
+            count++;
+          } else if (entry.positiveElements && entry.positiveElements.filter(p => p.trim()).length > 0) {
+            count++;
+          }
+        });
+        return { consistency: entries.length > 0 ? count / entries.length : 0 };
+      }
+
+      // Analyser les catégories de suivi
+      function analyzeTrackingCategories(entries) {
+        const insights = [];
+        const categoryCounts = {};
+        
+        // Compter les utilisations de chaque catégorie
+        entries.forEach(entry => {
+          if (entry.trackingCategories && Array.isArray(entry.trackingCategories)) {
+            entry.trackingCategories.forEach(cat => {
+              categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
+            });
+          }
+        });
+        
+        // Analyser les données de suivi spécifiques
+        const recentEntries = entries.slice(-7);
+        
+        // Addiction
+        if (categoryCounts['addiction']) {
+          const addictionData = recentEntries.filter(e => e.trackingData && e.trackingData.addiction);
+          if (addictionData.length > 0) {
+            const avgCravings = addictionData
+              .map(e => parseFloat(e.trackingData.addiction['addiction-cravings']) || 0)
+              .reduce((a, b) => a + b, 0) / addictionData.length;
+            
+            if (avgCravings > 0) {
+              if (avgCravings <= 3) {
+                insights.push(`<strong>Addictions :</strong> Envies faibles (${avgCravings.toFixed(1)}/10) - excellent contrôle ! ⚠️✅`);
+              } else if (avgCravings <= 6) {
+                insights.push(`<strong>Addictions :</strong> Envies modérées (${avgCravings.toFixed(1)}/10) - restez vigilant. ⚠️`);
+              } else {
+                insights.push(`<strong>Addictions :</strong> Envies intenses (${avgCravings.toFixed(1)}/10) - cherchez du soutien. ⚠️🆘`);
+              }
+            }
+          }
+        }
+        
+        // Santé mentale
+        if (categoryCounts['mental-health']) {
+          const mentalData = recentEntries.filter(e => e.trackingData && e.trackingData['mental-health']);
+          if (mentalData.length > 0) {
+            const avgAnxiety = mentalData
+              .map(e => parseFloat(e.trackingData['mental-health']['mental-anxiety']) || 0)
+              .reduce((a, b) => a + b, 0) / mentalData.length;
+            
+            if (avgAnxiety > 7) {
+              insights.push(`<strong>Santé mentale :</strong> Anxiété élevée (${avgAnxiety.toFixed(1)}/10). Considérez des techniques de relaxation. 🧠`);
+            } else if (avgAnxiety > 0 && avgAnxiety <= 4) {
+              insights.push(`<strong>Santé mentale :</strong> Anxiété bien gérée (${avgAnxiety.toFixed(1)}/10). 🧠✅`);
+            }
+          }
+        }
+        
+        return insights;
       }
 
       // Créer le graphique d'humeur
@@ -709,6 +920,45 @@
             html += `<span class="px-3 py-1 rounded-full text-sm" style="background: ${categoryInfo.color}; color: white;">${categoryInfo.name}</span>`;
           });
           html += `</div></div>`;
+        }
+
+        // Afficher les données de suivi complémentaires
+        if (entry.trackingData && Object.keys(entry.trackingData).length > 0) {
+          html += `<div class="mb-6">`;
+          
+          Object.keys(entry.trackingData).forEach(category => {
+            const categoryInfo = getCategoryInfo(category);
+            const categoryData = entry.trackingData[category];
+            
+            // Filtrer les valeurs non vides
+            const nonEmptyData = Object.entries(categoryData).filter(([key, value]) => value && value.trim && value.trim() !== '');
+            
+            if (nonEmptyData.length > 0) {
+              html += `
+                <div class="mb-4 p-4 rounded-lg" style="background: ${categoryInfo.color}20; border-left: 4px solid ${categoryInfo.color};">
+                  <h4 class="font-semibold mb-3" style="color: ${categoryInfo.color};">${categoryInfo.name} - Suivi détaillé</h4>
+                  <div class="space-y-2">
+              `;
+              
+              nonEmptyData.forEach(([key, value]) => {
+                // Convertir l'ID en label lisible
+                const label = key.replace(category + '-', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                html += `
+                  <div class="bg-white bg-opacity-60 p-2 rounded">
+                    <span class="text-sm font-medium text-gray-700">${label}:</span>
+                    <span class="text-sm text-gray-900 ml-2">${value}</span>
+                  </div>
+                `;
+              });
+              
+              html += `
+                  </div>
+                </div>
+              `;
+            }
+          });
+          
+          html += `</div>`;
         }
 
         // Ajouter les sections selon les préférences

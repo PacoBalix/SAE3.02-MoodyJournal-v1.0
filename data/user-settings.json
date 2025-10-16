@@ -1,20 +1,23 @@
 {
   "Alix": {
     "trackingCategories": [
+      "tca",
       "addiction",
-      "physical-health"
+      "mental-health",
+      "physical-health",
+      "social",
+      "productivity"
     ],
     "sections": [
       "mood",
-      "goals",
       "gratitude",
-      "consciousness",
+      "reflections",
       "intention",
       "notes"
     ],
     "reminderTime": "20:00",
-    "savedAt": "2025-10-15T09:29:29.290Z",
-    "lastUpdated": "2025-10-15T09:29:29.292Z"
+    "savedAt": "2025-10-16T18:43:28.159Z",
+    "lastUpdated": "2025-10-16T18:43:28.162Z"
   },
   "Emmanuel": {
     "trackingCategories": [

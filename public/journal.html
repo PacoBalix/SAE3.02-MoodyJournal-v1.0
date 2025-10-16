@@ -58,6 +58,10 @@
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
+        .section-card.hidden-section {
+            display: none;
+        }
+
         .floating {
             animation: floating 6s ease-in-out infinite;
         }
@@ -155,136 +159,82 @@
             }
         }
 
-        /* Floating home button with improved animation */
-        #home-button {
-            position: fixed;
-            right: 1.25rem;
-            bottom: 1.25rem;
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #059669;
-            color: white;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(5, 150, 105, 0.1);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            transform: scale(0.95);
-            opacity: 0.9;
-            z-index: 60;
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-        }
-
-        #home-button:hover {
-            transform: scale(1) translateY(-4px);
-            background-color: #047857;
-            opacity: 1;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15), 0 0 0 6px rgba(5, 150, 105, 0.2);
-        }
-
-        #home-button:active {
-            transform: scale(0.95) translateY(0);
-            background-color: #065f46;
-        }
-
-        #home-button:focus {
-            outline: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 0 0 4px rgba(5, 150, 105, 0.3);
-        }
-
-        #home-button svg {
-            width: 24px;
-            height: 24px;
-            stroke-width: 2.5;
-            transition: transform 0.2s ease;
-        }
-
-        #home-button:hover svg {
-            transform: scale(1.1);
-        }
-
-        /* Nouveaux styles pour les catégories de suivi */
-        .tracking-category {
-            background: rgba(255, 255, 255, 0.95);
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .tracking-category:hover {
-            border-color: #10b981;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
-        }
-
-        .tracking-category.selected {
-            border-color: #10b981;
-            background: #ecfdf5;
-        }
-
-        .tracking-category h4 {
-            color: #1f2937;
-            font-weight: 600;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .category-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-        }
-
-        .category-tca { background: #ef4444; color: white; }
-        .category-addiction { background: #f59e0b; color: white; }
-        .category-mental-health { background: #3b82f6; color: white; }
-        .category-physical-health { background: #10b981; color: white; }
-        .category-social { background: #8b5cf6; color: white; }
-        .category-productivity { background: #f97316; color: white; }
-
-        .tracking-options {
+        /* Modal pour les questions annexes */
+        .modal {
             display: none;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 8px;
-            margin-top: 12px;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
         }
 
-        .tracking-category.selected .tracking-options {
-            display: grid;
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .tracking-option {
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .question-card {
             background: #f9fafb;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            padding: 8px;
-            text-align: center;
-            font-size: 14px;
-            transition: all 0.2s ease;
-            cursor: pointer;
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
         }
 
-        .tracking-option:hover {
-            background: #10b981;
-            color: white;
-            border-color: #10b981;
+        .question-card h4 {
+            color: #065f46;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .question-card p {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
     </style>
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
     <!-- Header avec navbar -->
-    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
+    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200 fixed top-0 left-0 right-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4">
             <div class="flex items-center justify-between">
                 <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
@@ -311,7 +261,7 @@
         </div>
     </header>
 
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-8 pt-24">
         <div class="text-center mb-12" data-aos="fade-down">
             <h1 class="text-4xl md:text-5xl font-bold text-emerald-800 mb-4">📊 Journal d'Analyse Comportementale</h1>
             <p class="text-lg text-emerald-600">Analysez vos émotions, comportements et stratégies d'adaptation de manière scientifique</p>
@@ -327,41 +277,35 @@
                             class="w-full md:w-48 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Day of the week</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Jour de la semaine</label>
                         <div class="flex flex-wrap gap-2 day-selector">
                             <label class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
-                                <input type="radio" name="day" value="Monday" class="hidden">
-                                <span>Monday</span>
+                                <input type="radio" name="day" value="Lundi" class="hidden">
+                                <span>Lundi</span>
                             </label>
-                            <label
-                            class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
-                                <input type="radio" name="day" value="Tuesday" class="hidden">
-                                <span>Tuesday</span>
+                            <label class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
+                                <input type="radio" name="day" value="Mardi" class="hidden">
+                                <span>Mardi</span>
                             </label>
-                            <label
-                                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
-                                <input type="radio" name="day" value="Wednesday" class="hidden">
-                                <span>Wednesday</span>
+                            <label class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
+                                <input type="radio" name="day" value="Mercredi" class="hidden">
+                                <span>Mercredi</span>
                             </label>
-                            <label
-                                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
-                                <input type="radio" name="day" value="Thursday" class="hidden">
-                                <span>Thursday</span>
+                            <label class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
+                                <input type="radio" name="day" value="Jeudi" class="hidden">
+                                <span>Jeudi</span>
                             </label>
-                            <label
-                                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
-                                <input type="radio" name="day" value="Friday" class="hidden">
-                                <span>Friday</span>
+                            <label class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer">
+                                <input type="radio" name="day" value="Vendredi" class="hidden">
+                                <span>Vendredi</span>
                             </label>
-                            <label
-                                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer day-selector">
-                                <input type="radio" name="day" value="Saturday" class="hidden">
-                                <span>Saturday</span>
+                            <label class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer day-selector">
+                                <input type="radio" name="day" value="Samedi" class="hidden">
+                                <span>Samedi</span>
                             </label>
-                            <label
-                                class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer day-selector">
-                                <input type="radio" name="day" value="Sunday" class="hidden">
-                                <span>Sunday</span>
+                            <label class="inline-flex items-center px-3 py-1 bg-gray-100 rounded-full cursor-pointer day-selector">
+                                <input type="radio" name="day" value="Dimanche" class="hidden">
+                                <span>Dimanche</span>
                             </label>
                         </div>
                     </div>
@@ -369,7 +313,7 @@
             </div>
 
             <!-- Évaluation émotionnelle Section -->
-            <div class="p-6 border-b border-gray-100 section-card mood-section">
+            <div class="p-6 border-b border-gray-100 section-card" data-section="mood">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="activity" class="mr-2"></i> Évaluation émotionnelle
                 </h2>
@@ -409,6 +353,20 @@
                                 class="w-8 h-8 flex items-center justify-center rounded-full bg-green-400 text-green-900 cursor-pointer">10</label>
                         </div>
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">3 mots pour décrire ce que je ressens</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <input type="text"
+                                class="mood-words w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                placeholder="Mot 1">
+                            <input type="text"
+                                class="mood-words w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                placeholder="Mot 2">
+                            <input type="text"
+                                class="mood-words w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                placeholder="Mot 3">
+                        </div>
+                    </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Émotion principale ressentie</label>
@@ -444,7 +402,7 @@
             </div>
 
             <!-- Évaluation positive Section -->
-            <div class="p-6 border-b border-gray-100 section-card gratitude-section">
+            <div class="p-6 border-b border-gray-100 section-card" data-section="gratitude">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="sun" class="mr-2"></i> Évaluation positive
                 </h2>
@@ -464,6 +422,12 @@
                         </div>
                     </div>
                     <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Meilleur moment / Point culminant de la journée</label>
+                        <textarea id="best-moment"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2" placeholder="Décrivez votre meilleur moment..."></textarea>
+                    </div>
+                    <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Émotion positive dominante du jour</label>
                         <select id="positive-emotion"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
@@ -481,8 +445,120 @@
                 </div>
             </div>
 
+            <!-- Habitudes & Actions Section -->
+            <div class="p-6 border-b border-gray-100 section-card" data-section="habits">
+                <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
+                    <i data-feather="activity" class="mr-2"></i> Habitudes & Actions
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Sommeil (heures)</label>
+                        <input type="number" id="sleep" min="0" max="24" step="0.5"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Exercice / mouvement</label>
+                        <input type="text" id="exercise"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            placeholder="Qu'avez-vous fait ?">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nutrition</label>
+                        <div class="flex gap-3">
+                            <label
+                                class="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full cursor-pointer">
+                                <input type="radio" name="nutrition" value="Good" class="hidden">
+                                <span>🍎 Bonne</span>
+                            </label>
+                            <label
+                                class="inline-flex items-center px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full cursor-pointer">
+                                <input type="radio" name="nutrition" value="Average" class="hidden">
+                                <span>⚡ Moyenne</span>
+                            </label>
+                            <label
+                                class="inline-flex items-center px-3 py-1 bg-red-100 text-red-800 rounded-full cursor-pointer">
+                                <input type="radio" name="nutrition" value="Poor" class="hidden">
+                                <span>💤 Mauvaise</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Habitudes productives suivies aujourd'hui</label>
+                        <textarea id="good-habits"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2" placeholder="Qu'est-ce qui s'est bien passé ?"></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Habitudes que j'ai négligées</label>
+                        <textarea id="bad-habits"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2" placeholder="Qu'est-ce qui pourrait être amélioré ?"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Défis & Problèmes Section -->
+            <div class="p-6 border-b border-gray-100 section-card" data-section="challenges">
+                <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
+                    <i data-feather="alert-triangle" class="mr-2"></i> Défis & Problèmes
+                </h2>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Qu'est-ce qui m'a défié aujourd'hui ?</label>
+                        <textarea id="challenges"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Comment ai-je réagi ?</label>
+                        <textarea id="reaction"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Que pourrais-je essayer différemment la prochaine fois ?</label>
+                        <textarea id="approach"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Réflexions & Leçons Section -->
+            <div class="p-6 border-b border-gray-100 section-card" data-section="reflections">
+                <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
+                    <i data-feather="eye" class="mr-2"></i> Réflexions & Leçons
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Ai-je remarqué des schémas dans mes pensées/comportements ?</label>
+                        <textarea id="patterns"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="3"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Qu'ai-je appris sur moi aujourd'hui ?</label>
+                        <textarea id="lessons"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="3"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Qu'est-ce qui m'a donné de l'énergie ?</label>
+                        <textarea id="energy-givers"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Qu'est-ce qui a drainé mon énergie ?</label>
+                        <textarea id="energy-drainers"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2"></textarea>
+                    </div>
+                </div>
+            </div>
+
             <!-- Analyse comportementale Section -->
-            <div class="p-6 border-b border-gray-100 section-card">
+            <div class="p-6 border-b border-gray-100 section-card" data-section="consciousness">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="users" class="mr-2"></i> Analyse comportementale
                 </h2>
@@ -515,7 +591,7 @@
             </div>
 
             <!-- Planification proactive Section -->
-            <div class="p-6 border-b border-gray-100 section-card">
+            <div class="p-6 border-b border-gray-100 section-card" data-section="intention">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="target" class="mr-2"></i> Planification proactive
                 </h2>
@@ -525,6 +601,17 @@
                         <textarea id="tomorrow-priorities"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
                             rows="2" placeholder="Listez 2-3 objectifs concrets et réalisables pour demain..."></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Une chose que je veux améliorer demain</label>
+                        <input type="text" id="improve"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Un rappel ou une affirmation pour moi-même</label>
+                        <textarea id="affirmation"
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                            rows="2" placeholder="Écrivez votre affirmation ici..."></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Quelle ressource vais-je mobiliser ?</label>
@@ -547,8 +634,13 @@
                 </div>
             </div>
 
-            <!-- Extra Notes Section -->
-            <div class="p-6 section-card">
+            <!-- Suivi complémentaire (Catégories de suivi) -->
+            <div id="tracking-sections-container">
+                <!-- Les sections de suivi seront générées dynamiquement ici -->
+            </div>
+
+            <!-- Notes libres Section -->
+            <div class="p-6 section-card" data-section="notes">
                 <h2 class="text-xl font-semibold text-emerald-700 mb-4 flex items-center">
                     <i data-feather="edit-3" class="mr-2"></i> Notes libres
                 </h2>
@@ -575,7 +667,36 @@
         </footer>
     </div>
 
+    <!-- Modal pour les questions annexes -->
+    <div id="followup-modal" class="modal">
+        <div class="modal-content">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-emerald-800 mb-2">🌱 Suivi Complémentaire</h2>
+                <p class="text-gray-600">Prenons quelques instants pour approfondir votre réflexion</p>
+            </div>
+
+            <div id="followup-questions"></div>
+
+            <div class="flex justify-end gap-4 mt-6">
+                <button id="skip-followup" class="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium rounded-lg transition">
+                    Ignorer pour l'instant
+                </button>
+                <button id="save-followup" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition">
+                    Sauvegarder mes réponses
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // Initialisation de feather icons et AOS
+        if (typeof feather !== 'undefined') {
+            feather.replace();
+        }
+        if (typeof AOS !== 'undefined') {
+            AOS.init({ duration: 800, once: true });
+        }
+
         // Utilitaires
         function info_popup() {
             var toaster = document.getElementById("snackbar");
@@ -585,12 +706,330 @@
             }, 3000);
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
+        // Définir les questions pour chaque catégorie de suivi
+        const trackingCategoryQuestions = {
+            'tca': {
+                title: '🍎 Suivi TCA',
+                icon: 'activity',
+                color: '#991b1b',
+                questions: [
+                    { id: 'tca-meals', label: 'Nombre de repas pris aujourd\'hui', type: 'number', min: 0, max: 10 },
+                    { id: 'tca-feeling', label: 'Comment je me sens par rapport à mon alimentation', type: 'select', options: ['Très bien', 'Bien', 'Neutre', 'Difficile', 'Très difficile'] },
+                    { id: 'tca-triggers', label: 'Déclencheurs ou moments difficiles', type: 'textarea', rows: 2 },
+                    { id: 'tca-coping', label: 'Stratégies utilisées pour gérer', type: 'textarea', rows: 2 },
+                    { id: 'tca-support', label: 'Soutien reçu aujourd\'hui', type: 'text' }
+                ]
+            },
+            'addiction': {
+                title: '⚠️ Suivi Addictions',
+                icon: 'alert-circle',
+                color: '#92400e',
+                questions: [
+                    { id: 'addiction-abstinence', label: 'Jours d\'abstinence', type: 'number', min: 0 },
+                    { id: 'addiction-cravings', label: 'Intensité des envies (1-10)', type: 'number', min: 1, max: 10 },
+                    { id: 'addiction-triggers', label: 'Déclencheurs identifiés', type: 'textarea', rows: 2 },
+                    { id: 'addiction-strategies', label: 'Stratégies d\'adaptation utilisées', type: 'textarea', rows: 2 },
+                    { id: 'addiction-wins', label: 'Victoires d\'aujourd\'hui', type: 'textarea', rows: 2 }
+                ]
+            },
+            'mental-health': {
+                title: '🧠 Suivi Santé Mentale',
+                icon: 'brain',
+                color: '#1e40af',
+                questions: [
+                    { id: 'mental-anxiety', label: 'Niveau d\'anxiété (1-10)', type: 'number', min: 1, max: 10 },
+                    { id: 'mental-depression', label: 'Niveau de dépression (1-10)', type: 'number', min: 1, max: 10 },
+                    { id: 'mental-therapy', label: 'Séance de thérapie / suivi aujourd\'hui ?', type: 'select', options: ['Oui', 'Non', 'Prévue'] },
+                    { id: 'mental-medication', label: 'Médicaments pris comme prescrit ?', type: 'select', options: ['Oui', 'Non', 'Partiellement', 'N/A'] },
+                    { id: 'mental-selfcare', label: 'Pratiques de bien-être mental', type: 'textarea', rows: 2 }
+                ]
+            },
+            'physical-health': {
+                title: '💪 Suivi Santé Physique',
+                icon: 'activity',
+                color: '#065f46',
+                questions: [
+                    { id: 'physical-symptoms', label: 'Symptômes ou douleurs ressentis', type: 'textarea', rows: 2 },
+                    { id: 'physical-medication', label: 'Médicaments / Traitements pris', type: 'text' },
+                    { id: 'physical-doctor', label: 'Rendez-vous médical aujourd\'hui ?', type: 'select', options: ['Oui', 'Non', 'Prévu'] },
+                    { id: 'physical-energy', label: 'Niveau d\'énergie (1-10)', type: 'number', min: 1, max: 10 },
+                    { id: 'physical-hydration', label: 'Hydratation (verres d\'eau)', type: 'number', min: 0, max: 20 }
+                ]
+            },
+            'social': {
+                title: '👥 Suivi Relations Sociales',
+                icon: 'users',
+                color: '#5b21b6',
+                questions: [
+                    { id: 'social-interactions', label: 'Nombre d\'interactions sociales', type: 'number', min: 0, max: 50 },
+                    { id: 'social-quality', label: 'Qualité des interactions (1-10)', type: 'number', min: 1, max: 10 },
+                    { id: 'social-people', label: 'Avec qui j\'ai interagi', type: 'text' },
+                    { id: 'social-conflicts', label: 'Conflits ou tensions', type: 'textarea', rows: 2 },
+                    { id: 'social-positive', label: 'Moments de connexion positive', type: 'textarea', rows: 2 }
+                ]
+            },
+            'productivity': {
+                title: '📈 Suivi Productivité',
+                icon: 'trending-up',
+                color: '#9a3412',
+                questions: [
+                    { id: 'productivity-tasks', label: 'Tâches accomplies / prévues', type: 'text' },
+                    { id: 'productivity-focus', label: 'Niveau de concentration (1-10)', type: 'number', min: 1, max: 10 },
+                    { id: 'productivity-distractions', label: 'Principales distractions', type: 'textarea', rows: 2 },
+                    { id: 'productivity-wins', label: 'Réalisations du jour', type: 'textarea', rows: 2 },
+                    { id: 'productivity-obstacles', label: 'Obstacles rencontrés', type: 'textarea', rows: 2 }
+                ]
+            }
+        };
+
+        // Générer dynamiquement les sections de suivi
+        function generateTrackingSections(trackingCategories) {
+            const container = document.getElementById('tracking-sections-container');
+            if (!container || !trackingCategories || trackingCategories.length === 0) {
+                return;
+            }
+
+            container.innerHTML = '';
+
+            trackingCategories.forEach(category => {
+                const categoryData = trackingCategoryQuestions[category];
+                if (!categoryData) return;
+
+                let sectionHTML = `
+                    <div class="p-6 border-b border-gray-100 section-card tracking-category-section" data-category="${category}">
+                        <h2 class="text-xl font-semibold mb-4 flex items-center" style="color: ${categoryData.color}">
+                            <i data-feather="${categoryData.icon}" class="mr-2"></i> ${categoryData.title}
+                        </h2>
+                        <div class="space-y-4">
+                `;
+
+                categoryData.questions.forEach(question => {
+                    sectionHTML += `<div>`;
+                    sectionHTML += `<label class="block text-sm font-medium text-gray-700 mb-2">${question.label}</label>`;
+
+                    if (question.type === 'textarea') {
+                        sectionHTML += `
+                            <textarea id="${question.id}" 
+                                class="tracking-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                rows="${question.rows || 3}"
+                                data-category="${category}"></textarea>
+                        `;
+                    } else if (question.type === 'select') {
+                        sectionHTML += `
+                            <select id="${question.id}" 
+                                class="tracking-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                data-category="${category}">
+                                <option value="">Sélectionnez...</option>
+                                ${question.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                            </select>
+                        `;
+                    } else if (question.type === 'number') {
+                        sectionHTML += `
+                            <input type="number" id="${question.id}" 
+                                class="tracking-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                min="${question.min || 0}" 
+                                max="${question.max || 100}"
+                                data-category="${category}">
+                        `;
+                    } else {
+                        sectionHTML += `
+                            <input type="text" id="${question.id}" 
+                                class="tracking-input w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                data-category="${category}">
+                        `;
+                    }
+
+                    sectionHTML += `</div>`;
+                });
+
+                sectionHTML += `
+                        </div>
+                    </div>
+                `;
+
+                container.innerHTML += sectionHTML;
+            });
+
+            // Réinitialiser les icônes feather
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+        }
+
+        // Charger les préférences utilisateur et masquer les sections non désirées
+        async function loadUserPreferences() {
+            try {
+                const response = await fetch('/api/user-settings', {
+                    credentials: 'same-origin'
+                });
+
+                if (response.ok) {
+                    const settings = await response.json();
+                    console.log('✅ Préférences chargées:', settings);
+
+                    // Masquer les sections non sélectionnées
+                    const allSections = document.querySelectorAll('[data-section]');
+                    allSections.forEach(section => {
+                        const sectionName = section.getAttribute('data-section');
+                        if (!settings.sections || !settings.sections.includes(sectionName)) {
+                            section.classList.add('hidden-section');
+                        }
+                    });
+
+                    // Générer les sections de suivi complémentaires
+                    if (settings.trackingCategories && settings.trackingCategories.length > 0) {
+                        generateTrackingSections(settings.trackingCategories);
+                    }
+
+                    return settings;
+                } else {
+                    console.log('⚠️ Aucune préférence trouvée, affichage de toutes les sections');
+                    return null;
+                }
+            } catch (err) {
+                console.error('❌ Erreur lors du chargement des préférences:', err);
+                return null;
+            }
+        }
+
+        // Questions annexes personnalisées selon l'humeur
+        function generateFollowupQuestions(journalData) {
+            const mood = parseInt(journalData.mood);
+            const questions = [];
+
+            // Questions basées sur l'humeur
+            if (mood <= 4) {
+                questions.push({
+                    id: 'support',
+                    title: 'Recherche de soutien',
+                    question: 'Qui pourriez-vous contacter pour obtenir du soutien aujourd\'hui ?',
+                    hint: 'Pensez à un ami, un membre de la famille, ou un professionnel'
+                });
+                questions.push({
+                    id: 'self-care',
+                    title: 'Auto-soin',
+                    question: 'Quelle petite action pourriez-vous faire maintenant pour prendre soin de vous ?',
+                    hint: 'Même un petit geste compte'
+                });
+            } else if (mood >= 7) {
+                questions.push({
+                    id: 'share-positivity',
+                    title: 'Partage de positivité',
+                    question: 'Comment pourriez-vous partager cette énergie positive avec les autres ?',
+                    hint: 'Un message, un appel, un geste...'
+                });
+            }
+
+            // Questions sur les déclencheurs
+            if (journalData.emotionalTriggers) {
+                questions.push({
+                    id: 'trigger-prevention',
+                    title: 'Prévention',
+                    question: 'Quelles stratégies pourriez-vous mettre en place pour mieux gérer ces déclencheurs à l\'avenir ?',
+                    hint: 'Pensez à des techniques concrètes'
+                });
+            }
+
+            // Question sur la gratitude
+            questions.push({
+                id: 'gratitude-depth',
+                title: 'Approfondissement de la gratitude',
+                question: 'Pourquoi ces éléments positifs sont-ils importants pour vous ?',
+                hint: 'Explorez vos valeurs profondes'
+            });
+
+            // Question sur l'intention
+            questions.push({
+                id: 'tomorrow-intention',
+                title: 'Intention pour demain',
+                question: 'Quelle est votre intention principale pour demain ? Comment allez-vous l\'incarner ?',
+                hint: 'Soyez spécifique et réaliste'
+            });
+
+            return questions;
+        }
+
+        // Afficher le modal de questions annexes
+        function showFollowupModal(journalData) {
+            const modal = document.getElementById('followup-modal');
+            const questionsContainer = document.getElementById('followup-questions');
+            
+            const questions = generateFollowupQuestions(journalData);
+            
+            questionsContainer.innerHTML = questions.map(q => `
+                <div class="question-card">
+                    <h4>${q.title}</h4>
+                    <p>${q.question}</p>
+                    ${q.hint ? `<p class="text-xs text-gray-500 mb-2"><em>${q.hint}</em></p>` : ''}
+                    <textarea 
+                        id="followup-${q.id}" 
+                        rows="3"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="Votre réponse..."></textarea>
+                </div>
+            `).join('');
+
+            modal.classList.add('active');
+        }
+
+        // Sauvegarder les réponses aux questions annexes
+        async function saveFollowupAnswers(journalDate) {
+            const answers = {};
+            const textareas = document.querySelectorAll('[id^="followup-"]');
+            
+            textareas.forEach(textarea => {
+                const questionId = textarea.id.replace('followup-', '');
+                answers[questionId] = textarea.value;
+            });
+
+            try {
+                const response = await fetch('/api/save-followup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        date: journalDate,
+                        answers: answers,
+                        savedAt: new Date().toISOString()
+                    }),
+                });
+
+                if (response.ok) {
+                    console.log('✅ Réponses aux questions annexes sauvegardées !');
+                    return true;
+                } else {
+                    console.error('❌ Échec de la sauvegarde des réponses');
+                    return false;
+                }
+            } catch (err) {
+                console.error('❌ Erreur lors de la sauvegarde des réponses:', err);
+                return false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Charger les préférences utilisateur
+            await loadUserPreferences();
+
+            // Initialiser feather icons après le chargement
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+
             // Définir la date du jour
             const today = new Date().toISOString().split("T")[0];
             const dateInput = document.getElementById("journal-date");
             if (dateInput) {
                 dateInput.value = today;
+            }
+
+            // Sélectionner automatiquement le jour de la semaine
+            const dayOfWeek = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'][new Date().getDay()];
+            const dayRadio = document.querySelector(`input[name="day"][value="${dayOfWeek}"]`);
+            if (dayRadio) {
+                dayRadio.checked = true;
             }
 
             // Gestion de la sauvegarde
@@ -601,19 +1040,52 @@
                         date: document.getElementById("journal-date").value,
                         day: document.querySelector('input[name="day"]:checked')?.value,
                         mood: document.querySelector('input[name="mood"]:checked')?.value,
+                        moodWords: Array.from(document.querySelectorAll(".mood-words")).map(input => input.value),
                         primaryEmotion: document.getElementById("primary-emotion")?.value || "",
                         emotionIntensity: document.getElementById("emotion-intensity")?.value || "",
                         positiveElements: Array.from(document.querySelectorAll(".gratitude-input")).map(input => input.value),
+                        bestMoment: document.getElementById("best-moment")?.value || "",
                         positiveEmotion: document.getElementById("positive-emotion")?.value || "",
+                        sleep: document.getElementById("sleep")?.value || "",
+                        exercise: document.getElementById("exercise")?.value || "",
+                        nutrition: document.querySelector('input[name="nutrition"]:checked')?.value || "",
+                        goodHabits: document.getElementById("good-habits")?.value || "",
+                        badHabits: document.getElementById("bad-habits")?.value || "",
+                        challenges: document.getElementById("challenges")?.value || "",
+                        reaction: document.getElementById("reaction")?.value || "",
+                        approach: document.getElementById("approach")?.value || "",
+                        patterns: document.getElementById("patterns")?.value || "",
+                        lessons: document.getElementById("lessons")?.value || "",
+                        energyGivers: document.getElementById("energy-givers")?.value || "",
+                        energyDrainers: document.getElementById("energy-drainers")?.value || "",
                         copingStrategies: document.getElementById("coping-strategies")?.value || "",
                         emotionalTriggers: document.getElementById("emotional-triggers")?.value || "",
                         socialActivity: document.getElementById("social-activity")?.value || "",
                         tomorrowPriorities: document.getElementById("tomorrow-priorities")?.value || "",
+                        improve: document.getElementById("improve")?.value || "",
+                        affirmation: document.getElementById("affirmation")?.value || "",
                         resourceMobilization: document.getElementById("resource-mobilization")?.value || "",
                         sleepGoal: document.getElementById("sleep-goal")?.value || "",
                         extraNotes: document.getElementById("extra-notes")?.value || "",
                         savedAt: new Date().toISOString()
                     };
+
+                    // Collecter les données des catégories de suivi complémentaires
+                    const trackingData = {};
+                    const trackingInputs = document.querySelectorAll('.tracking-input');
+                    trackingInputs.forEach(input => {
+                        const category = input.getAttribute('data-category');
+                        if (!trackingData[category]) {
+                            trackingData[category] = {};
+                        }
+                        trackingData[category][input.id] = input.value || "";
+                    });
+
+                    // Ajouter les données de suivi au journal
+                    if (Object.keys(trackingData).length > 0) {
+                        journalData.trackingData = trackingData;
+                        journalData.trackingCategories = Object.keys(trackingData);
+                    }
 
                     console.log("💾 Sauvegarde du journal:", journalData);
 
@@ -630,6 +1102,11 @@
                     if (response.ok) {
                         console.log("✅ Journal sauvegardé !");
                         info_popup();
+                        
+                        // Afficher les questions annexes
+                        setTimeout(() => {
+                            showFollowupModal(journalData);
+                        }, 1000);
                     } else {
                         console.error("❌ Échec de la sauvegarde");
                         const error = await response.json();
@@ -639,6 +1116,22 @@
                 } catch (err) {
                     console.error("❌ Erreur lors de la sauvegarde:", err);
                 }
+            });
+
+            // Gestion des boutons du modal
+            document.getElementById('skip-followup').addEventListener('click', function() {
+                document.getElementById('followup-modal').classList.remove('active');
+            });
+
+            document.getElementById('save-followup').addEventListener('click', async function() {
+                const journalDate = document.getElementById("journal-date").value;
+                const saved = await saveFollowupAnswers(journalDate);
+                
+                if (saved) {
+                    info_popup();
+                }
+                
+                document.getElementById('followup-modal').classList.remove('active');
             });
         });
     </script>

@@ -6,7 +6,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const { marked } = require('marked');
 
-const PORT = 3001;
+const PORT = 3000;
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
@@ -515,7 +515,7 @@ app.get('/api/user-settings', requireAuth, async (req, res) => {
     const userSettings = allSettings[username] || {
       trackingCategories: [],
       trackingOptions: {},
-      sections: ['mood', 'goals', 'reflections'],
+      sections: ['mood', 'gratitude', 'habits', 'challenges', 'reflections', 'consciousness', 'intention', 'notes'],
       notifications: [],
       reminderTime: '20:00'
     };
@@ -649,6 +649,76 @@ app.get('/api/journal-entries', requireAuth, async (req, res) => {
   } catch (err) {
     console.error('❌ Erreur lors de la lecture du fichier journal.json:', err);
     res.status(500).json({ error: 'Impossible de charger les entrées du journal.' });
+  }
+});
+
+// Route pour sauvegarder les réponses aux questions annexes
+app.post('/api/save-followup', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const { date, answers, savedAt } = req.body;
+
+    console.log(`📝 Sauvegarde des réponses aux questions annexes pour: ${username}`);
+    console.log('📊 Données reçues:', { date, answers });
+
+    // Créer le fichier de réponses aux questions annexes s'il n'existe pas
+    const followupFile = path.join(__dirname, 'data', 'journal-followup.json');
+
+    let allFollowups = {};
+    try {
+      const data = await fs.readFile(followupFile, 'utf-8');
+      allFollowups = JSON.parse(data);
+    } catch (err) {
+      // Fichier n'existe pas encore, on le créera
+      console.log('📁 Création du fichier de questions annexes');
+    }
+
+    // Initialiser l'utilisateur s'il n'existe pas
+    if (!allFollowups[username]) {
+      allFollowups[username] = [];
+    }
+
+    // Ajouter les réponses
+    allFollowups[username].push({
+      date,
+      answers,
+      savedAt
+    });
+
+    await fs.writeFile(followupFile, JSON.stringify(allFollowups, null, 2));
+
+    console.log(`✅ Réponses aux questions annexes sauvegardées pour ${username}`);
+    res.json({ success: true, message: 'Réponses sauvegardées avec succès' });
+
+  } catch (err) {
+    console.error('❌ Erreur lors de la sauvegarde des réponses:', err);
+    res.status(500).json({ error: 'Impossible de sauvegarder les réponses' });
+  }
+});
+
+// Route pour récupérer les réponses aux questions annexes
+app.get('/api/followup-answers', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    console.log(`📖 Récupération des réponses aux questions annexes pour: ${username}`);
+
+    const followupFile = path.join(__dirname, 'data', 'journal-followup.json');
+
+    let allFollowups = {};
+    try {
+      const data = await fs.readFile(followupFile, 'utf-8');
+      allFollowups = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Fichier de questions annexes non trouvé');
+    }
+
+    const userFollowups = allFollowups[username] || [];
+    console.log(`📋 ${userFollowups.length} réponses trouvées pour ${username}`);
+    res.json(userFollowups);
+
+  } catch (err) {
+    console.error('❌ Erreur lors de la récupération des réponses:', err);
+    res.status(500).json({ error: 'Impossible de charger les réponses' });
   }
 });
 
