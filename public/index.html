@@ -501,7 +501,10 @@
         async function loadPersonalDashboard(username) {
             try {
                 // Afficher le nom de l'utilisateur
-                document.getElementById('user-name').textContent = username;
+                const userNameEl = document.getElementById('user-name');
+                if (userNameEl) {
+                    userNameEl.textContent = username;
+                }
                 
                 // Salutation personnalisée selon l'heure
                 const hour = new Date().getHours();
@@ -516,15 +519,37 @@
                     `${greeting} ${username} ! Prenez un moment pour vous aujourd'hui 💚`,
                     `${greeting} ${username} ! Votre bien-être est une priorité ✨`
                 ];
-                document.getElementById('dashboard-greeting').textContent = greetings[Math.floor(Math.random() * greetings.length)];
                 
-                // Charger les données du journal
-                const journalRes = await fetch('/api/journal-entries');
-                const entries = await journalRes.json();
+                const greetingEl = document.getElementById('dashboard-greeting');
+                if (greetingEl) {
+                    greetingEl.textContent = greetings[Math.floor(Math.random() * greetings.length)];
+                }
                 
-                // Charger les paramètres utilisateur
-                const settingsRes = await fetch('/api/user-settings');
-                const settings = await settingsRes.json();
+                // Charger les données du journal avec gestion d'erreur
+                let entries = [];
+                try {
+                    const journalRes = await fetch('/api/journal-entries');
+                    if (journalRes.ok) {
+                        entries = await journalRes.json();
+                    } else {
+                        console.error('Erreur lors du chargement des entrées:', journalRes.status);
+                    }
+                } catch (err) {
+                    console.error('Impossible de charger les entrées:', err);
+                }
+                
+                // Charger les paramètres utilisateur avec gestion d'erreur
+                let settings = { trackingCategories: [], sections: [] };
+                try {
+                    const settingsRes = await fetch('/api/user-settings');
+                    if (settingsRes.ok) {
+                        settings = await settingsRes.json();
+                    } else {
+                        console.error('Erreur lors du chargement des paramètres:', settingsRes.status);
+                    }
+                } catch (err) {
+                    console.error('Impossible de charger les paramètres:', err);
+                }
                 
                 // Calculer les stats
                 calculateDashboardStats(entries);
@@ -546,40 +571,52 @@
         function calculateDashboardStats(entries) {
             if (!entries || entries.length === 0) return;
             
+            // Fonction helper pour mettre à jour un élément de manière sécurisée
+            const safeUpdateElement = (id, value) => {
+                const el = document.getElementById(id);
+                if (el) el.textContent = value;
+            };
+            
             // Série de jours consécutifs
             const streak = calculateStreak(entries);
-            document.getElementById('dash-streak').textContent = streak;
+            safeUpdateElement('dash-streak', streak);
             
             // Humeur moyenne sur 7 jours
             const last7Days = entries.slice(-7);
-            const avgMood = last7Days.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / last7Days.length;
-            document.getElementById('dash-mood').textContent = avgMood ? avgMood.toFixed(1) + '/10' : '--';
+            const avgMood = last7Days.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / (last7Days.length || 1);
+            safeUpdateElement('dash-mood', avgMood ? avgMood.toFixed(1) + '/10' : '--');
             
             // Entrées ce mois-ci
             const thisMonth = entries.filter(e => {
-                const entryDate = new Date(e.date);
-                const now = new Date();
-                return entryDate.getMonth() === now.getMonth() && entryDate.getFullYear() === now.getFullYear();
+                if (!e.date) return false;
+                try {
+                    const entryDate = new Date(e.date);
+                    const now = new Date();
+                    return entryDate.getMonth() === now.getMonth() && entryDate.getFullYear() === now.getFullYear();
+                } catch (err) {
+                    console.error('Date invalide:', e.date, err);
+                    return false;
+                }
             });
-            document.getElementById('dash-entries').textContent = thisMonth.length;
+            safeUpdateElement('dash-entries', thisMonth.length);
             
             // Tendance
-            if (entries.length >= 2) {
+            if (entries.length >= 6) {
                 const recent = entries.slice(-3);
                 const older = entries.slice(-6, -3);
-                const recentAvg = recent.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / recent.length;
-                const olderAvg = older.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / older.length;
+                const recentAvg = recent.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / (recent.length || 1);
+                const olderAvg = older.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / (older.length || 1);
                 
                 const diff = recentAvg - olderAvg;
                 if (diff > 0.5) {
-                    document.getElementById('dash-trend').textContent = '📈';
-                    document.getElementById('dash-trend-text').textContent = 'en hausse';
+                    safeUpdateElement('dash-trend', '📈');
+                    safeUpdateElement('dash-trend-text', 'en hausse');
                 } else if (diff < -0.5) {
-                    document.getElementById('dash-trend').textContent = '📉';
-                    document.getElementById('dash-trend-text').textContent = 'en baisse';
+                    safeUpdateElement('dash-trend', '📉');
+                    safeUpdateElement('dash-trend-text', 'en baisse');
                 } else {
-                    document.getElementById('dash-trend').textContent = '→';
-                    document.getElementById('dash-trend-text').textContent = 'stable';
+                    safeUpdateElement('dash-trend', '→');
+                    safeUpdateElement('dash-trend-text', 'stable');
                 }
             }
         }
@@ -616,13 +653,19 @@
             const attentionContainer = document.getElementById('attention-container');
             const suggestedActions = document.getElementById('suggested-actions');
             
+            // Vérifier que les conteneurs existent
+            if (!strengthsContainer || !attentionContainer || !suggestedActions) {
+                console.warn('Certains conteneurs d\'insights sont manquants');
+                return;
+            }
+            
             const strengths = [];
             const attentionPoints = [];
             const actions = [];
             
             if (entries && entries.length > 0) {
                 const last7Days = entries.slice(-7);
-                const avgMood = last7Days.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / last7Days.length;
+                const avgMood = last7Days.reduce((sum, e) => sum + (parseFloat(e.mood) || 0), 0) / (last7Days.length || 1);
                 
                 // Identifier les forces
                 if (avgMood >= 7) {
@@ -636,15 +679,30 @@
                 
                 // Analyser les patterns
                 const lastEntry = entries[entries.length - 1];
-                if (lastEntry.gratitude && lastEntry.gratitude.filter(g => g.trim()).length > 0) {
-                    strengths.push('Vous pratiquez activement la gratitude 🙏');
+                if (lastEntry) {
+                    // Vérifier la pratique de la gratitude (compatibilité avec gratitude OU positiveElements)
+                    const gratitudeArray = lastEntry.gratitude || lastEntry.positiveElements || [];
+                    if (Array.isArray(gratitudeArray) && gratitudeArray.filter(g => g && g.trim()).length > 0) {
+                        strengths.push('Vous pratiquez activement la gratitude 🙏');
+                    }
+                    
+                    if (lastEntry.sleep && parseFloat(lastEntry.sleep) >= 7) {
+                        strengths.push('Vous prenez soin de votre sommeil 💤');
+                    }
+                    
+                    // Points d'attention sur le sommeil
+                    if (!lastEntry.sleep || parseFloat(lastEntry.sleep) < 6) {
+                        attentionPoints.push('Le sommeil semble être un défi. Essayez d\'établir une routine 🌙');
+                        actions.push({
+                            icon: '😴',
+                            title: 'Améliorer le sommeil',
+                            desc: 'Fixez un objectif de sommeil',
+                            link: 'journal.html'
+                        });
+                    }
                 }
                 
-                if (lastEntry.sleep && parseFloat(lastEntry.sleep) >= 7) {
-                    strengths.push('Vous prenez soin de votre sommeil 💤');
-                }
-                
-                // Points d'attention
+                // Points d'attention sur l'humeur
                 if (avgMood < 5) {
                     attentionPoints.push('Votre humeur semble basse récemment. Pensez à contacter un proche ou un professionnel 💚');
                     actions.push({
@@ -652,16 +710,6 @@
                         title: 'Demander du soutien',
                         desc: 'Contactez un ami ou un professionnel',
                         link: 'chat.html'
-                    });
-                }
-                
-                if (!lastEntry.sleep || parseFloat(lastEntry.sleep) < 6) {
-                    attentionPoints.push('Le sommeil semble être un défi. Essayez d\'établir une routine 🌙');
-                    actions.push({
-                        icon: '😴',
-                        title: 'Améliorer le sommeil',
-                        desc: 'Fixez un objectif de sommeil',
-                        link: 'journal.html'
                     });
                 }
                 

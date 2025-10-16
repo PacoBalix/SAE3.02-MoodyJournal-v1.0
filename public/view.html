@@ -519,9 +519,11 @@
       function analyzeGratitudePractice(entries) {
         let count = 0;
         entries.forEach(entry => {
-          if (entry.gratitude && entry.gratitude.filter(g => g.trim()).length > 0) {
-            count++;
-          } else if (entry.positiveElements && entry.positiveElements.filter(p => p.trim()).length > 0) {
+          if (!entry) return;
+          
+          // Vérifier gratitude ou positiveElements (compatibilité)
+          const gratitudeArray = entry.gratitude || entry.positiveElements || [];
+          if (Array.isArray(gratitudeArray) && gratitudeArray.filter(g => g && g.trim()).length > 0) {
             count++;
           }
         });
@@ -547,13 +549,21 @@
         
         // Addiction
         if (categoryCounts['addiction']) {
-          const addictionData = recentEntries.filter(e => e.trackingData && e.trackingData.addiction);
+          const addictionData = recentEntries.filter(e => e && e.trackingData && e.trackingData.addiction);
           if (addictionData.length > 0) {
-            const avgCravings = addictionData
-              .map(e => parseFloat(e.trackingData.addiction['addiction-cravings']) || 0)
-              .reduce((a, b) => a + b, 0) / addictionData.length;
+            const cravingsValues = addictionData
+              .map(e => {
+                try {
+                  return parseFloat(e.trackingData.addiction['addiction-cravings']) || 0;
+                } catch (err) {
+                  return 0;
+                }
+              })
+              .filter(v => v > 0);
             
-            if (avgCravings > 0) {
+            if (cravingsValues.length > 0) {
+              const avgCravings = cravingsValues.reduce((a, b) => a + b, 0) / cravingsValues.length;
+              
               if (avgCravings <= 3) {
                 insights.push(`<strong>Addictions :</strong> Envies faibles (${avgCravings.toFixed(1)}/10) - excellent contrôle ! ⚠️✅`);
               } else if (avgCravings <= 6) {
@@ -567,16 +577,26 @@
         
         // Santé mentale
         if (categoryCounts['mental-health']) {
-          const mentalData = recentEntries.filter(e => e.trackingData && e.trackingData['mental-health']);
+          const mentalData = recentEntries.filter(e => e && e.trackingData && e.trackingData['mental-health']);
           if (mentalData.length > 0) {
-            const avgAnxiety = mentalData
-              .map(e => parseFloat(e.trackingData['mental-health']['mental-anxiety']) || 0)
-              .reduce((a, b) => a + b, 0) / mentalData.length;
+            const anxietyValues = mentalData
+              .map(e => {
+                try {
+                  return parseFloat(e.trackingData['mental-health']['mental-anxiety']) || 0;
+                } catch (err) {
+                  return 0;
+                }
+              })
+              .filter(v => v > 0);
             
-            if (avgAnxiety > 7) {
-              insights.push(`<strong>Santé mentale :</strong> Anxiété élevée (${avgAnxiety.toFixed(1)}/10). Considérez des techniques de relaxation. 🧠`);
-            } else if (avgAnxiety > 0 && avgAnxiety <= 4) {
-              insights.push(`<strong>Santé mentale :</strong> Anxiété bien gérée (${avgAnxiety.toFixed(1)}/10). 🧠✅`);
+            if (anxietyValues.length > 0) {
+              const avgAnxiety = anxietyValues.reduce((a, b) => a + b, 0) / anxietyValues.length;
+              
+              if (avgAnxiety > 7) {
+                insights.push(`<strong>Santé mentale :</strong> Anxiété élevée (${avgAnxiety.toFixed(1)}/10). Considérez des techniques de relaxation. 🧠`);
+              } else if (avgAnxiety <= 4) {
+                insights.push(`<strong>Santé mentale :</strong> Anxiété bien gérée (${avgAnxiety.toFixed(1)}/10). 🧠✅`);
+              }
             }
           }
         }
@@ -1096,12 +1116,33 @@
         return categories[category] || { name: category, color: '#6b7280' };
       }
 
+      // Normaliser une entrée pour assurer la compatibilité
+      function normalizeEntry(entry) {
+        if (!entry) return entry;
+        
+        // Normaliser les noms de champs pour la compatibilité
+        return {
+          ...entry,
+          // Unifier moodWords et feelingWords
+          moodWords: entry.moodWords || entry.feelingWords || [],
+          feelingWords: entry.feelingWords || entry.moodWords || [],
+          // Unifier gratitude et positiveElements
+          gratitude: entry.gratitude || entry.positiveElements || [],
+          positiveElements: entry.positiveElements || entry.gratitude || [],
+          // S'assurer que mood est un nombre
+          mood: entry.mood ? String(entry.mood) : '5'
+        };
+      }
+
       // Charge les données depuis le serveur
       async function loadEntries() {
         try {
           const res = await fetch('/api/journal-entries');
           if (!res.ok) throw new Error('Erreur lors du chargement des entrées.');
-          entries = await res.json();
+          let rawEntries = await res.json();
+          
+          // Normaliser toutes les entrées
+          entries = rawEntries.map(normalizeEntry);
           entries.sort((a, b) => new Date(a.date) - new Date(b.date));
           currentIndex = entries.length - 1; // Commencer par la dernière entrée
 

@@ -1036,14 +1036,21 @@
             document.getElementById("save-journal").addEventListener("click", async function () {
                 try {
                     // Collecter les données du formulaire
+                    const moodWordsArray = Array.from(document.querySelectorAll(".mood-words")).map(input => input.value);
+                    const gratitudeArray = Array.from(document.querySelectorAll(".gratitude-input")).map(input => input.value);
+                    
                     const journalData = {
                         date: document.getElementById("journal-date").value,
                         day: document.querySelector('input[name="day"]:checked')?.value,
                         mood: document.querySelector('input[name="mood"]:checked')?.value,
-                        moodWords: Array.from(document.querySelectorAll(".mood-words")).map(input => input.value),
+                        // Compatibilité avec anciennes entrées : utiliser les deux noms
+                        moodWords: moodWordsArray,
+                        feelingWords: moodWordsArray, // Alias pour compatibilité
                         primaryEmotion: document.getElementById("primary-emotion")?.value || "",
                         emotionIntensity: document.getElementById("emotion-intensity")?.value || "",
-                        positiveElements: Array.from(document.querySelectorAll(".gratitude-input")).map(input => input.value),
+                        // Compatibilité avec anciennes entrées : utiliser les deux noms
+                        positiveElements: gratitudeArray,
+                        gratitude: gratitudeArray, // Alias pour compatibilité
                         bestMoment: document.getElementById("best-moment")?.value || "",
                         positiveEmotion: document.getElementById("positive-emotion")?.value || "",
                         sleep: document.getElementById("sleep")?.value || "",
