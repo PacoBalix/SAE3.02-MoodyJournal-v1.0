@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>Paramètres - MoodyJournal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/navbar.js"></script>
     <style>
         .settings-container {
             max-width: 900px;
@@ -110,33 +111,8 @@
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
-    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-                    <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
-                    <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
-                </a>
-
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
-                    <a href="journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
-                    <a href="view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
-                    <a href="blog.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Blog</a>
-                    <a href="chat.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
-                    <a href="settings.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Paramètres</a>
-                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
-                </nav>
-
-                <!-- Mobile menu button -->
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-emerald-100 transition-colors">
-                    <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- Navbar Container -->
+    <div id="navbar-container"></div>
 
     <main class="settings-container">
         <div class="settings-card">
@@ -310,6 +286,9 @@
 
             // Gestion du clic sur les badges de catégories
             document.addEventListener('DOMContentLoaded', function () {
+                // Initialiser la navbar
+                initNavbar('settings.html');
+                
                 const categoryBadges = document.querySelectorAll('.category-badge');
                 categoryBadges.forEach(badge => {
                     badge.addEventListener('click', function () {

@@ -175,10 +175,7 @@
                 <!-- Logo -->
                 <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
                     <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-12 sm:h-14">
-                    <div class="hidden sm:block">
-                        <span class="text-xl font-bold text-emerald-800 block">MoodyJournal</span>
-                        <span class="text-xs text-gray-600">Votre compagnon bien-être</span>
-                    </div>
+                    <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
                 </a>
 
                 <!-- Desktop Navigation -->
@@ -197,6 +194,11 @@
                     </a>
                     <a href="chat.html" class="bg-emerald-500/70 text-white font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
                         Discuter
+                    </a>
+                    
+                    <!-- Bouton Paramètres (si connecté) -->
+                    <a id="settings-button-nav" href="settings.html" class="hidden bg-gray-500/70 hover:bg-gray-600/80 text-white font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+                        Paramètres
                     </a>
                     
                     <!-- User Display (si connecté) -->
@@ -232,6 +234,11 @@
                 </a>
                 <a href="chat.html" class="bg-emerald-500/70 text-white block font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
                     Discuter
+                </a>
+                
+                <!-- Bouton Paramètres Mobile (si connecté) -->
+                <a id="settings-button-mobile-nav" href="settings.html" class="hidden block bg-gray-500/70 hover:bg-gray-600/80 text-white font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+                    Paramètres
                 </a>
                 
                 <!-- User Display Mobile -->
@@ -537,6 +544,8 @@
                 const userDisplayMobileNav = document.getElementById('user-display-mobile-nav');
                 const authButtonNav = document.getElementById('auth-button-nav');
                 const authButtonMobileNav = document.getElementById('auth-button-mobile-nav');
+                const settingsButtonNav = document.getElementById('settings-button-nav');
+                const settingsButtonMobileNav = document.getElementById('settings-button-mobile-nav');
                 
                 if (data.authenticated && data.user) {
                     // Afficher le nom d'utilisateur
@@ -547,6 +556,14 @@
                     if (userDisplayMobileNav) {
                         userDisplayMobileNav.textContent = data.user;
                         userDisplayMobileNav.classList.remove('hidden');
+                    }
+                    
+                    // Afficher le bouton Paramètres
+                    if (settingsButtonNav) {
+                        settingsButtonNav.classList.remove('hidden');
+                    }
+                    if (settingsButtonMobileNav) {
+                        settingsButtonMobileNav.classList.remove('hidden');
                     }
                     
                     // Bouton Déconnexion
@@ -560,6 +577,14 @@
                         authButtonMobileNav.textContent = 'Déconnexion';
                     }
                 } else {
+                    // Cacher le bouton Paramètres
+                    if (settingsButtonNav) {
+                        settingsButtonNav.classList.add('hidden');
+                    }
+                    if (settingsButtonMobileNav) {
+                        settingsButtonMobileNav.classList.add('hidden');
+                    }
+                    
                     // Bouton Se connecter
                     if (authButtonNav) {
                         authButtonNav.href = '#';

@@ -26,6 +26,8 @@ async function checkSessionForNavbar() {
 function updateNavbar() {
   const authButton = document.getElementById('auth-button');
   const userDisplay = document.getElementById('user-display');
+  const settingsButton = document.getElementById('settings-button');
+  const settingsButtonMobile = document.getElementById('settings-button-mobile');
   
   if (authButton) {
     if (isAuthenticated && currentUser) {
@@ -58,6 +60,23 @@ function updateNavbar() {
       userDisplay.classList.add('hidden');
     }
   }
+  
+  // Afficher le bouton Paramètres si connecté
+  if (settingsButton) {
+    if (isAuthenticated && currentUser) {
+      settingsButton.classList.remove('hidden');
+    } else {
+      settingsButton.classList.add('hidden');
+    }
+  }
+  
+  if (settingsButtonMobile) {
+    if (isAuthenticated && currentUser) {
+      settingsButtonMobile.classList.remove('hidden');
+    } else {
+      settingsButtonMobile.classList.add('hidden');
+    }
+  }
 }
 
 // Générer le HTML de la navbar
@@ -69,6 +88,9 @@ function generateNavbarHTML(currentPage, options = {}) {
     'blog.html': 'Blog',
     'chat.html': 'Discuter'
   };
+  
+  // Ajouter Paramètres uniquement s'il sera visible (connecté)
+  const includeSettings = currentPage === 'settings.html';
   
   let navLinks = '';
   for (const [page, label] of Object.entries(pages)) {
@@ -87,6 +109,12 @@ function generateNavbarHTML(currentPage, options = {}) {
   // Boutons personnalisés (ex: Exporter pour view.html)
   const customButtons = options.customButtons || '';
   
+  // Style du bouton Paramètres selon si on est sur la page ou non
+  const settingsActive = currentPage === 'settings.html';
+  const settingsClass = settingsActive
+    ? 'hidden bg-emerald-500/70 text-white font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md'
+    : 'hidden bg-gray-500/70 hover:bg-gray-600/80 text-white font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md';
+  
   return `
     <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200 sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
@@ -94,10 +122,7 @@ function generateNavbarHTML(currentPage, options = {}) {
           <!-- Logo -->
           <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-12 sm:h-14">
-            <div class="hidden sm:block">
-              <span class="text-xl font-bold text-emerald-800 block">MoodyJournal</span>
-              <span class="text-xs text-gray-600">Votre compagnon bien-être</span>
-            </div>
+            <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
           </a>
 
           <!-- Desktop Navigation -->
@@ -105,6 +130,11 @@ function generateNavbarHTML(currentPage, options = {}) {
             ${navLinks}
             
             ${customButtons}
+            
+            <!-- Bouton Paramètres (si connecté) -->
+            <a id="settings-button" href="settings.html" class="${settingsClass}">
+              Paramètres
+            </a>
             
             <!-- User Display (si connecté) -->
             <span id="user-display" class="hidden bg-blue-500/70 text-white font-medium px-4 py-2 rounded-full backdrop-blur-sm shadow-sm"></span>
@@ -138,6 +168,11 @@ function generateNavbarHTML(currentPage, options = {}) {
           }).join('')}
           
           ${options.customButtonsMobile || ''}
+          
+          <!-- Bouton Paramètres Mobile (si connecté) -->
+          <a id="settings-button-mobile" href="settings.html" class="${settingsActive ? 'hidden block bg-emerald-500/70 text-white' : 'hidden block bg-gray-500/70 hover:bg-gray-600/80 text-white'} font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+            Paramètres
+          </a>
           
           <!-- User Display Mobile -->
           <div id="user-display-mobile" class="hidden bg-blue-500/70 text-white font-medium px-4 py-3 rounded-lg backdrop-blur-sm shadow-sm text-center"></div>

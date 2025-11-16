@@ -89,5 +89,12 @@
     "username": "Alix",
     "text": "Bonsoir à tous, ce soir j'avance un peu sur le projet, la version finale sera bientôt disponible :)",
     "timestamp": "2025-11-14T19:05:56.329Z"
+  },
+  {
+    "id": 1763302741825,
+    "userId": 1,
+    "username": "Alix",
+    "text": "J'ai amélioré le journal, la page d'affichage des données, le chat et le blog :D",
+    "timestamp": "2025-11-16T14:19:01.825Z"
   }
 ]

@@ -261,10 +261,36 @@
           </div>
         </div>
         <div class="section-content p-5 sm:p-6">
-          <div class="text-center mb-6">
-            <div class="inline-block bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white shadow-xl">
-              <p class="text-sm opacity-90 mb-2">Série actuelle</p>
-              <p id="current-streak" class="text-5xl font-bold">0 jours</p>
+          <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="text-center">
+              <div class="inline-block bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-6 text-white shadow-xl w-full">
+                <p class="text-xs opacity-90 mb-2">Série actuelle</p>
+                <p id="current-streak" class="text-4xl font-bold">0 jours</p>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="inline-block bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl p-6 text-white shadow-xl w-full">
+                <p class="text-xs opacity-90 mb-2">Série la plus longue</p>
+                <p id="longest-streak" class="text-4xl font-bold">0 jours</p>
+              </div>
+            </div>
+            <div class="text-center">
+              <div class="inline-block bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl p-6 text-white shadow-xl w-full">
+                <p class="text-xs opacity-90 mb-2">Régularité</p>
+                <p id="regularity-percent" class="text-4xl font-bold">0%</p>
+              </div>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 gap-4 mb-6">
+            <div class="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-4 border-l-4 border-purple-500">
+              <p class="text-sm text-gray-600 mb-1">📅 Première rédaction</p>
+              <p id="first-entry-date" class="text-lg font-bold text-purple-700">--</p>
+              <p id="days-since-first" class="text-sm text-gray-600 mt-1">--</p>
+            </div>
+            <div class="bg-gradient-to-br from-cyan-50 to-blue-50 rounded-xl p-4 border-l-4 border-cyan-500">
+              <p class="text-sm text-gray-600 mb-1">📊 Total de jours</p>
+              <p id="total-days-tracked" class="text-lg font-bold text-cyan-700">0 jours</p>
+              <p class="text-sm text-gray-600 mt-1">avec entrées</p>
             </div>
           </div>
           <div id="streak-details" class="space-y-3">
@@ -291,18 +317,66 @@
           </div>
         </div>
         <div class="section-content p-5 sm:p-6">
-          <div class="grid md:grid-cols-2 gap-4 mb-6">
-            <div class="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
-              <p class="text-sm text-gray-600 mb-1">Sommeil moyen</p>
-              <p id="avg-sleep" class="text-3xl font-bold text-purple-700">0h</p>
+          <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 border-l-4 border-purple-500 shadow-sm">
+              <p class="text-sm text-gray-600 mb-2">💤 Sommeil moyen</p>
+              <p id="avg-sleep" class="text-3xl font-bold text-purple-700 mb-2">0h</p>
+              <div class="w-full bg-purple-200 rounded-full h-3">
+                <div id="sleep-progress-bar" class="bg-gradient-to-r from-purple-500 to-purple-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+              </div>
+              <p class="text-xs text-gray-500 mt-2">Objectif: 7-9h</p>
             </div>
-            <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
-              <p class="text-sm text-gray-600 mb-1">Qualité du sommeil</p>
-              <p id="sleep-quality" class="text-lg font-bold text-blue-700">--</p>
+            <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border-l-4 border-blue-500 shadow-sm">
+              <p class="text-sm text-gray-600 mb-2">⭐ Qualité</p>
+              <p id="sleep-quality" class="text-lg font-bold text-blue-700 mb-2">--</p>
+              <div class="flex gap-1">
+                <div id="sleep-stars" class="flex gap-1"></div>
+              </div>
+            </div>
+            <div class="bg-gradient-to-br from-indigo-50 to-indigo-100 rounded-xl p-5 border-l-4 border-indigo-500 shadow-sm">
+              <p class="text-sm text-gray-600 mb-2">📊 Évolution</p>
+              <p id="sleep-trend" class="text-lg font-bold text-indigo-700">--</p>
+              <p class="text-xs text-gray-500 mt-2">vs semaine dernière</p>
             </div>
           </div>
-          <div id="sleep-insights" class="p-4 bg-purple-50 rounded-lg">
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">📈 Évolution du sommeil (7 derniers jours)</h3>
+            <div style="height: 200px; position: relative;">
+              <canvas id="sleepMiniChart"></canvas>
+            </div>
+          </div>
+          <div id="sleep-insights" class="p-4 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
             <!-- Sera rempli dynamiquement -->
+          </div>
+          <div id="habits-display" class="mt-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-3">🏃 Habitudes de vie</h3>
+            <div id="habits-content" class="grid md:grid-cols-2 gap-4">
+              <!-- Sera rempli dynamiquement -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Suivi Détaillé -->
+      <div class="section-card widget-compact rounded-2xl shadow-xl border border-teal-200" data-section="tracking" id="tracking-section">
+        <div class="section-header p-5 sm:p-6 flex items-center justify-between cursor-pointer border-b border-gray-200" onclick="toggleSection(this)">
+          <div class="flex items-center gap-3">
+            <span class="drag-handle text-2xl">⋮⋮</span>
+            <span class="text-2xl sm:text-3xl">📊</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Suivi Détaillé</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="favorite-star text-2xl" onclick="toggleFavorite(event, 'tracking')" title="Favoriser cette section">
+              ★
+            </button>
+            <svg class="toggle-icon w-6 h-6 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="section-content p-5 sm:p-6">
+          <div id="tracking-content" class="space-y-6">
+            <p class="text-gray-500 text-center">Chargement de vos données de suivi...</p>
           </div>
         </div>
       </div>
@@ -351,7 +425,7 @@
     let sleepChart = null;
     let weeklyChart = null;
     let userPreferences = {
-      sectionOrder: ['insights', 'positive', 'charts', 'streak', 'sleep', 'entries'],
+      sectionOrder: ['insights', 'positive', 'charts', 'streak', 'sleep', 'tracking', 'entries'],
       collapsedSections: [],
       favoriteSections: [],
       favoriteEntries: []
@@ -559,6 +633,7 @@
       updatePositiveMoments(dataToShow);
       updateStreakSection(dataToShow, stats);
       updateSleepSection(dataToShow, stats);
+      updateTrackingSection(dataToShow);
     }
 
     // ========== CALCULS & STATISTIQUES ==========
@@ -657,67 +732,130 @@
       let insights = [];
       let recommendations = [];
       
-      // Analyser
+      // Analyser les entrées récentes
       const recentEntries = entries.slice(-7);
-      const moodValues = recentEntries.map(e => parseInt(e.mood) || 0);
+      const moodValues = recentEntries.map(e => parseInt(e.mood) || 0).filter(m => m > 0);
       const variance = calculateVariance(moodValues);
       
-      // Tendance
+      // Tendance de l'humeur
       if (moodTrend > 0.5) {
-        insights.push(`✨ <strong>Excellente progression !</strong> Votre humeur s'améliore.`);
-        recommendations.push(`Identifiez ce qui contribue à cette amélioration.`);
+        insights.push(`✨ <strong>Excellente progression !</strong> Votre humeur s'améliore (+${moodTrend.toFixed(1)}).`);
+        recommendations.push(`Identifiez ce qui contribue à cette amélioration et continuez ces pratiques.`);
       } else if (moodTrend < -0.5) {
-        insights.push(`💙 <strong>Période difficile détectée</strong>. Vous n'êtes pas seul·e.`);
+        insights.push(`💙 <strong>Période difficile détectée</strong>. Votre humeur a baissé de ${Math.abs(moodTrend).toFixed(1)} point(s).`);
         recommendations.push(`Parlez à un proche ou un professionnel de ce que vous vivez.`);
+        recommendations.push(`Revisitez vos stratégies d'adaptation (copingStrategies) qui fonctionnent.`);
       } else {
         insights.push(`➡️ <strong>Humeur stable</strong>, c'est une constance positive.`);
       }
       
-      // Sommeil
+      // Variabilité de l'humeur
+      if (variance > 2) {
+        insights.push(`📊 <strong>Variabilité importante</strong> de l'humeur détectée.`);
+        recommendations.push(`Identifiez les déclencheurs (emotionalTriggers) qui causent ces variations.`);
+      }
+      
+      // Analyse du sommeil
       if (stats.avgSleep > 0) {
         if (stats.avgSleep < 6) {
           insights.push(`😴 <strong>Sommeil insuffisant</strong> (${stats.avgSleep}h/nuit).`);
-          recommendations.push(`Priorité : augmenter votre temps de sommeil.`);
+          recommendations.push(`Priorité : augmenter votre temps de sommeil à au moins 7h.`);
+          recommendations.push(`Établissez une routine de coucher régulière.`);
         } else if (stats.avgSleep >= 7 && stats.avgSleep <= 9) {
           insights.push(`✅ <strong>Sommeil optimal</strong> (${stats.avgSleep}h).`);
+        } else if (stats.avgSleep > 9) {
+          insights.push(`😴 <strong>Sommeil excessif</strong> (${stats.avgSleep}h).`);
+          recommendations.push(`Vérifiez si ce sommeil est réparateur ou s'il indique un besoin de repos.`);
         }
       }
       
-      // Série
+      // Analyse des habitudes
+      const exerciseEntries = entries.filter(e => e.exercise && e.exercise.trim()).length;
+      const exercisePercent = entries.length > 0 ? Math.round((exerciseEntries / entries.length) * 100) : 0;
+      
+      if (exercisePercent < 30) {
+        recommendations.push(`🏃 Augmentez votre activité physique : seulement ${exercisePercent}% de vos entrées mentionnent de l'exercice.`);
+      } else if (exercisePercent >= 50) {
+        insights.push(`💪 <strong>Bonne activité physique</strong> (${exercisePercent}% des jours).`);
+      }
+      
+      // Analyse des gratitudes
+      const gratitudeEntries = entries.filter(e => e.gratitude && e.gratitude.length > 0).length;
+      const gratitudePercent = entries.length > 0 ? Math.round((gratitudeEntries / entries.length) * 100) : 0;
+      
+      if (gratitudePercent < 50) {
+        recommendations.push(`🙏 Pratiquez la gratitude plus régulièrement : cela améliore le bien-être.`);
+      } else {
+        insights.push(`✨ <strong>Belle pratique de gratitude</strong> (${gratitudePercent}% des jours).`);
+      }
+      
+      // Analyse des défis et réactions
+      const challengesEntries = entries.filter(e => e.challenges && e.challenges.trim()).length;
+      const reactionEntries = entries.filter(e => e.reaction && e.reaction.trim()).length;
+      
+      if (challengesEntries > 0 && reactionEntries > 0) {
+        insights.push(`💪 Vous documentez bien vos défis et vos réactions (${challengesEntries} entrées).`);
+        recommendations.push(`Continuez à analyser vos patterns pour mieux comprendre vos réactions.`);
+      }
+      
+      // Série et régularité
       if (stats.streak >= 14) {
-        insights.push(`🔥 <strong>Série exceptionnelle !</strong> ${stats.streak} jours - continuez !`);
+        insights.push(`🔥 <strong>Série exceptionnelle !</strong> ${stats.streak} jours consécutifs - continuez !`);
       } else if (stats.streak >= 7) {
-        insights.push(`🔥 <strong>Belle série !</strong> ${stats.streak} jours.`);
+        insights.push(`🔥 <strong>Belle série !</strong> ${stats.streak} jours consécutifs.`);
+        recommendations.push(`Essayez d'atteindre 14 jours pour créer une habitude solide.`);
       } else if (stats.streak === 0) {
         recommendations.push(`📝 Essayez d'écrire quotidiennement, même brièvement.`);
+        recommendations.push(`Fixez-vous un rappel quotidien pour tenir votre journal.`);
       }
       
       // Humeur globale
       if (stats.avgMood >= 7.5) {
-        insights.push(`😊 <strong>Humeur excellente</strong> (${stats.avgMood}/10) !`);
+        insights.push(`😊 <strong>Humeur excellente</strong> (${stats.avgMood}/10) ! Profitez de cette énergie positive.`);
       } else if (stats.avgMood < 4) {
         insights.push(`💙 <strong>Humeur basse</strong> (${stats.avgMood}/10).`);
         recommendations.push(`🆘 N'hésitez pas à chercher du soutien professionnel.`);
+        recommendations.push(`Revisitez vos "energyGivers" et augmentez ces activités.`);
+      } else if (stats.avgMood >= 4 && stats.avgMood < 6) {
+        recommendations.push(`Identifiez ce qui vous fait du bien (energyGivers) et augmentez ces moments.`);
+      }
+      
+      // Analyse des patterns
+      const patternsEntries = entries.filter(e => e.patterns && e.patterns.trim()).length;
+      if (patternsEntries > 0) {
+        insights.push(`🔍 Vous identifiez bien vos patterns (${patternsEntries} entrées).`);
+        recommendations.push(`Utilisez ces patterns pour anticiper et mieux gérer vos réactions.`);
+      }
+      
+      // Analyse des stratégies d'adaptation
+      const copingEntries = entries.filter(e => e.copingStrategies && e.copingStrategies.trim()).length;
+      if (copingEntries > 0) {
+        insights.push(`🛡️ Vous utilisez des stratégies d'adaptation (${copingEntries} entrées).`);
+      } else {
+        recommendations.push(`Développez vos stratégies d'adaptation (copingStrategies) pour mieux gérer les difficultés.`);
       }
       
       // Formater
       let html = '';
       if (insights.length > 0) {
-        html += `<div class="mb-3"><p class="text-gray-800 leading-relaxed">${insights.join(' ')}</p></div>`;
+        html += `<div class="mb-4 space-y-2"><p class="text-gray-800 leading-relaxed">${insights.join('</p><p class="text-gray-800 leading-relaxed">')}</p></div>`;
       }
       
       if (recommendations.length > 0) {
         html += `
-          <div class="mt-4 pt-4 border-t border-amber-200">
-            <p class="font-semibold text-amber-900 mb-2">💡 Recommandations :</p>
-            <ul class="space-y-1 text-sm text-gray-700">
-              ${recommendations.map(r => `<li class="flex items-start"><span class="mr-2">→</span><span>${r}</span></li>`).join('')}
+          <div class="mt-4 pt-4 border-t border-amber-200 bg-amber-50 rounded-lg p-4">
+            <p class="font-semibold text-amber-900 mb-3 flex items-center gap-2">
+              <span class="text-xl">💡</span>
+              <span>Recommandations personnalisées :</span>
+            </p>
+            <ul class="space-y-2 text-sm text-gray-700">
+              ${recommendations.map(r => `<li class="flex items-start gap-2"><span class="text-amber-600 mt-1">→</span><span>${r}</span></li>`).join('')}
             </ul>
           </div>
         `;
       }
       
-      insightsContainer.innerHTML = html || '<p class="text-gray-700">Continuez à tenir votre journal ! 💪</p>';
+      insightsContainer.innerHTML = html || '<p class="text-gray-700">Continuez à tenir votre journal pour obtenir des insights personnalisés ! 💪</p>';
     }
 
     function calculateVariance(values) {
@@ -833,6 +971,57 @@
     function updateStreakSection(entries, stats) {
       const container = document.getElementById('streak-details');
       
+      if (entries.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center">Commencez à écrire pour voir vos statistiques !</p>';
+        return;
+      }
+
+      // Calculer la série la plus longue
+      const sortedEntries = [...entries].sort((a, b) => new Date(a.date) - new Date(b.date));
+      let longestStreak = 0;
+      let currentStreak = 1;
+      
+      for (let i = 1; i < sortedEntries.length; i++) {
+        const prevDate = new Date(sortedEntries[i-1].date);
+        const currDate = new Date(sortedEntries[i].date);
+        const daysDiff = Math.floor((currDate - prevDate) / (1000 * 60 * 60 * 24));
+        
+        if (daysDiff === 1) {
+          currentStreak++;
+        } else {
+          longestStreak = Math.max(longestStreak, currentStreak);
+          currentStreak = 1;
+        }
+      }
+      longestStreak = Math.max(longestStreak, currentStreak);
+      
+      // Calculer la régularité (pourcentage de jours avec entrées)
+      const firstEntry = sortedEntries[0];
+      const lastEntry = sortedEntries[sortedEntries.length - 1];
+      const firstDate = new Date(firstEntry.date);
+      const lastDate = new Date(lastEntry.date);
+      const totalDays = Math.ceil((lastDate - firstDate) / (1000 * 60 * 60 * 24)) + 1;
+      const regularityPercent = totalDays > 0 ? Math.round((entries.length / totalDays) * 100) : 0;
+      
+      // Mettre à jour les éléments
+      document.getElementById('longest-streak').textContent = `${longestStreak} jours`;
+      document.getElementById('regularity-percent').textContent = `${regularityPercent}%`;
+      
+      // Première rédaction
+      const firstDateStr = new Date(firstEntry.date).toLocaleDateString('fr-FR', { 
+        weekday: 'long', 
+        day: 'numeric', 
+        month: 'long', 
+        year: 'numeric' 
+      });
+      document.getElementById('first-entry-date').textContent = firstDateStr;
+      
+      const today = new Date();
+      const daysSinceFirst = Math.floor((today - firstDate) / (1000 * 60 * 60 * 24));
+      document.getElementById('days-since-first').textContent = `Il y a ${daysSinceFirst} jours`;
+      
+      document.getElementById('total-days-tracked').textContent = `${entries.length} jours`;
+      
       let html = '';
       
       if (stats.streak > 0) {
@@ -854,14 +1043,15 @@
       });
       
       html += `
-        <div class="bg-white rounded-lg p-4">
+        <div class="bg-white rounded-lg p-4 shadow-sm">
           <p class="text-sm font-semibold text-gray-700 mb-3">Derniers 30 jours</p>
           <div class="grid grid-cols-10 gap-1">
             ${last30Days.map(date => {
               const hasEntry = entries.some(e => e.date === date);
-              return `<div class="w-full aspect-square rounded ${hasEntry ? 'bg-emerald-500' : 'bg-gray-200'}" title="${date}"></div>`;
+              return `<div class="w-full aspect-square rounded ${hasEntry ? 'bg-emerald-500 hover:bg-emerald-600' : 'bg-gray-200'}" title="${date}"></div>`;
             }).join('')}
           </div>
+          <p class="text-xs text-gray-500 mt-2 text-center">${last30Days.filter(date => entries.some(e => e.date === date)).length}/30 jours avec entrées</p>
         </div>
       `;
       
@@ -870,46 +1060,384 @@
 
     // ========== SECTION SOMMEIL ==========
     
+    let sleepMiniChart = null;
+    
     function updateSleepSection(entries, stats) {
       const container = document.getElementById('sleep-insights');
+      const habitsContainer = document.getElementById('habits-content');
       
       const sleepEntries = entries.filter(e => e.sleep && parseFloat(e.sleep) > 0);
       
       if (sleepEntries.length === 0) {
         container.innerHTML = '<p class="text-gray-600">Commencez à suivre votre sommeil pour voir des insights apparaître ici.</p>';
+        habitsContainer.innerHTML = '<p class="text-gray-500 text-center col-span-2">Commencez à noter vos habitudes pour voir des statistiques !</p>';
         return;
       }
       
       const sleepValues = sleepEntries.map(e => parseFloat(e.sleep));
       const minSleep = Math.min(...sleepValues);
       const maxSleep = Math.max(...sleepValues);
+      const avgSleep = stats.avgSleep || 0;
       
+      // Barre de progression du sommeil (objectif 7-9h)
+      const sleepProgress = Math.min(100, (avgSleep / 9) * 100);
+      document.getElementById('sleep-progress-bar').style.width = `${sleepProgress}%`;
+      
+      // Qualité du sommeil avec étoiles
       let quality = 'Bonne';
       let qualityColor = 'text-green-700';
-      if (stats.avgSleep < 6) {
+      let stars = 3;
+      if (avgSleep < 6) {
         quality = 'Insuffisante';
         qualityColor = 'text-red-700';
-      } else if (stats.avgSleep > 9) {
+        stars = 1;
+      } else if (avgSleep >= 6 && avgSleep < 7) {
+        quality = 'Correcte';
+        qualityColor = 'text-orange-700';
+        stars = 2;
+      } else if (avgSleep >= 7 && avgSleep <= 9) {
+        quality = 'Optimale';
+        qualityColor = 'text-green-700';
+        stars = 5;
+      } else if (avgSleep > 9) {
         quality = 'Excessive';
         qualityColor = 'text-orange-700';
+        stars = 3;
       }
       
       document.getElementById('sleep-quality').innerHTML = `<span class="${qualityColor}">${quality}</span>`;
       
+      // Afficher les étoiles
+      const starsContainer = document.getElementById('sleep-stars');
+      starsContainer.innerHTML = Array.from({ length: 5 }, (_, i) => 
+        `<span class="text-xl ${i < stars ? 'text-yellow-400' : 'text-gray-300'}">★</span>`
+      ).join('');
+      
+      // Tendance du sommeil
+      const recentSleep = sleepEntries.slice(-7).map(e => parseFloat(e.sleep));
+      const previousSleep = sleepEntries.slice(-14, -7).map(e => parseFloat(e.sleep));
+      let trendText = '→ Stable';
+      let trendColor = 'text-gray-700';
+      
+      if (recentSleep.length > 0 && previousSleep.length > 0) {
+        const recentAvg = recentSleep.reduce((a, b) => a + b, 0) / recentSleep.length;
+        const previousAvg = previousSleep.reduce((a, b) => a + b, 0) / previousSleep.length;
+        const diff = recentAvg - previousAvg;
+        
+        if (diff > 0.5) {
+          trendText = `↗️ +${diff.toFixed(1)}h`;
+          trendColor = 'text-green-600';
+        } else if (diff < -0.5) {
+          trendText = `↘️ ${diff.toFixed(1)}h`;
+          trendColor = 'text-red-600';
+        }
+      }
+      
+      document.getElementById('sleep-trend').innerHTML = `<span class="${trendColor}">${trendText}</span>`;
+      
+      // Graphique mini sommeil
+      createSleepMiniChart(sleepEntries.slice(-7));
+      
+      // Insights sommeil
       let html = `
-        <div class="space-y-3">
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-600">Minimum enregistré</span>
-            <span class="font-bold text-gray-800">${minSleep}h</span>
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <p class="text-xs text-gray-600 mb-1">Minimum</p>
+              <p class="text-xl font-bold text-gray-800">${minSleep}h</p>
+            </div>
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <p class="text-xs text-gray-600 mb-1">Maximum</p>
+              <p class="text-xl font-bold text-gray-800">${maxSleep}h</p>
+            </div>
           </div>
-          <div class="flex justify-between items-center">
-            <span class="text-sm text-gray-600">Maximum enregistré</span>
-            <span class="font-bold text-gray-800">${maxSleep}h</span>
-          </div>
+          ${avgSleep < 7 ? `
+            <div class="bg-amber-50 border-l-4 border-amber-400 p-3 rounded">
+              <p class="text-sm text-amber-800"><strong>💡 Conseil :</strong> Essayez d'augmenter votre temps de sommeil pour améliorer votre bien-être général.</p>
+            </div>
+          ` : avgSleep > 9 ? `
+            <div class="bg-blue-50 border-l-4 border-blue-400 p-3 rounded">
+              <p class="text-sm text-blue-800"><strong>💡 Conseil :</strong> Un sommeil excessif peut parfois indiquer un besoin de repos. Assurez-vous que c'est réparateur.</p>
+            </div>
+          ` : `
+            <div class="bg-green-50 border-l-4 border-green-400 p-3 rounded">
+              <p class="text-sm text-green-800"><strong>✨ Excellent !</strong> Votre sommeil est dans la zone optimale.</p>
+            </div>
+          `}
         </div>
       `;
       
       container.innerHTML = html;
+      
+      // Afficher les habitudes
+      updateHabitsDisplay(entries, habitsContainer);
+    }
+    
+    function createSleepMiniChart(sleepEntries) {
+      const canvas = document.getElementById('sleepMiniChart');
+      if (!canvas) return;
+      
+      if (sleepMiniChart) sleepMiniChart.destroy();
+      
+      const labels = sleepEntries.map(e => new Date(e.date).toLocaleDateString('fr-FR', { weekday: 'short' }));
+      const data = sleepEntries.map(e => parseFloat(e.sleep) || 0);
+      
+      sleepMiniChart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Heures',
+            data: data,
+            borderColor: '#8b5cf6',
+            backgroundColor: 'rgba(139, 92, 246, 0.1)',
+            tension: 0.4,
+            fill: true,
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 12,
+              ticks: { stepSize: 2 }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+    
+    function updateHabitsDisplay(entries, container) {
+      const habits = {
+        exercise: [],
+        nutrition: [],
+        goodHabits: [],
+        badHabits: []
+      };
+      
+      entries.forEach(entry => {
+        if (entry.exercise && entry.exercise.trim()) habits.exercise.push(entry.exercise);
+        if (entry.nutrition && entry.nutrition.trim()) habits.nutrition.push(entry.nutrition);
+        if (entry.goodHabits && entry.goodHabits.trim()) habits.goodHabits.push(entry.goodHabits);
+        if (entry.badHabits && entry.badHabits.trim()) habits.badHabits.push(entry.badHabits);
+      });
+      
+      let html = '';
+      
+      if (habits.exercise.length > 0) {
+        const exerciseCount = habits.exercise.length;
+        const exercisePercent = Math.round((exerciseCount / entries.length) * 100);
+        html += `
+          <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 border-l-4 border-green-500">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-semibold text-gray-800">🏃 Activité physique</h4>
+              <span class="text-sm font-bold text-green-700">${exercisePercent}%</span>
+            </div>
+            <div class="w-full bg-green-200 rounded-full h-2 mb-2">
+              <div class="bg-green-500 h-2 rounded-full" style="width: ${exercisePercent}%"></div>
+            </div>
+            <p class="text-xs text-gray-600">${exerciseCount} jour${exerciseCount > 1 ? 's' : ''} avec activité</p>
+          </div>
+        `;
+      }
+      
+      if (habits.nutrition.length > 0) {
+        const nutritionCount = habits.nutrition.length;
+        const nutritionPercent = Math.round((nutritionCount / entries.length) * 100);
+        const avgNutrition = habits.nutrition.filter(n => n.toLowerCase().includes('good') || n.toLowerCase().includes('excellent')).length;
+        html += `
+          <div class="bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-4 border-l-4 border-orange-500">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-semibold text-gray-800">🍎 Nutrition</h4>
+              <span class="text-sm font-bold text-orange-700">${nutritionPercent}%</span>
+            </div>
+            <div class="w-full bg-orange-200 rounded-full h-2 mb-2">
+              <div class="bg-orange-500 h-2 rounded-full" style="width: ${nutritionPercent}%"></div>
+            </div>
+            <p class="text-xs text-gray-600">${nutritionCount} jour${nutritionCount > 1 ? 's' : ''} noté${nutritionCount > 1 ? 's' : ''}</p>
+          </div>
+        `;
+      }
+      
+      if (html === '') {
+        html = '<p class="text-gray-500 text-center col-span-2">Commencez à noter vos habitudes pour voir des statistiques !</p>';
+      }
+      
+      container.innerHTML = html;
+    }
+
+    // ========== SECTION TRACKING DÉTAILLÉ ==========
+    
+    function updateTrackingSection(entries) {
+      const container = document.getElementById('tracking-content');
+      
+      // Récupérer toutes les entrées avec trackingData
+      const trackingEntries = entries.filter(e => e.trackingData && Object.keys(e.trackingData).length > 0);
+      
+      if (trackingEntries.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8">
+            <p class="text-gray-500 mb-4">Aucune donnée de suivi détaillée disponible.</p>
+            <p class="text-sm text-gray-400">Activez des catégories de suivi dans votre journal pour voir des statistiques ici.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      // Regrouper par catégorie
+      const categories = {};
+      trackingEntries.forEach(entry => {
+        if (entry.trackingCategories && Array.isArray(entry.trackingCategories)) {
+          entry.trackingCategories.forEach(cat => {
+            if (!categories[cat]) {
+              categories[cat] = [];
+            }
+            if (entry.trackingData[cat]) {
+              categories[cat].push({
+                date: entry.date,
+                data: entry.trackingData[cat]
+              });
+            }
+          });
+        }
+      });
+      
+      let html = '';
+      
+      // Afficher chaque catégorie
+      Object.keys(categories).forEach(category => {
+        const categoryData = categories[category];
+        const categoryName = getCategoryDisplayName(category);
+        const categoryColor = getCategoryColor(category);
+        
+        html += `
+          <div class="bg-white rounded-xl p-6 shadow-lg border-l-4" style="border-color: ${categoryColor}">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2" style="color: ${categoryColor}">
+              <span class="text-2xl">${getCategoryIcon(category)}</span>
+              <span>${categoryName}</span>
+              <span class="text-sm font-normal text-gray-500">(${categoryData.length} entrées)</span>
+            </h3>
+            <div class="space-y-4">
+              ${renderCategoryData(category, categoryData, categoryColor)}
+            </div>
+          </div>
+        `;
+      });
+      
+      container.innerHTML = html || '<p class="text-gray-500 text-center">Aucune donnée de suivi disponible.</p>';
+    }
+    
+    function getCategoryDisplayName(category) {
+      const names = {
+        'mental-health': 'Santé Mentale',
+        'physical-health': 'Santé Physique',
+        'addiction': 'Addictions',
+        'tca': 'Troubles du Comportement Alimentaire',
+        'social': 'Social',
+        'productivity': 'Productivité'
+      };
+      return names[category] || category.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    }
+    
+    function getCategoryColor(category) {
+      const colors = {
+        'mental-health': '#3b82f6',
+        'physical-health': '#10b981',
+        'addiction': '#ef4444',
+        'tca': '#f59e0b',
+        'social': '#8b5cf6',
+        'productivity': '#06b6d4'
+      };
+      return colors[category] || '#6b7280';
+    }
+    
+    function getCategoryIcon(category) {
+      const icons = {
+        'mental-health': '🧠',
+        'physical-health': '💪',
+        'addiction': '🚫',
+        'tca': '🍽️',
+        'social': '👥',
+        'productivity': '⚡'
+      };
+      return icons[category] || '📊';
+    }
+    
+    function renderCategoryData(category, data, color) {
+      // Récupérer toutes les clés possibles pour cette catégorie
+      const allKeys = new Set();
+      data.forEach(item => {
+        Object.keys(item.data).forEach(key => allKeys.add(key));
+      });
+      
+      let html = '';
+      
+      allKeys.forEach(key => {
+        const values = data.map(item => item.data[key]).filter(v => v !== null && v !== undefined && v !== '');
+        
+        if (values.length === 0) return;
+        
+        const label = key.replace(category + '-', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        
+        // Analyser les valeurs
+        const numericValues = values.map(v => {
+          const num = parseFloat(v);
+          return isNaN(num) ? null : num;
+        }).filter(v => v !== null);
+        
+        if (numericValues.length > 0) {
+          // Valeurs numériques : afficher moyenne et graphique
+          const avg = (numericValues.reduce((a, b) => a + b, 0) / numericValues.length).toFixed(1);
+          const min = Math.min(...numericValues);
+          const max = Math.max(...numericValues);
+          
+          html += `
+            <div class="bg-gray-50 rounded-lg p-4">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold text-gray-700">${label}</span>
+                <span class="text-lg font-bold" style="color: ${color}">${avg}</span>
+              </div>
+              <div class="text-xs text-gray-500 mb-2">Moyenne: ${avg} | Min: ${min} | Max: ${max}</div>
+              <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="h-2 rounded-full transition-all" style="width: ${(avg / 10) * 100}%; background-color: ${color}"></div>
+              </div>
+            </div>
+          `;
+        } else {
+          // Valeurs textuelles : afficher les plus fréquentes
+          const valueCounts = {};
+          values.forEach(v => {
+            valueCounts[v] = (valueCounts[v] || 0) + 1;
+          });
+          
+          const sortedValues = Object.entries(valueCounts)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5);
+          
+          html += `
+            <div class="bg-gray-50 rounded-lg p-4">
+              <div class="font-semibold text-gray-700 mb-2">${label}</div>
+              <div class="space-y-1">
+                ${sortedValues.map(([value, count]) => `
+                  <div class="flex justify-between items-center text-sm">
+                    <span class="text-gray-600">${value}</span>
+                    <span class="font-semibold" style="color: ${color}">${count}x</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+      });
+      
+      return html;
     }
 
     // ========== GRAPHIQUES ==========
@@ -1128,41 +1656,63 @@
           <div class="p-6 space-y-6">
       `;
 
-      // Sections de l'entrée (simplifiées pour la lisibilité)
+      // Sections de l'entrée - COMPLÈTES
       
-      // Émotions
-      if (entry.feelingWords && entry.feelingWords.filter(w => w.trim()).length > 0) {
+      // 1. Émotions et ressentis
+      if ((entry.feelingWords && entry.feelingWords.filter(w => w && w.trim()).length > 0) || entry.primaryEmotion || entry.emotionIntensity || entry.positiveEmotion) {
         html += `
           <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border-l-4 border-purple-500">
             <h3 class="text-lg font-bold text-purple-800 mb-3 flex items-center gap-2">
-              <span class="text-xl">💜</span> Émotions ressenties
+              <span class="text-xl">💜</span> État émotionnel
             </h3>
-            <div class="flex flex-wrap gap-2">
-              ${entry.feelingWords.filter(w => w.trim()).map(word =>
-                `<span class="px-3 py-2 bg-white text-purple-700 rounded-full text-sm font-medium shadow-sm border border-purple-200">${word}</span>`
-              ).join('')}
-            </div>
-          </div>
         `;
+        
+        if (entry.feelingWords && entry.feelingWords.filter(w => w && w.trim()).length > 0) {
+          html += `
+            <div class="mb-3">
+              <p class="text-sm font-semibold text-purple-700 mb-2">Mots qui décrivent mes émotions</p>
+              <div class="flex flex-wrap gap-2">
+                ${entry.feelingWords.filter(w => w && w.trim()).map(word =>
+                  `<span class="px-3 py-2 bg-white text-purple-700 rounded-full text-sm font-medium shadow-sm border border-purple-200">${word}</span>`
+                ).join('')}
+              </div>
+            </div>
+          `;
+        }
+        
+        if (entry.primaryEmotion) {
+          html += `<div class="mb-2"><p class="text-sm text-purple-700"><strong>Émotion principale:</strong> ${entry.primaryEmotion}</p></div>`;
+        }
+        
+        if (entry.emotionIntensity) {
+          html += `<div class="mb-2"><p class="text-sm text-purple-700"><strong>Intensité:</strong> ${entry.emotionIntensity}/5</p></div>`;
+        }
+        
+        if (entry.positiveEmotion) {
+          html += `<div class="mb-2"><p class="text-sm text-purple-700"><strong>Émotion positive:</strong> ${entry.positiveEmotion}</p></div>`;
+        }
+        
+        html += `</div>`;
       }
 
-      // Gratitude et moments positifs
-      if ((entry.gratitude && entry.gratitude.filter(g => g.trim()).length > 0) || entry.bestMoment) {
+      // 2. Gratitude et moments positifs
+      if ((entry.gratitude && entry.gratitude.filter(g => g && g.trim()).length > 0) || entry.bestMoment || (entry.positiveElements && entry.positiveElements.filter(p => p && p.trim()).length > 0)) {
         html += `
           <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 border-l-4 border-yellow-500">
             <h3 class="text-lg font-bold text-yellow-800 mb-3 flex items-center gap-2">
-              <span class="text-xl">✨</span> Moments positifs
+              <span class="text-xl">✨</span> Moments positifs & Gratitude
             </h3>
         `;
         
         if (entry.bestMoment) {
-          html += `<p class="text-gray-800 bg-white p-3 rounded-lg border border-yellow-100 italic mb-3">"${entry.bestMoment}"</p>`;
+          html += `<p class="text-gray-800 bg-white p-3 rounded-lg border border-yellow-100 italic mb-3"><strong>Meilleur moment:</strong> "${entry.bestMoment}"</p>`;
         }
         
-        if (entry.gratitude && entry.gratitude.filter(g => g.trim()).length > 0) {
+        const gratitudeList = entry.gratitude || entry.positiveElements || [];
+        if (gratitudeList.filter(g => g && g.trim()).length > 0) {
           html += `
             <div class="flex flex-wrap gap-2">
-              ${entry.gratitude.filter(g => g.trim()).map(item =>
+              ${gratitudeList.filter(g => g && g.trim()).map(item =>
                 `<span class="px-3 py-2 bg-white text-yellow-700 rounded-full text-sm font-medium shadow-sm border border-yellow-200">${item}</span>`
               ).join('')}
             </div>
@@ -1172,45 +1722,228 @@
         html += `</div>`;
       }
 
-      // Sommeil
-      if (entry.sleep) {
+      // 3. Habitudes et Santé
+      if (entry.sleep || entry.exercise || entry.nutrition || entry.goodHabits || entry.productiveHabits || entry.badHabits || entry.slippedHabits || entry.sleepGoal) {
         html += `
           <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-4 border-l-4 border-blue-500">
-            <h3 class="text-lg font-bold text-blue-800 mb-2 flex items-center gap-2">
-              <span class="text-xl">💤</span> Sommeil
+            <h3 class="text-lg font-bold text-blue-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">🔄</span> Habitudes & Santé
             </h3>
-            <p class="text-gray-800 bg-white p-3 rounded-lg border border-blue-100">${entry.sleep} heures</p>
-          </div>
         `;
+        
+        if (entry.sleep) {
+          html += `<div class="mb-2 bg-white p-2 rounded"><p class="text-sm"><strong>💤 Sommeil:</strong> ${entry.sleep} heures</p></div>`;
+        }
+        
+        if (entry.sleepGoal) {
+          html += `<div class="mb-2 bg-white p-2 rounded"><p class="text-sm"><strong>🎯 Objectif sommeil:</strong> ${entry.sleepGoal} heures</p></div>`;
+        }
+        
+        if (entry.exercise) {
+          html += `<div class="mb-2 bg-white p-2 rounded"><p class="text-sm"><strong>💪 Activité physique:</strong> ${entry.exercise}</p></div>`;
+        }
+        
+        if (entry.nutrition) {
+          html += `<div class="mb-2 bg-white p-2 rounded"><p class="text-sm"><strong>🍎 Nutrition:</strong> ${entry.nutrition}</p></div>`;
+        }
+        
+        const goodHabits = entry.goodHabits || entry.productiveHabits;
+        if (goodHabits) {
+          html += `<div class="mb-2 bg-white p-2 rounded"><p class="text-sm"><strong>✅ Bonnes habitudes:</strong> ${goodHabits}</p></div>`;
+        }
+        
+        const badHabits = entry.badHabits || entry.slippedHabits;
+        if (badHabits) {
+          html += `<div class="mb-2 bg-white p-2 rounded"><p class="text-sm"><strong>⚠️ Habitudes à améliorer:</strong> ${badHabits}</p></div>`;
+        }
+        
+        html += `</div>`;
       }
 
-      // Défis
-      if (entry.challenges) {
+      // 4. Défis et Réactions
+      if (entry.challenges || entry.reaction || entry.approach || entry.differentApproach) {
         html += `
           <div class="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-4 border-l-4 border-red-500">
-            <h3 class="text-lg font-bold text-red-800 mb-2 flex items-center gap-2">
-              <span class="text-xl">⚡</span> Défis rencontrés
+            <h3 class="text-lg font-bold text-red-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">⚡</span> Défis & Réactions
             </h3>
-            <p class="text-gray-800 bg-white p-3 rounded-lg border border-red-100">${entry.challenges}</p>
+        `;
+        
+        if (entry.challenges) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-red-100"><p class="text-sm"><strong>🎯 Défis:</strong><br>${entry.challenges.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        if (entry.reaction) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-red-100"><p class="text-sm"><strong>💭 Ma réaction:</strong><br>${entry.reaction.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        const approach = entry.approach || entry.differentApproach;
+        if (approach) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-red-100"><p class="text-sm"><strong>🔧 Approche/Solution:</strong><br>${approach.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        html += `</div>`;
+      }
+
+      // 5. Réflexions et Conscience
+      if (entry.patterns || entry.lessons || entry.energyGivers || entry.energyDrainers || entry.copingStrategies || entry.emotionalTriggers) {
+        html += `
+          <div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl p-4 border-l-4 border-indigo-500">
+            <h3 class="text-lg font-bold text-indigo-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">🧠</span> Réflexions & Conscience
+            </h3>
+        `;
+        
+        if (entry.patterns) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-indigo-100"><p class="text-sm"><strong>🔍 Schémas observés:</strong><br>${entry.patterns.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        if (entry.lessons) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-indigo-100"><p class="text-sm"><strong>📚 Leçons apprises:</strong><br>${entry.lessons.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        if (entry.energyGivers) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-indigo-100"><p class="text-sm"><strong>⚡ Sources d'énergie:</strong><br>${entry.energyGivers.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        if (entry.energyDrainers) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-indigo-100"><p class="text-sm"><strong>🔋 Ce qui me vide:</strong><br>${entry.energyDrainers.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        if (entry.copingStrategies) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-indigo-100"><p class="text-sm"><strong>🛡️ Stratégies d'adaptation:</strong> ${entry.copingStrategies}</p></div>`;
+        }
+        
+        if (entry.emotionalTriggers) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-indigo-100"><p class="text-sm"><strong>⚠️ Déclencheurs émotionnels:</strong> ${entry.emotionalTriggers}</p></div>`;
+        }
+        
+        html += `</div>`;
+      }
+
+      // 6. Social
+      if (entry.socialActivity) {
+        html += `
+          <div class="bg-gradient-to-r from-green-50 to-teal-50 rounded-xl p-4 border-l-4 border-green-500">
+            <h3 class="text-lg font-bold text-green-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">👥</span> Activité sociale
+            </h3>
+            <p class="text-gray-800 bg-white p-3 rounded-lg border border-green-100">${entry.socialActivity}</p>
           </div>
         `;
       }
 
-      // Notes libres
+      // 7. Planification et Intentions
+      if (entry.tomorrowPriorities || entry.improve || entry.improvement || entry.affirmation || entry.resourceMobilization) {
+        html += `
+          <div class="bg-gradient-to-r from-teal-50 to-emerald-50 rounded-xl p-4 border-l-4 border-teal-500">
+            <h3 class="text-lg font-bold text-teal-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">🎯</span> Intentions & Planification
+            </h3>
+        `;
+        
+        if (entry.tomorrowPriorities) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-teal-100"><p class="text-sm"><strong>📋 Priorités pour demain:</strong><br>${entry.tomorrowPriorities.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        const improvement = entry.improve || entry.improvement;
+        if (improvement) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-teal-100"><p class="text-sm"><strong>⬆️ À améliorer:</strong><br>${improvement.replace(/\n/g, '<br>')}</p></div>`;
+        }
+        
+        if (entry.affirmation) {
+          html += `<div class="mb-3 bg-white p-4 rounded-lg border border-teal-100 italic text-center"><p class="text-sm"><strong>💫 Mon affirmation:</strong><br>"${entry.affirmation}"</p></div>`;
+        }
+        
+        if (entry.resourceMobilization) {
+          html += `<div class="mb-3 bg-white p-3 rounded-lg border border-teal-100"><p class="text-sm"><strong>🔧 Ressources à mobiliser:</strong> ${entry.resourceMobilization}</p></div>`;
+        }
+        
+        html += `</div>`;
+      }
+
+      // 8. Notes libres
       if (entry.extraNotes) {
         html += `
           <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl p-4 border-l-4 border-gray-400">
-            <h3 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
-              <span class="text-xl">📝</span> Notes
+            <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">📝</span> Notes libres
             </h3>
             <p class="text-gray-800 bg-white p-3 rounded-lg border border-gray-200 leading-relaxed whitespace-pre-wrap">${entry.extraNotes}</p>
           </div>
         `;
       }
 
+      // 9. Catégories de suivi et données détaillées
+      if (entry.trackingCategories && entry.trackingCategories.length > 0) {
+        html += `
+          <div class="bg-gradient-to-r from-pink-50 to-rose-50 rounded-xl p-4 border-l-4 border-pink-500">
+            <h3 class="text-lg font-bold text-pink-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">📊</span> Catégories de suivi activées
+            </h3>
+            <div class="flex flex-wrap gap-2 mb-4">
+              ${entry.trackingCategories.map(cat => {
+                const categoryInfo = getCategoryInfo(cat);
+                return `<span class="px-3 py-2 rounded-full text-sm font-medium text-white" style="background-color: ${categoryInfo.color}">${categoryInfo.name}</span>`;
+              }).join('')}
+            </div>
+        `;
+        
+        // Afficher les données détaillées de chaque catégorie
+        if (entry.trackingData && Object.keys(entry.trackingData).length > 0) {
+          html += `<div class="space-y-3">`;
+          
+          Object.keys(entry.trackingData).forEach(category => {
+            const categoryInfo = getCategoryInfo(category);
+            const categoryData = entry.trackingData[category];
+            
+            // Filtrer les valeurs non vides
+            const nonEmptyData = Object.entries(categoryData).filter(([key, value]) => value && value.toString().trim() !== '');
+            
+            if (nonEmptyData.length > 0) {
+              html += `
+                <div class="bg-white p-3 rounded-lg border-l-4" style="border-color: ${categoryInfo.color}">
+                  <h4 class="font-semibold mb-2" style="color: ${categoryInfo.color}">${categoryInfo.name} - Détails</h4>
+                  <div class="space-y-2">
+              `;
+              
+              nonEmptyData.forEach(([key, value]) => {
+                // Convertir l'ID en label lisible
+                const label = key.replace(category + '-', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                html += `
+                  <div class="text-sm">
+                    <span class="font-medium text-gray-700">${label}:</span>
+                    <span class="text-gray-900 ml-2">${value}</span>
+                  </div>
+                `;
+              });
+              
+              html += `</div></div>`;
+            }
+          });
+          
+          html += `</div>`;
+        }
+        
+        html += `</div>`;
+      }
+
       html += `</div></div>`;
 
       document.getElementById('entryDisplay').innerHTML = html;
+    }
+    
+    // Fonction helper pour les infos de catégories
+    function getCategoryInfo(category) {
+      const categories = {
+        'tca': { name: 'TCA', color: '#ef4444' },
+        'addiction': { name: 'Addictions', color: '#f59e0b' },
+        'mental-health': { name: 'Santé Mentale', color: '#3b82f6' },
+        'physical-health': { name: 'Santé Physique', color: '#10b981' },
+        'social': { name: 'Relations Sociales', color: '#8b5cf6' },
+        'productivity': { name: 'Productivité', color: '#f97316' }
+      };
+      return categories[category] || { name: category, color: '#6b7280' };
     }
 
     // ========== NAVIGATION DES ENTRÉES ==========
