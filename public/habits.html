@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Habitudes - MoodyJournal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .habit-card {
+            transition: all 0.3s ease;
+        }
+        
+        .habit-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .habit-checked {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #059669;
+        }
+        
+        .streak-flame {
+            animation: flicker 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes flicker {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+        
+        .progress-ring {
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .category-physical { background: #dbeafe; color: #1e40af; }
+        .category-mental { background: #fce7f3; color: #9f1239; }
+        .category-growth { background: #fef3c7; color: #92400e; }
+        .category-health { background: #d1fae5; color: #065f46; }
+        .category-social { background: #e0e7ff; color: #3730a3; }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
+    
+    <!-- Navigation -->
+    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                    <img src="/assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
+                    <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
+                </a>
+
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="/index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
+                    <a href="/journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
+                    <a href="/view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
+                    <a href="/habits.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Habitudes</a>
+                    <a href="/chat.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
+                    <a href="/settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
+                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <!-- En-tête -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-emerald-800 mb-2">🌱 Mes Habitudes</h1>
+            <p class="text-gray-600">Construisez votre meilleure version, un jour à la fois</p>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <!-- Streak actuel -->
+            <div class="bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl shadow-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-medium opacity-90">Streak Actuel</span>
+                    <span class="streak-flame text-3xl">🔥</span>
+                </div>
+                <div class="text-4xl font-bold mb-1" id="current-streak">0</div>
+                <div class="text-xs opacity-75">jours consécutifs</div>
+            </div>
+
+            <!-- Meilleur streak -->
+            <div class="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl shadow-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-medium opacity-90">Meilleur Streak</span>
+                    <span class="text-3xl">🏆</span>
+                </div>
+                <div class="text-4xl font-bold mb-1" id="best-streak">0</div>
+                <div class="text-xs opacity-75">votre record</div>
+            </div>
+
+            <!-- Aujourd'hui -->
+            <div class="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl shadow-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-medium opacity-90">Aujourd'hui</span>
+                    <span class="text-3xl">✅</span>
+                </div>
+                <div class="text-4xl font-bold mb-1"><span id="completed-today">0</span>/<span id="total-today">0</span></div>
+                <div class="text-xs opacity-75">habitudes complétées</div>
+            </div>
+
+            <!-- Taux de réussite -->
+            <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-xl p-6 text-white">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-sm font-medium opacity-90">Taux de Réussite</span>
+                    <span class="text-3xl">📊</span>
+                </div>
+                <div class="text-4xl font-bold mb-1" id="success-rate">0%</div>
+                <div class="text-xs opacity-75">sur les 7 derniers jours</div>
+            </div>
+        </div>
+
+        <!-- Habitudes du jour -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">📅 <span id="today-date">Aujourd'hui</span></h2>
+                <button id="add-habit-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2">
+                    <span class="text-xl">+</span>
+                    <span>Nouvelle Habitude</span>
+                </button>
+            </div>
+
+            <!-- Liste des habitudes -->
+            <div id="habits-list" class="space-y-4">
+                <!-- Les habitudes seront chargées ici -->
+            </div>
+
+            <!-- État vide -->
+            <div id="empty-state" class="text-center py-12 hidden">
+                <div class="text-6xl mb-4">🌱</div>
+                <h3 class="text-xl font-bold text-gray-700 mb-2">Aucune habitude pour l'instant</h3>
+                <p class="text-gray-500 mb-6">Commencez à construire votre meilleure version en créant votre première habitude !</p>
+                <button onclick="document.getElementById('add-habit-btn').click()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">
+                    Créer ma première habitude
+                </button>
+            </div>
+        </div>
+
+        <!-- Calendrier (aperçu simple) -->
+        <div class="bg-white rounded-3xl shadow-xl p-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">📆 Calendrier du mois</h2>
+            <div id="calendar-grid" class="grid grid-cols-7 gap-2">
+                <!-- Le calendrier sera généré ici -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal - Ajouter/Modifier Habitude -->
+    <div id="habit-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full mx-4 p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6" id="modal-title">Nouvelle Habitude</h3>
+            
+            <form id="habit-form" class="space-y-4">
+                <!-- Nom -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nom de l'habitude</label>
+                    <input type="text" id="habit-name" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all" placeholder="Ex: Méditer 10 minutes">
+                </div>
+
+                <!-- Icône -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Icône</label>
+                    <div class="grid grid-cols-6 gap-2">
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="🏃">🏃</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="🧘">🧘</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="📚">📚</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="💧">💧</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="😴">😴</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="🍎">🍎</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="💪">💪</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="🎨">🎨</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="✍️">✍️</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="🎵">🎵</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="🌿">🌿</button>
+                        <button type="button" class="icon-btn text-3xl p-2 rounded-lg hover:bg-gray-100 transition-colors" data-icon="⭐">⭐</button>
+                    </div>
+                    <input type="hidden" id="habit-icon" value="🏃">
+                </div>
+
+                <!-- Catégorie -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Catégorie</label>
+                    <select id="habit-category" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all">
+                        <option value="physical">🏃 Physique</option>
+                        <option value="mental">🧘 Mental</option>
+                        <option value="growth">📚 Croissance</option>
+                        <option value="health">💧 Santé</option>
+                        <option value="social">👥 Social</option>
+                    </select>
+                </div>
+
+                <!-- Boutons -->
+                <div class="flex gap-3 pt-4">
+                    <button type="button" id="cancel-btn" class="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                        Annuler
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold transition-colors">
+                        Ajouter
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/session-check.js"></script>
+    <script>
+        // Données
+        let habits = [];
+        let habitsData = [];
+        let selectedIcon = '🏃';
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadHabits();
+            await loadHabitsData();
+            updateStats();
+            renderHabitsList();
+            setupEventListeners();
+            updateDateDisplay();
+        });
+        
+        // Charger les templates d'habitudes
+        async function loadHabits() {
+            try {
+                const response = await fetch('/api/habits/templates');
+                if (response.ok) {
+                    habits = await response.json();
+                }
+            } catch (err) {
+                console.error('Erreur chargement habitudes:', err);
+            }
+        }
+        
+        // Charger les données d'habitudes
+        async function loadHabitsData() {
+            try {
+                const response = await fetch('/api/habits');
+                if (response.ok) {
+                    habitsData = await response.json();
+                }
+            } catch (err) {
+                console.error('Erreur chargement données:', err);
+            }
+        }
+        
+        // Mettre à jour les statistiques
+        function updateStats() {
+            const today = new Date().toISOString().split('T')[0];
+            const todayData = habitsData.find(h => h.date === today);
+            
+            // Habitudes d'aujourd'hui
+            const totalToday = habits.length;
+            const completedToday = todayData ? todayData.habits.filter(h => h.completed).length : 0;
+            
+            document.getElementById('total-today').textContent = totalToday;
+            document.getElementById('completed-today').textContent = completedToday;
+            
+            // Calculer le streak
+            let currentStreak = 0;
+            let bestStreak = 0;
+            let tempStreak = 0;
+            
+            // Trier les dates
+            const sortedDates = habitsData
+                .map(h => h.date)
+                .sort((a, b) => new Date(b) - new Date(a));
+            
+            // Streak actuel
+            const todayDate = new Date();
+            todayDate.setHours(0, 0, 0, 0);
+            let checkDate = new Date(todayDate);
+            
+            for (const dateStr of sortedDates) {
+                const date = new Date(dateStr);
+                date.setHours(0, 0, 0, 0);
+                
+                if (date.getTime() === checkDate.getTime()) {
+                    const dayData = habitsData.find(h => h.date === dateStr);
+                    const allCompleted = dayData.habits.every(h => h.completed);
+                    
+                    if (allCompleted) {
+                        currentStreak++;
+                        checkDate.setDate(checkDate.getDate() - 1);
+                    } else {
+                        break;
+                    }
+                } else {
+                    break;
+                }
+            }
+            
+            // Meilleur streak
+            tempStreak = 0;
+            for (let i = 0; i < sortedDates.length; i++) {
+                const dayData = habitsData.find(h => h.date === sortedDates[i]);
+                const allCompleted = dayData.habits.every(h => h.completed);
+                
+                if (allCompleted) {
+                    tempStreak++;
+                    bestStreak = Math.max(bestStreak, tempStreak);
+                } else {
+                    tempStreak = 0;
+                }
+            }
+            
+            document.getElementById('current-streak').textContent = currentStreak;
+            document.getElementById('best-streak').textContent = bestStreak;
+            
+            // Taux de réussite (7 derniers jours)
+            const last7Days = habitsData.slice(-7);
+            const totalHabits = last7Days.reduce((sum, day) => sum + day.habits.length, 0);
+            const completedHabits = last7Days.reduce((sum, day) => {
+                return sum + day.habits.filter(h => h.completed).length;
+            }, 0);
+            
+            const successRate = totalHabits > 0 ? Math.round((completedHabits / totalHabits) * 100) : 0;
+            document.getElementById('success-rate').textContent = successRate + '%';
+        }
+        
+        // Afficher les habitudes
+        function renderHabitsList() {
+            const container = document.getElementById('habits-list');
+            const emptyState = document.getElementById('empty-state');
+            
+            if (habits.length === 0) {
+                container.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            container.classList.remove('hidden');
+            emptyState.classList.add('hidden');
+            
+            const today = new Date().toISOString().split('T')[0];
+            const todayData = habitsData.find(h => h.date === today);
+            
+            container.innerHTML = habits.map((habit, index) => {
+                const habitData = todayData?.habits.find(h => h.id === habit.id);
+                const isCompleted = habitData?.completed || false;
+                const streak = habitData?.streak || 0;
+                
+                return `
+                    <div class="habit-card ${isCompleted ? 'habit-checked' : 'bg-white border-2 border-gray-200'} rounded-2xl p-6 cursor-pointer" data-habit-id="${habit.id}">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4 flex-1">
+                                <div class="text-4xl">${habit.icon}</div>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-bold ${isCompleted ? 'text-white' : 'text-gray-800'}">${habit.name}</h3>
+                                    <span class="category-badge category-${habit.category} ${isCompleted ? 'opacity-80' : ''}">${getCategoryLabel(habit.category)}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                ${streak > 0 ? `
+                                    <div class="text-center">
+                                        <div class="text-2xl">🔥</div>
+                                        <div class="text-sm font-bold ${isCompleted ? 'text-white' : 'text-gray-600'}">${streak}j</div>
+                                    </div>
+                                ` : ''}
+                                <input type="checkbox" 
+                                    ${isCompleted ? 'checked' : ''} 
+                                    class="w-7 h-7 rounded-lg ${isCompleted ? 'accent-white' : 'accent-emerald-600'} cursor-pointer"
+                                    onchange="toggleHabit('${habit.id}')"
+                                    onclick="event.stopPropagation()">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Basculer une habitude
+        async function toggleHabit(habitId) {
+            const today = new Date().toISOString().split('T')[0];
+            let todayData = habitsData.find(h => h.date === today);
+            
+            if (!todayData) {
+                todayData = {
+                    date: today,
+                    habits: habits.map(h => ({
+                        id: h.id,
+                        name: h.name,
+                        icon: h.icon,
+                        category: h.category,
+                        completed: false,
+                        streak: 0
+                    })),
+                    stacks: []
+                };
+                habitsData.push(todayData);
+            }
+            
+            const habitData = todayData.habits.find(h => h.id === habitId);
+            if (habitData) {
+                habitData.completed = !habitData.completed;
+                
+                // Mettre à jour le streak
+                if (habitData.completed) {
+                    habitData.streak = (habitData.streak || 0) + 1;
+                } else {
+                    habitData.streak = 0;
+                }
+            }
+            
+            // Sauvegarder
+            await saveHabitsData(todayData);
+            
+            // Mettre à jour l'affichage
+            updateStats();
+            renderHabitsList();
+            
+            // Vérifier les badges
+            checkBadges();
+        }
+        
+        // Sauvegarder les données
+        async function saveHabitsData(todayData) {
+            try {
+                const response = await fetch('/api/habits/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(todayData)
+                });
+                
+                if (!response.ok) {
+                    console.error('Erreur sauvegarde');
+                }
+            } catch (err) {
+                console.error('Erreur:', err);
+            }
+        }
+        
+        // Vérifier les badges à débloquer
+        async function checkBadges() {
+            // Implémenter la logique de vérification des badges
+            // Par exemple: débloquer "habit-master" après 30 jours
+        }
+        
+        // Obtenir le label de catégorie
+        function getCategoryLabel(category) {
+            const labels = {
+                physical: '🏃 Physique',
+                mental: '🧘 Mental',
+                growth: '📚 Croissance',
+                health: '💧 Santé',
+                social: '👥 Social'
+            };
+            return labels[category] || category;
+        }
+        
+        // Event listeners
+        function setupEventListeners() {
+            // Ouvrir le modal
+            document.getElementById('add-habit-btn').addEventListener('click', () => {
+                document.getElementById('habit-modal').classList.remove('hidden');
+                document.getElementById('habit-modal').classList.add('flex');
+            });
+            
+            // Fermer le modal
+            document.getElementById('cancel-btn').addEventListener('click', () => {
+                document.getElementById('habit-modal').classList.add('hidden');
+                document.getElementById('habit-modal').classList.remove('flex');
+            });
+            
+            // Sélection d'icône
+            document.querySelectorAll('.icon-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.querySelectorAll('.icon-btn').forEach(b => b.classList.remove('bg-emerald-100'));
+                    btn.classList.add('bg-emerald-100');
+                    selectedIcon = btn.dataset.icon;
+                    document.getElementById('habit-icon').value = selectedIcon;
+                });
+            });
+            
+            // Soumettre le formulaire
+            document.getElementById('habit-form').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const newHabit = {
+                    id: 'habit-' + Date.now(),
+                    name: document.getElementById('habit-name').value,
+                    icon: selectedIcon,
+                    category: document.getElementById('habit-category').value
+                };
+                
+                habits.push(newHabit);
+                
+                // Sauvegarder les templates
+                try {
+                    await fetch('/api/habits/templates', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ templates: habits })
+                    });
+                    
+                    // Fermer le modal
+                    document.getElementById('habit-modal').classList.add('hidden');
+                    document.getElementById('habit-modal').classList.remove('flex');
+                    
+                    // Réinitialiser le formulaire
+                    document.getElementById('habit-form').reset();
+                    
+                    // Mettre à jour l'affichage
+                    renderHabitsList();
+                    updateStats();
+                    
+                } catch (err) {
+                    console.error('Erreur:', err);
+                    alert('Erreur lors de l\'ajout de l\'habitude');
+                }
+            });
+        }
+        
+        // Afficher la date du jour
+        function updateDateDisplay() {
+            const today = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const dateStr = today.toLocaleDateString('fr-FR', options);
+            document.getElementById('today-date').textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+        }
+    </script>
+</body>
+</html>
+

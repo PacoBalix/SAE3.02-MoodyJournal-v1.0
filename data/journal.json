@@ -357,6 +357,824 @@
         "social",
         "productivity"
       ]
+    },
+    {
+      "date": "2025-10-17",
+      "day": "Vendredi",
+      "mood": "9",
+      "moodWords": [
+        "Serein",
+        "Fatigué",
+        "Altruiste"
+      ],
+      "feelingWords": [
+        "Serein",
+        "Fatigué",
+        "Altruiste"
+      ],
+      "primaryEmotion": "contentment",
+      "emotionIntensity": "4",
+      "positiveElements": [
+        "Venir en cours ce matin malgré la flemme",
+        "Travailler (mdrrr)",
+        "Discuter avec mes camarades"
+      ],
+      "gratitude": [
+        "Venir en cours ce matin malgré la flemme",
+        "Travailler (mdrrr)",
+        "Discuter avec mes camarades"
+      ],
+      "bestMoment": "Déconner avec Lallie le midi",
+      "positiveEmotion": "serenity",
+      "sleep": "",
+      "exercise": "",
+      "nutrition": "",
+      "goodHabits": "",
+      "badHabits": "",
+      "challenges": "",
+      "reaction": "",
+      "approach": "",
+      "patterns": "Tout le temps repenser à ce qui ne me fais pas avancer. Par exemple mon ex. Voir même des actions que j'ai faite que je regrette.",
+      "lessons": "Que je parle peut-être un peu trop.\nQue je peux être trop gentil.\nQue je donne trop aux autres...",
+      "energyGivers": "Ma famille, mes amis, les gens, l'espoir fait vivre :P",
+      "energyDrainers": "Les transports en commun.\nLes cours avec Mr Faucon.",
+      "copingStrategies": "",
+      "emotionalTriggers": "",
+      "socialActivity": "",
+      "tomorrowPriorities": "- Ranger mes affaires et ma chambre. Me rappeler et noter ce que je dois faire (l'eau?les amis?le sport?le permis?).\n- Nettoyer la maison tout seul ou avec les colocataires\n- Voir mon amis Noa, peut être sortir en teuf Samedi soir ducoup :D",
+      "improve": "Ma résilience face à l'adversité et aux problèmes de nos sociétés",
+      "affirmation": "Je suis capable de réussir, je peux arriver à m'en sortir, je dois juste arriver à faire les choses.\nJe vais gagner ce combat contre moi même, et même si je le perds, l'homme qui aura gagné en sortira grandis.",
+      "resourceMobilization": "time",
+      "sleepGoal": "10",
+      "extraNotes": "Aujourd'hui, journée compliqué, mais enfaite pas du tout, j'ai rien glandé x)\nCe matin je me suis levé en retard comme d'habitudes depuis quelques temps.\nJe suis allé me préparer, me doucher, manger un petit bout, juste ce qu'il faut pour avoir l'énergie d'aller en cours.\nEnsuite j'ai disucté avec un jolie couple de personne agé dans le bus, ils étaient trop mignon tout les deux, j'espère avoir la chance d'être pareil à la fin de ma vie hihi :D\n\nJ'écoute de la House vu que Lallie m'a dis découter de la musique.\nJe vais aller à mon rendez-vous cette après-midi mais je vais essayer de passer voir Mathéo avant quand même.\nOn est en vacances à partir de ce soir (sauf pour les alternants force à vous), donc je vais pouvoir me reposer, prendre le temps qu'il me faudra pour me sentir mieux et mettre de l'ordre dans ma vie. J'en ai grandement besoin.... Mais merci à moi, pour les efforts, aux autres, pour le soutiens, et à tout le monde, ou à personne, pour tout le reste.\n\nMerci :)",
+      "savedAt": "2025-10-17T09:29:38.528Z",
+      "trackingData": {
+        "tca": {
+          "tca-meals": "0",
+          "tca-feeling": "Bien",
+          "tca-triggers": "Quand les gens autour de moi ne mangent pas. Quand je suis contrarié. Quand j'ai pas le moral je n'ai pas faim.",
+          "tca-coping": "Je fais à manger, je pense à des choses plus positives, je me concentre sur le moment présent et plus sur ce qui me bouffe petit à petit. Je préfère manger que de me laisser manger par mon mal-être :)",
+          "tca-support": "Conseil de la part d'une amie"
+        },
+        "addiction": {
+          "addiction-abstinence": "5",
+          "addiction-cravings": "2.5",
+          "addiction-triggers": "Voir des gens fumer. M'imaginer tirer sur le pilon. Manque de confiance en soit. Perte de controle sur mes addictions du quotidien. Peur de ne jamais réussir à m'en sortir. Besoin de se réconforter",
+          "addiction-strategies": "Respirer. Me rappeler que j'ai le contrôle. Que je peux vaincre l'addiction qui me ralentit depuis tant d'années.\nAussi, je ne prends plus la puff pour aller en cours, ça m'évite de fumer la journée et d'avoir un élément supplémentaire qui influe sur ma motivation.",
+          "addiction-wins": "Ne pas fumer de joint. Me reposer au besoin. Ne pas penser à acheter de part. Discuter avec mes amis."
+        },
+        "mental-health": {
+          "mental-anxiety": "2",
+          "mental-depression": "1",
+          "mental-therapy": "Oui",
+          "mental-medication": "Non",
+          "mental-selfcare": "Gratification journalière. Échange avec les autres et leurs expériences. Conseiller les autres dans leurs expériences."
+        },
+        "physical-health": {
+          "physical-symptoms": "",
+          "physical-medication": "Aucun",
+          "physical-doctor": "Non",
+          "physical-energy": "5",
+          "physical-hydration": "8"
+        },
+        "social": {
+          "social-interactions": "19",
+          "social-quality": "7",
+          "social-people": "Elwan, Lallie, les petits vieux dans le bus, les chauffeurs, quelques camarades, mon ex copine, quelques amis et potes",
+          "social-conflicts": "Le couple des colocs, les professeurs en R&T, les disparités économiques et sociales, le mal-être de ce système.",
+          "social-positive": "Échanger avec ma collègue sur de divers sujets, avec simplicité et authenticité. Voir même naïveté mais je suis encore jeune je vais me laisser le temps de bien apprendre à faire les choses :)"
+        },
+        "productivity": {
+          "productivity-tasks": "Réveiller, Transport, Travail, Repas, Rentrer, Dormir",
+          "productivity-focus": "3",
+          "productivity-distractions": "Les écrans, l'ex copine, les filles les fillllesss, les jeux-vidéos, les réseaux sociaux, les rayons du soleil, les discussions inopinés, tout ce qui se passe dans ma journée enfaite x)",
+          "productivity-wins": "Travailler, Venir en cours, Me nourrir, Écrire ce journal, Être gentil et beinveillant avec mon ex copine",
+          "productivity-obstacles": "La haine, la peur, le dégoût, le desespoir, l"
+        }
+      },
+      "trackingCategories": [
+        "tca",
+        "addiction",
+        "mental-health",
+        "physical-health",
+        "social",
+        "productivity"
+      ]
+    },
+    {
+      "date": "2025-11-13",
+      "day": "Jeudi",
+      "mood": "7",
+      "moodWords": [
+        "Apaisé",
+        "Reposé",
+        "Espérant"
+      ],
+      "feelingWords": [
+        "Apaisé",
+        "Reposé",
+        "Espérant"
+      ],
+      "primaryEmotion": "contentment",
+      "emotionIntensity": "3",
+      "positiveElements": [
+        "J'ai assisté à une projection sur la santé mentale",
+        "On m'a dit que j'étais un jolie gars",
+        "J'avance sur mon deuil de la séparation"
+      ],
+      "gratitude": [
+        "J'ai assisté à une projection sur la santé mentale",
+        "On m'a dit que j'étais un jolie gars",
+        "J'avance sur mon deuil de la séparation"
+      ],
+      "bestMoment": "Quand je suis rentré à la maison et que j'ai pu être écouté et aidé.",
+      "positiveEmotion": "serenity",
+      "sleep": "9",
+      "exercise": "Marche, Course",
+      "nutrition": "Good",
+      "goodHabits": "remise en question",
+      "badHabits": "lecture",
+      "challenges": "ma rupture",
+      "reaction": "je l'ai stalk, je lui ai écris",
+      "approach": "ne pas la stalk, finir d'écrire pour de bon",
+      "patterns": "me dévaloriser",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "copingStrategies": "",
+      "emotionalTriggers": "",
+      "socialActivity": "",
+      "tomorrowPriorities": "",
+      "improve": "",
+      "affirmation": "",
+      "resourceMobilization": "",
+      "sleepGoal": "",
+      "extraNotes": "",
+      "savedAt": "2025-11-13T18:10:59.057Z"
+    },
+    {
+      "selectedQuestions": {
+        "mood": [
+          {
+            "label": "Évaluation globale de l'humeur (1-10)",
+            "id": "mood-1"
+          },
+          {
+            "label": "Décrivez vos émotions en 3 mots",
+            "id": ""
+          },
+          {
+            "label": "Vous êtes-vous senti à l'aise avec vos émotions ?",
+            "id": "emotion-comfort"
+          },
+          {
+            "label": "Émotion principale ressentie",
+            "id": "primary-emotion"
+          }
+        ],
+        "gratitude": [
+          {
+            "label": "Éléments positifs identifiés aujourd'hui :",
+            "id": ""
+          },
+          {
+            "label": "Meilleur moment / Point culminant de la journée",
+            "id": "best-moment"
+          },
+          {
+            "label": "L'émotion agréable la plus marquante",
+            "id": "positive-emotion"
+          }
+        ],
+        "habits": [],
+        "challenges": [
+          {
+            "label": "Qu'est-ce qui m'a défié aujourd'hui ?",
+            "id": "challenges"
+          },
+          {
+            "label": "Comment avez-vous géré la situation ?",
+            "id": "reaction"
+          },
+          {
+            "label": "Quelle approche différente envisagez-vous ?",
+            "id": "approach"
+          }
+        ],
+        "reflections": [],
+        "consciousness": [
+          {
+            "label": "Méthodes utilisées pour faire face aux difficultés",
+            "id": "coping-strategies"
+          },
+          {
+            "label": "Qu'est-ce qui a provoqué vos réactions émotionnelles ?",
+            "id": "emotional-triggers"
+          },
+          {
+            "label": "Quel a été mon niveau d'activité sociale aujourd'hui ?",
+            "id": "social-activity"
+          }
+        ],
+        "intention": [
+          {
+            "label": "Que prévoyez-vous d'accomplir demain ?",
+            "id": "tomorrow-priorities"
+          },
+          {
+            "label": "Qu'aimeriez-vous faire mieux demain ?",
+            "id": "improve"
+          },
+          {
+            "label": "Parole encourageante pour votre futur vous",
+            "id": "affirmation"
+          },
+          {
+            "label": "Ressource personnelle à activer demain",
+            "id": "resource-mobilization"
+          },
+          {
+            "label": "Objectif de sommeil (heures prévues)",
+            "id": "sleep-goal"
+          }
+        ],
+        "mental-health": [
+          {
+            "label": "À quel point vous êtes-vous senti anxieux ?",
+            "id": "mental-anxiety"
+          },
+          {
+            "label": "Niveau de moral aujourd'hui",
+            "id": "mental-depression"
+          },
+          {
+            "label": "Consultation psy aujourd'hui ?",
+            "id": "mental-therapy"
+          },
+          {
+            "label": "Avez-vous suivi votre traitement ?",
+            "id": "mental-medication"
+          },
+          {
+            "label": "Qu'avez-vous fait pour votre santé mentale ?",
+            "id": "mental-selfcare"
+          }
+        ],
+        "productivity": [
+          {
+            "label": "Qu'avez-vous réalisé aujourd'hui ?",
+            "id": "productivity-tasks"
+          },
+          {
+            "label": "Capacité de focus du jour",
+            "id": "productivity-focus"
+          },
+          {
+            "label": "Sources d'interruption",
+            "id": "productivity-distractions"
+          },
+          {
+            "label": "Réalisations du jour",
+            "id": "productivity-wins"
+          },
+          {
+            "label": "Obstacles rencontrés",
+            "id": "productivity-obstacles"
+          }
+        ],
+        "notes": []
+      },
+      "date": "2025-11-14",
+      "day": "Samedi",
+      "moodWords": [
+        "",
+        "",
+        ""
+      ],
+      "feelingWords": [
+        "",
+        "",
+        ""
+      ],
+      "primaryEmotion": "",
+      "emotionIntensity": "",
+      "positiveElements": [
+        "",
+        "",
+        ""
+      ],
+      "gratitude": [
+        "",
+        "",
+        ""
+      ],
+      "bestMoment": "",
+      "positiveEmotion": "",
+      "sleep": "",
+      "exercise": "",
+      "nutrition": "",
+      "goodHabits": "",
+      "badHabits": "",
+      "challenges": "",
+      "reaction": "",
+      "approach": "",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "copingStrategies": "",
+      "emotionalTriggers": "",
+      "socialActivity": "",
+      "tomorrowPriorities": "",
+      "improve": "",
+      "affirmation": "",
+      "resourceMobilization": "",
+      "sleepGoal": "",
+      "extraNotes": "",
+      "savedAt": "2025-11-14T21:10:23.241Z",
+      "trackingData": {
+        "mental-health": {
+          "mental-anxiety": "",
+          "mental-depression": "",
+          "mental-therapy": "",
+          "mental-medication": "",
+          "mental-selfcare": ""
+        },
+        "productivity": {
+          "productivity-tasks": "",
+          "productivity-focus": "",
+          "productivity-distractions": "",
+          "productivity-wins": "",
+          "productivity-obstacles": ""
+        }
+      },
+      "trackingCategories": [
+        "mental-health",
+        "productivity"
+      ]
+    },
+    {
+      "selectedQuestions": {
+        "mood": [
+          {
+            "label": "Évaluation globale de l'humeur (1-10)",
+            "id": "mood-1"
+          },
+          {
+            "label": "3 mots pour décrire ce que je ressens",
+            "id": ""
+          },
+          {
+            "label": "Quelle émotion a dominé votre journée ?",
+            "id": "primary-emotion"
+          }
+        ],
+        "gratitude": [
+          {
+            "label": "Éléments positifs identifiés aujourd'hui :",
+            "id": ""
+          },
+          {
+            "label": "Meilleur moment / Point culminant de la journée",
+            "id": "best-moment"
+          },
+          {
+            "label": "Quelle émotion positive a coloré votre journée ?",
+            "id": "positive-emotion"
+          }
+        ],
+        "habits": [],
+        "challenges": [
+          {
+            "label": "Qu'est-ce qui m'a défié aujourd'hui ?",
+            "id": "challenges"
+          },
+          {
+            "label": "Comment avez-vous géré la situation ?",
+            "id": "reaction"
+          },
+          {
+            "label": "Comment pourriez-vous mieux réagir ?",
+            "id": "approach"
+          }
+        ],
+        "reflections": [],
+        "consciousness": [
+          {
+            "label": "Quelles stratégies d'adaptation ai-je utilisées aujourd'hui ?",
+            "id": "coping-strategies"
+          },
+          {
+            "label": "Qu'est-ce qui a provoqué vos réactions émotionnelles ?",
+            "id": "emotional-triggers"
+          },
+          {
+            "label": "Quel a été mon niveau d'activité sociale aujourd'hui ?",
+            "id": "social-activity"
+          }
+        ],
+        "intention": [
+          {
+            "label": "Quelles sont mes priorités pour demain ?",
+            "id": "tomorrow-priorities"
+          },
+          {
+            "label": "Une chose que je veux améliorer demain",
+            "id": "improve"
+          },
+          {
+            "label": "Affirmation personnelle du jour",
+            "id": "affirmation"
+          },
+          {
+            "label": "Ressource personnelle à activer demain",
+            "id": "resource-mobilization"
+          },
+          {
+            "label": "Combien d'heures de sommeil visez-vous ?",
+            "id": "sleep-goal"
+          }
+        ],
+        "mental-health": [
+          {
+            "label": "Intensité de votre anxiété",
+            "id": "mental-anxiety"
+          },
+          {
+            "label": "Intensité de la tristesse",
+            "id": "mental-depression"
+          },
+          {
+            "label": "Avez-vous eu un rendez-vous thérapeutique ?",
+            "id": "mental-therapy"
+          },
+          {
+            "label": "Observance médicamenteuse",
+            "id": "mental-medication"
+          },
+          {
+            "label": "Qu'avez-vous fait pour votre santé mentale ?",
+            "id": "mental-selfcare"
+          }
+        ],
+        "productivity": [
+          {
+            "label": "Tâches accomplies / prévues",
+            "id": "productivity-tasks"
+          },
+          {
+            "label": "Capacité de focus du jour",
+            "id": "productivity-focus"
+          },
+          {
+            "label": "Qu'est-ce qui a perturbé votre concentration ?",
+            "id": "productivity-distractions"
+          },
+          {
+            "label": "De quoi êtes-vous fier aujourd'hui ?",
+            "id": "productivity-wins"
+          },
+          {
+            "label": "Qu'est-ce qui a freiné votre productivité ?",
+            "id": "productivity-obstacles"
+          }
+        ],
+        "notes": []
+      },
+      "date": "2025-11-14",
+      "day": "Samedi",
+      "moodWords": [
+        "",
+        "",
+        ""
+      ],
+      "feelingWords": [
+        "",
+        "",
+        ""
+      ],
+      "primaryEmotion": "",
+      "emotionIntensity": "",
+      "positiveElements": [
+        "",
+        "",
+        ""
+      ],
+      "gratitude": [
+        "",
+        "",
+        ""
+      ],
+      "bestMoment": "",
+      "positiveEmotion": "",
+      "sleep": "",
+      "exercise": "",
+      "nutrition": "",
+      "goodHabits": "",
+      "badHabits": "",
+      "challenges": "",
+      "reaction": "",
+      "approach": "",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "copingStrategies": "",
+      "emotionalTriggers": "",
+      "socialActivity": "",
+      "tomorrowPriorities": "",
+      "improve": "",
+      "affirmation": "",
+      "resourceMobilization": "",
+      "sleepGoal": "",
+      "extraNotes": "",
+      "savedAt": "2025-11-14T21:12:28.548Z",
+      "trackingData": {
+        "mental-health": {
+          "mental-anxiety": "",
+          "mental-depression": "",
+          "mental-therapy": "",
+          "mental-medication": "",
+          "mental-selfcare": ""
+        },
+        "productivity": {
+          "productivity-tasks": "",
+          "productivity-focus": "",
+          "productivity-distractions": "",
+          "productivity-wins": "",
+          "productivity-obstacles": ""
+        }
+      },
+      "trackingCategories": [
+        "mental-health",
+        "productivity"
+      ]
+    },
+    {
+      "date": "2025-11-14",
+      "savedAt": "2025-11-14T21:16:48.721Z",
+      "day": "Samedi"
+    },
+    {
+      "date": "2025-11-14",
+      "savedAt": "2025-11-14T21:18:07.823Z",
+      "day": "Samedi",
+      "mood": "8",
+      "moodWords": [
+        "zzz",
+        "zzz"
+      ],
+      "feelingWords": [
+        "zzz",
+        "zzz"
+      ],
+      "positiveElements": [
+        "zzz",
+        "zzz"
+      ],
+      "gratitude": [
+        "zzz",
+        "zzz"
+      ],
+      "primaryEmotion": "contentment",
+      "emotionIntensity": "4",
+      "goodHabits": "zzz",
+      "badHabits": "zzz",
+      "challenges": "zzz",
+      "reaction": "zzz",
+      "patterns": "zzz",
+      "energyDrainers": "zzz",
+      "emotionalTriggers": "zzz",
+      "socialActivity": "low",
+      "extraNotes": "zzz",
+      "trackingData": {
+        "mental-health": {
+          "mental-selfcare": "zzz"
+        },
+        "productivity": {
+          "productivity-obstacles": "zzzz"
+        }
+      },
+      "trackingCategories": [
+        "mental-health",
+        "productivity"
+      ],
+      "selectedQuestions": {
+        "mood": [
+          {
+            "label": "Notez votre humeur générale du jour (1-10)",
+            "id": "mood-1",
+            "type": "radio"
+          },
+          {
+            "label": "Quels 3 mots résument votre état émotionnel ?",
+            "id": "",
+            "type": "text"
+          },
+          {
+            "label": "Quel moment vous a le plus touché émotionnellement ?",
+            "id": "emotional-moments",
+            "type": "textarea"
+          },
+          {
+            "label": "L'émotion la plus présente aujourd'hui",
+            "id": "primary-emotion",
+            "type": "select-one"
+          },
+          {
+            "label": "L'émotion la plus présente aujourd'hui",
+            "id": "primary-emotion",
+            "type": "select-one"
+          },
+          {
+            "label": "Intensité émotionnelle (1-5)",
+            "id": "emotion-intensity",
+            "type": "select-one"
+          }
+        ],
+        "gratitude": [
+          {
+            "label": "Éléments positifs identifiés aujourd'hui :",
+            "id": "",
+            "type": "text"
+          },
+          {
+            "label": "Décrivez le pic positif de votre journée",
+            "id": "best-moment",
+            "type": "textarea"
+          },
+          {
+            "label": "L'émotion agréable la plus marquante",
+            "id": "positive-emotion",
+            "type": "select-one"
+          }
+        ],
+        "habits": [
+          {
+            "label": "Combien d'heures avez-vous dormi ?",
+            "id": "sleep",
+            "type": "number"
+          },
+          {
+            "label": "Activités physiques du jour",
+            "id": "exercise",
+            "type": "text"
+          },
+          {
+            "label": "Qualité de vos repas aujourd'hui",
+            "id": "",
+            "type": "radio"
+          },
+          {
+            "label": "Habitudes productives suivies aujourd'hui",
+            "id": "good-habits",
+            "type": "textarea"
+          },
+          {
+            "label": "Routines manquées ou oubliées",
+            "id": "bad-habits",
+            "type": "textarea"
+          }
+        ],
+        "challenges": [
+          {
+            "label": "Les obstacles du jour",
+            "id": "challenges",
+            "type": "textarea"
+          },
+          {
+            "label": "Votre réaction face aux difficultés",
+            "id": "reaction",
+            "type": "textarea"
+          },
+          {
+            "label": "Que pourrais-je essayer différemment la prochaine fois ?",
+            "id": "approach",
+            "type": "textarea"
+          }
+        ],
+        "reflections": [
+          {
+            "label": "Quels schémas répétitifs avez-vous remarqués ?",
+            "id": "patterns",
+            "type": "textarea"
+          },
+          {
+            "label": "Qu'ai-je appris sur moi aujourd'hui ?",
+            "id": "lessons",
+            "type": "textarea"
+          },
+          {
+            "label": "Sources d'énergie positive du jour",
+            "id": "energy-givers",
+            "type": "textarea"
+          },
+          {
+            "label": "Sources d'épuisement identifiées",
+            "id": "energy-drainers",
+            "type": "textarea"
+          }
+        ],
+        "consciousness": [
+          {
+            "label": "Quelles stratégies d'adaptation ai-je utilisées aujourd'hui ?",
+            "id": "coping-strategies",
+            "type": "textarea"
+          },
+          {
+            "label": "Qu'est-ce qui a provoqué vos réactions émotionnelles ?",
+            "id": "emotional-triggers",
+            "type": "textarea"
+          },
+          {
+            "label": "Intensité de vos échanges sociaux",
+            "id": "social-activity",
+            "type": "select-one"
+          }
+        ],
+        "intention": [
+          {
+            "label": "Vos 2-3 priorités pour demain",
+            "id": "tomorrow-priorities",
+            "type": "textarea"
+          },
+          {
+            "label": "Qu'aimeriez-vous faire mieux demain ?",
+            "id": "improve",
+            "type": "text"
+          },
+          {
+            "label": "Parole encourageante pour votre futur vous",
+            "id": "affirmation",
+            "type": "textarea"
+          },
+          {
+            "label": "Quelle capacité allez-vous utiliser ?",
+            "id": "resource-mobilization",
+            "type": "select-one"
+          },
+          {
+            "label": "Combien d'heures de sommeil visez-vous ?",
+            "id": "sleep-goal",
+            "type": "number"
+          }
+        ],
+        "mental-health": [
+          {
+            "label": "Intensité de votre anxiété",
+            "id": "mental-anxiety",
+            "type": "number"
+          },
+          {
+            "label": "Niveau de moral aujourd'hui",
+            "id": "mental-depression",
+            "type": "number"
+          },
+          {
+            "label": "Consultation psy aujourd'hui ?",
+            "id": "mental-therapy",
+            "type": "select-one"
+          },
+          {
+            "label": "Observance médicamenteuse",
+            "id": "mental-medication",
+            "type": "select-one"
+          },
+          {
+            "label": "Activités de soin personnel pratiquées",
+            "id": "mental-selfcare",
+            "type": "textarea"
+          }
+        ],
+        "productivity": [
+          {
+            "label": "Travail accompli vs planifié",
+            "id": "productivity-tasks",
+            "type": "text"
+          },
+          {
+            "label": "Capacité de focus du jour",
+            "id": "productivity-focus",
+            "type": "number"
+          },
+          {
+            "label": "Principales distractions",
+            "id": "productivity-distractions",
+            "type": "textarea"
+          },
+          {
+            "label": "Réalisations du jour",
+            "id": "productivity-wins",
+            "type": "textarea"
+          },
+          {
+            "label": "Difficultés dans l'accomplissement des tâches",
+            "id": "productivity-obstacles",
+            "type": "textarea"
+          }
+        ],
+        "notes": []
+      }
     }
   ],
   "Emmanuel": [
@@ -385,6 +1203,987 @@
       "energyGivers": "",
       "energyDrainers": "",
       "extraNotes": ""
+    }
+  ],
+  "Lallie": [
+    {
+      "date": "2025-10-17",
+      "day": "Vendredi",
+      "moodWords": [
+        "",
+        "",
+        ""
+      ],
+      "feelingWords": [
+        "",
+        "",
+        ""
+      ],
+      "primaryEmotion": "",
+      "emotionIntensity": "",
+      "positiveElements": [
+        "",
+        "",
+        ""
+      ],
+      "gratitude": [
+        "",
+        "",
+        ""
+      ],
+      "bestMoment": "",
+      "positiveEmotion": "",
+      "sleep": "",
+      "exercise": "",
+      "nutrition": "",
+      "goodHabits": "",
+      "badHabits": "",
+      "challenges": "",
+      "reaction": "",
+      "approach": "",
+      "patterns": "",
+      "lessons": "",
+      "energyGivers": "",
+      "energyDrainers": "",
+      "copingStrategies": "",
+      "emotionalTriggers": "",
+      "socialActivity": "",
+      "tomorrowPriorities": "",
+      "improve": "",
+      "affirmation": "",
+      "resourceMobilization": "",
+      "sleepGoal": "",
+      "extraNotes": "",
+      "savedAt": "2025-10-17T05:41:11.386Z",
+      "trackingData": {
+        "addiction": {
+          "addiction-abstinence": "",
+          "addiction-cravings": "",
+          "addiction-triggers": "",
+          "addiction-strategies": "",
+          "addiction-wins": ""
+        },
+        "mental-health": {
+          "mental-anxiety": "",
+          "mental-depression": "",
+          "mental-therapy": "",
+          "mental-medication": "",
+          "mental-selfcare": ""
+        },
+        "physical-health": {
+          "physical-symptoms": "",
+          "physical-medication": "",
+          "physical-doctor": "",
+          "physical-energy": "",
+          "physical-hydration": ""
+        },
+        "social": {
+          "social-interactions": "",
+          "social-quality": "",
+          "social-people": "",
+          "social-conflicts": "",
+          "social-positive": ""
+        },
+        "productivity": {
+          "productivity-tasks": "",
+          "productivity-focus": "",
+          "productivity-distractions": "",
+          "productivity-wins": "",
+          "productivity-obstacles": ""
+        }
+      },
+      "trackingCategories": [
+        "addiction",
+        "mental-health",
+        "physical-health",
+        "social",
+        "productivity"
+      ]
+    }
+  ],
+  "test": [
+    {
+      "date": "2025-10-27",
+      "day": "Lundi",
+      "mood": "7",
+      "feelingWords": [
+        "Déterminé",
+        "Calme",
+        "Concentré"
+      ],
+      "gratitude": [
+        "Ma routine matinale qui me permet de bien commencer la journée",
+        "Les moments de méditation qui m'apaisent",
+        "Le soutien de ma famille dans mes projets"
+      ],
+      "bestMoment": "J'ai réussi à terminer une tâche difficile que je repoussais depuis longtemps. La satisfaction d'avoir franchi ce cap me donne confiance pour la suite.",
+      "sleep": "7.5",
+      "exercise": "Yoga matinal 30 minutes + marche rapide 20 minutes",
+      "nutrition": "Good",
+      "productiveHabits": "Méditation quotidienne, lecture avant de dormir, planification de ma journée",
+      "slippedHabits": "J'ai passé un peu trop de temps sur les réseaux sociaux",
+      "challenges": "Gérer ma procrastination sur certaines tâches importantes",
+      "reaction": "J'ai découpé la tâche en petites étapes et je me suis lancé",
+      "differentApproach": "Utiliser la technique Pomodoro pour rester concentré",
+      "patterns": "Je remarque que je suis plus productif le matin",
+      "lessons": "Commencer est souvent plus difficile que continuer",
+      "energyGivers": "La musique douce, les promenades en nature, les conversations profondes",
+      "energyDrainers": "Les notifications constantes, le multitâche",
+      "improvement": "Mettre mon téléphone en mode avion pendant les périodes de concentration",
+      "affirmation": "Je suis capable de surmonter les obstacles un pas à la fois",
+      "extraNotes": "Journée productive. Je me sens aligné avec mes objectifs. Continuer sur cette lancée.",
+      "savedAt": "2025-10-27T21:00:00.000Z"
+    },
+    {
+      "date": "2025-10-28",
+      "day": "Mardi",
+      "mood": "8",
+      "feelingWords": [
+        "Inspiré",
+        "Reconnaissant",
+        "Serein"
+      ],
+      "gratitude": [
+        "Les conversations enrichissantes avec mes proches",
+        "Ma capacité à apprendre de nouvelles choses chaque jour",
+        "Ce moment de soleil en automne qui réchauffe le cœur"
+      ],
+      "bestMoment": "Une discussion profonde avec un ami qui m'a donné une nouvelle perspective sur ma situation. Je me sens compris et soutenu.",
+      "sleep": "8",
+      "exercise": "Natation 45 minutes",
+      "nutrition": "Excellent",
+      "productiveHabits": "Écriture dans mon journal, préparation de repas sains, temps sans écran avant le coucher",
+      "slippedHabits": "Rien de notable aujourd'hui",
+      "challenges": "Équilibrer mes ambitions professionnelles et mon bien-être personnel",
+      "reaction": "J'ai pris le temps de réfléchir à mes priorités réelles",
+      "differentApproach": "Accepter que je ne peux pas tout faire en même temps",
+      "patterns": "Quand je dors bien, tout semble plus facile à gérer",
+      "lessons": "L'équilibre est une pratique quotidienne, pas une destination",
+      "energyGivers": "L'eau, le mouvement, les échanges authentiques",
+      "energyDrainers": "Les attentes irréalistes que je me mets",
+      "improvement": "Être plus doux avec moi-même et célébrer les petites victoires",
+      "affirmation": "Je mérite de prendre soin de moi autant que je prends soin des autres",
+      "extraNotes": "Excellente journée. Je commence à voir les fruits de mes efforts de bien-être. La régularité paye.",
+      "savedAt": "2025-10-28T20:30:00.000Z"
+    },
+    {
+      "date": "2025-10-29",
+      "day": "Mercredi",
+      "mood": "7",
+      "feelingWords": [
+        "Paisible",
+        "Confiant",
+        "Optimiste"
+      ],
+      "gratitude": [
+        "Mon espace de travail calme et organisé",
+        "Les livres qui m'ouvrent à de nouvelles idées",
+        "La bienveillance des gens autour de moi"
+      ],
+      "bestMoment": "Avoir pris une pause dans l'après-midi pour lire dans le parc. Ces moments de déconnexion sont précieux.",
+      "sleep": "7",
+      "exercise": "Vélo 30 minutes + étirements",
+      "nutrition": "Good",
+      "productiveHabits": "Routine matinale maintenue, pauses régulières, hydratation",
+      "slippedHabits": "J'ai sauté ma séance de méditation du soir",
+      "challenges": "Maintenir ma concentration toute la journée",
+      "reaction": "J'ai intégré des micro-pauses toutes les heures",
+      "differentApproach": "Alterner entre travail intensif et moments de repos",
+      "patterns": "Les pauses actives me redonnent de l'énergie",
+      "lessons": "Se reposer n'est pas perdre du temps, c'est investir dans ma productivité",
+      "energyGivers": "La nature, les moments de solitude créative, la lecture",
+      "energyDrainers": "Rester assis trop longtemps",
+      "improvement": "Programmer des rappels pour bouger régulièrement",
+      "affirmation": "Chaque jour, je deviens une meilleure version de moi-même",
+      "extraNotes": "Bonne journée, équilibrée. Je trouve mon rythme progressivement.",
+      "savedAt": "2025-10-29T21:15:00.000Z"
+    },
+    {
+      "date": "2025-10-30",
+      "day": "Jeudi",
+      "mood": "9",
+      "feelingWords": [
+        "Joyeux",
+        "Accompli",
+        "Énergique"
+      ],
+      "gratitude": [
+        "Ma santé qui me permet de profiter de la vie",
+        "Les opportunités d'apprentissage qui se présentent",
+        "Le rire partagé avec mes proches"
+      ],
+      "bestMoment": "J'ai réalisé un projet personnel qui me tenait à cœur depuis longtemps. La fierté et la joie que je ressens sont immenses !",
+      "sleep": "8",
+      "exercise": "Course à pied 5km + musculation légère",
+      "nutrition": "Excellent",
+      "productiveHabits": "Tout ! Méditation, exercice, alimentation, sommeil, créativité",
+      "slippedHabits": "Aucun aujourd'hui",
+      "challenges": "Gérer mon enthousiasme pour ne pas m'épuiser",
+      "reaction": "J'ai célébré ma réussite en prenant un moment pour apprécier le chemin parcouru",
+      "differentApproach": "Reconnaître mes accomplissements au lieu de passer directement au suivant",
+      "patterns": "Quand je termine quelque chose, je me sens vraiment vivant",
+      "lessons": "La persévérance transforme les rêves en réalité",
+      "energyGivers": "L'accomplissement, la créativité, le mouvement",
+      "energyDrainers": "Rien aujourd'hui, tout flow !",
+      "improvement": "Continuer sur cette lancée tout en restant ancré",
+      "affirmation": "Je crée la vie que je veux vivre, une action à la fois",
+      "extraNotes": "Journée exceptionnelle ! C'est pour ces moments que tous les efforts valent la peine. Je me sens aligné et puissant.",
+      "savedAt": "2025-10-30T22:00:00.000Z"
+    },
+    {
+      "date": "2025-10-31",
+      "day": "Vendredi",
+      "mood": "8",
+      "feelingWords": [
+        "Reconnaissant",
+        "Présent",
+        "Satisfait"
+      ],
+      "gratitude": [
+        "Cette semaine productive et épanouissante",
+        "Les personnes qui croient en moi",
+        "Ma capacité à me relever après les difficultés"
+      ],
+      "bestMoment": "Soirée tranquille à la maison, cuisiner un bon repas et profiter du calme. Parfois le bonheur est dans la simplicité.",
+      "sleep": "7.5",
+      "exercise": "Yoga restauratif 40 minutes",
+      "nutrition": "Excellent",
+      "productiveHabits": "Réflexion hebdomadaire, planification du weekend, temps de qualité avec moi-même",
+      "slippedHabits": "Rien de significatif",
+      "challenges": "Ralentir après une semaine intense",
+      "reaction": "J'ai choisi consciemment de ne rien planifier et de me reposer",
+      "differentApproach": "Écouter mon corps qui demande de la douceur",
+      "patterns": "Le repos fait partie intégrante de ma productivité",
+      "lessons": "Célébrer la fin de semaine est un rituel important",
+      "energyGivers": "Le calme, la cuisine créative, les moments cocooning",
+      "energyDrainers": "L'obligation d'être constamment productif",
+      "improvement": "M'autoriser plus souvent ces moments de repos sans culpabilité",
+      "affirmation": "Je mérite de me reposer et de profiter des fruits de mon travail",
+      "extraNotes": "Belle fin de semaine. Je suis fier du chemin parcouru. Vivement le weekend pour recharger les batteries.",
+      "savedAt": "2025-10-31T21:30:00.000Z"
+    },
+    {
+      "date": "2025-11-01",
+      "day": "Samedi",
+      "mood": "8",
+      "feelingWords": [
+        "Détendu",
+        "Créatif",
+        "Heureux"
+      ],
+      "gratitude": [
+        "Ce temps libre pour explorer mes passions",
+        "La beauté de l'automne qui m'inspire",
+        "Mes hobbies qui nourrissent mon âme"
+      ],
+      "bestMoment": "Longue balade en forêt, les couleurs d'automne sont magnifiques. J'ai pris des photos et me suis senti profondément connecté à la nature.",
+      "sleep": "8.5",
+      "exercise": "Randonnée 2 heures",
+      "nutrition": "Good",
+      "productiveHabits": "Connexion avec la nature, photographie, journaling",
+      "slippedHabits": "J'ai fait une petite grasse matinée mais c'était nécessaire",
+      "challenges": "Profiter du weekend sans penser au travail",
+      "reaction": "J'ai laissé mon téléphone à la maison pendant la balade",
+      "differentApproach": "Digital detox partiel le weekend",
+      "patterns": "La nature me ressource profondément",
+      "lessons": "Les meilleures idées viennent quand je ne cherche pas à les forcer",
+      "energyGivers": "La nature, l'art, la solitude choisie",
+      "energyDrainers": "La connexion permanente aux écrans",
+      "improvement": "Planifier plus de sorties nature régulières",
+      "affirmation": "Je suis en harmonie avec le rythme naturel de la vie",
+      "extraNotes": "Weekend parfait pour me reconnecter à l'essentiel. La beauté de la nature m'a rappelé l'importance du moment présent.",
+      "savedAt": "2025-11-01T20:00:00.000Z"
+    },
+    {
+      "date": "2025-11-02",
+      "day": "Dimanche",
+      "mood": "9",
+      "feelingWords": [
+        "Énergique",
+        "Euphorique",
+        "Invincible"
+      ],
+      "gratitude": [
+        "Cette énergie incroyable qui me traverse",
+        "Toutes les idées qui fusent dans ma tête",
+        "La vie qui me semble si pleine de possibilités"
+      ],
+      "bestMoment": "J'ai eu l'idée géniale de reprendre la guitare ET de créer un blog ET peut-être même lancer une chaîne YouTube. Tout me semble possible !",
+      "sleep": "4",
+      "exercise": "Course à pied 10km + musculation",
+      "nutrition": "Average",
+      "goodHabits": "Lever à 5h du matin, super productif, plein de projets",
+      "badHabits": "Difficulté à me poser, j'ai sauté quelques repas",
+      "challenges": "Ralentir un peu, tout le monde ne suit pas mon rythme",
+      "reaction": "J'ai essayé d'entraîner mes amis dans mes projets mais ils avaient l'air fatigués. Tant pis, je fonce seul !",
+      "approach": "Peut-être respirer un peu plus entre deux idées",
+      "patterns": "Je me sens comme sur un nuage, rien ne peut m'arrêter",
+      "lessons": "Quand je me sens comme ça, c'est le bon moment pour tout entreprendre",
+      "energyGivers": "La musique à fond, les nouveaux projets, parler de mes idées",
+      "energyDrainers": "Les gens qui me disent de ralentir",
+      "copingStrategies": "Foncer, créer, avancer",
+      "emotionalTriggers": "Rien ne me dérange aujourd'hui",
+      "socialActivity": "high",
+      "tomorrowPriorities": "Commencer 3 nouveaux projets, contacter d'anciens amis, réorganiser tout mon appartement",
+      "improve": "Rien, je suis au top !",
+      "affirmation": "Je suis capable de tout. Le monde m'appartient et je vais réaliser tous mes rêves.",
+      "extraNotes": "J'ai dormi que 4h mais je me sens mieux que jamais ! J'ai commencé à trier toutes mes affaires à 3h du matin et j'ai eu tellement d'idées. J'ai envoyé des messages à plein de gens, commandé du matériel en ligne. Tout est clair maintenant, je sais exactement où je vais.",
+      "savedAt": "2025-11-02T22:30:00.000Z"
+    },
+    {
+      "date": "2025-11-03",
+      "day": "Lundi",
+      "mood": "8",
+      "feelingWords": [
+        "Surexcité",
+        "Créatif",
+        "Impatient"
+      ],
+      "gratitude": [
+        "Mon job qui me laisse de la liberté",
+        "Mes talents multiples",
+        "Cette clarté d'esprit"
+      ],
+      "bestMoment": "Réunion au boulot où j'ai partagé 15 idées en 10 minutes. Tout le monde était un peu surpris mais je sentais l'énergie !",
+      "sleep": "3.5",
+      "exercise": "Vélo pour aller au travail en speed",
+      "nutrition": "Poor",
+      "goodHabits": "Hyper productif au travail",
+      "badHabits": "J'ai oublié de manger le midi tellement j'étais concentré",
+      "challenges": "Mon patron m'a demandé de me concentrer sur UN projet à la fois",
+      "reaction": "J'ai trouvé ça frustrant. Il ne comprend pas que je peux TOUT gérer en même temps.",
+      "approach": "Peut-être noter mes idées pour plus tard ?",
+      "patterns": "Les autres semblent lents, je dois attendre qu'ils me suivent",
+      "lessons": "Quand on a du talent, il ne faut pas se brider",
+      "energyGivers": "Mes projets multiples, les conversations intenses",
+      "energyDrainers": "Les procédures lentes, les gens qui ne comprennent pas ma vision",
+      "copingStrategies": "Continuer à créer malgré les freins",
+      "emotionalTriggers": "Qu'on me dise de ralentir",
+      "socialActivity": "high",
+      "tomorrowPriorities": "Finir mes 5 projets en cours, apprendre le japonais, refaire mon CV",
+      "improve": "Peut-être dormir un peu plus ? Mais je n'ai pas vraiment sommeil",
+      "affirmation": "Je suis exceptionnel. Les règles normales ne s'appliquent pas à moi.",
+      "extraNotes": "Encore une nuit courte mais je suis en feu. J'ai lu 3 articles, écrit 10 pages de notes, contacté 5 personnes. Mon cerveau va à 1000 à l'heure et c'est génial. Ma colocataire m'a dit que je parlais trop vite. Elle ne peut pas comprendre.",
+      "savedAt": "2025-11-03T23:15:00.000Z"
+    },
+    {
+      "date": "2025-11-04",
+      "day": "Mardi",
+      "mood": "7",
+      "feelingWords": [
+        "Stable",
+        "Concentré",
+        "Motivé"
+      ],
+      "gratitude": [
+        "Ma capacité à maintenir des habitudes positives",
+        "Les petits progrès quotidiens",
+        "Le café du matin qui lance bien la journée"
+      ],
+      "bestMoment": "Avoir maintenu ma routine matinale malgré la tentation de rester au lit. Chaque petite victoire compte.",
+      "sleep": "7",
+      "exercise": "Jogging 30 minutes",
+      "nutrition": "Good",
+      "productiveHabits": "Routine matinale, organisation de la journée, temps de lecture",
+      "slippedHabits": "J'ai procrastiné sur une tâche administrative",
+      "challenges": "Rester discipliné même quand la motivation baisse",
+      "reaction": "Je me suis rappelé que la discipline bat la motivation",
+      "differentApproach": "Ne pas compter sur mes émotions pour agir",
+      "patterns": "Les systèmes fonctionnent mieux que les objectifs seuls",
+      "lessons": "La constance est plus importante que la perfection",
+      "energyGivers": "Les routines bien établies, l'activité physique",
+      "energyDrainers": "Les tâches administratives",
+      "improvement": "Bloquer un créneau fixe pour les tâches ennuyeuses",
+      "affirmation": "Je suis fiable pour moi-même, je tiens mes engagements",
+      "extraNotes": "Journée normale mais productive. La magie est dans la répétition des bonnes actions.",
+      "savedAt": "2025-11-04T21:00:00.000Z"
+    },
+    {
+      "date": "2025-11-05",
+      "day": "Mercredi",
+      "mood": "8",
+      "feelingWords": [
+        "Inspiré",
+        "Productif",
+        "Équilibré"
+      ],
+      "gratitude": [
+        "Les mentors qui partagent leur sagesse",
+        "Ma curiosité naturelle qui me pousse à apprendre",
+        "Les moments de flow dans mon travail"
+      ],
+      "bestMoment": "J'ai appris quelque chose de nouveau aujourd'hui qui a changé ma perspective. L'apprentissage continu est vraiment enrichissant.",
+      "sleep": "7.5",
+      "exercise": "Natation 40 minutes + sauna",
+      "nutrition": "Excellent",
+      "productiveHabits": "Apprentissage actif, prise de notes, réflexion",
+      "slippedHabits": "Rien de notable",
+      "challenges": "Intégrer toutes mes nouvelles connaissances",
+      "reaction": "J'ai créé un système de notes pour organiser ce que j'apprends",
+      "differentApproach": "Apprendre en enseignant aux autres",
+      "patterns": "J'apprends mieux par la pratique que par la théorie seule",
+      "lessons": "Chaque jour est une opportunité de croissance",
+      "energyGivers": "La découverte, les insights, le partage de connaissances",
+      "energyDrainers": "L'information passive et non actionnable",
+      "improvement": "Appliquer immédiatement ce que j'apprends",
+      "affirmation": "Mon esprit est ouvert et réceptif aux nouvelles idées",
+      "extraNotes": "Excellente journée d'apprentissage. Je me sens intellectuellement stimulé et motivé à continuer.",
+      "savedAt": "2025-11-05T21:30:00.000Z"
+    },
+    {
+      "date": "2025-11-06",
+      "day": "Jeudi",
+      "mood": "7",
+      "feelingWords": [
+        "Réfléchi",
+        "Calme",
+        "Ancré"
+      ],
+      "gratitude": [
+        "Les moments de silence qui permettent l'introspection",
+        "Ma pratique de méditation qui s'approfondit",
+        "La patience que je développe envers moi-même"
+      ],
+      "bestMoment": "Une méditation particulièrement profonde ce matin. J'ai ressenti une vraie paix intérieure.",
+      "sleep": "7",
+      "exercise": "Yoga 45 minutes",
+      "nutrition": "Good",
+      "productiveHabits": "Méditation prolongée, journaling approfondi, temps de réflexion",
+      "slippedHabits": "J'ai regardé des vidéos inutiles avant de dormir",
+      "challenges": "Maintenir ma présence mentale tout au long de la journée",
+      "reaction": "J'ai utilisé des rappels réguliers pour revenir à l'instant présent",
+      "differentApproach": "Pratiquer la pleine conscience dans les activités quotidiennes",
+      "patterns": "Plus je ralentis, plus je suis efficace",
+      "lessons": "La présence est un muscle qui se renforce avec la pratique",
+      "energyGivers": "Le silence, la méditation, l'introspection",
+      "energyDrainers": "Le bruit mental constant",
+      "improvement": "Créer plus d'espaces de silence dans ma journée",
+      "affirmation": "Je suis présent ici et maintenant, c'est suffisant",
+      "extraNotes": "Journée contemplative. J'apprends à apprécier la lenteur et la profondeur plutôt que la vitesse et la surface.",
+      "savedAt": "2025-11-06T22:00:00.000Z"
+    },
+    {
+      "date": "2025-11-07",
+      "day": "Vendredi",
+      "mood": "9",
+      "feelingWords": [
+        "Épanoui",
+        "Vivant",
+        "Reconnaissant"
+      ],
+      "gratitude": [
+        "Cette semaine riche en apprentissages et émotions",
+        "Les défis qui me font grandir",
+        "La joie simple d'être en vie"
+      ],
+      "bestMoment": "Un moment de rire partagé avec des amis. Ces connexions authentiques sont ce qui donne du sens à la vie.",
+      "sleep": "8",
+      "exercise": "Cours de danse 1 heure",
+      "nutrition": "Excellent",
+      "productiveHabits": "Connexion sociale authentique, expression créative, célébration",
+      "slippedHabits": "Aucun, semaine parfaite",
+      "challenges": "Contenir mon enthousiasme pour ne pas déborder",
+      "reaction": "J'ai savouré chaque moment sans chercher à le prolonger artificiellement",
+      "differentApproach": "Apprécier sans s'attacher",
+      "patterns": "Les relations authentiques sont ma plus grande source de joie",
+      "lessons": "Le bonheur se multiplie quand il est partagé",
+      "energyGivers": "Le rire, la danse, la connexion humaine",
+      "energyDrainers": "Rien aujourd'hui",
+      "improvement": "Prioriser davantage ces moments de connexion",
+      "affirmation": "Je suis entouré d'amour et je rayonne l'amour",
+      "extraNotes": "Magnifique fin de semaine ! Je me sens vivant, connecté et profondément heureux. La vie est belle.",
+      "savedAt": "2025-11-07T23:00:00.000Z"
+    },
+    {
+      "date": "2025-11-08",
+      "day": "Samedi",
+      "mood": "8",
+      "feelingWords": [
+        "Reposé",
+        "Créatif",
+        "Libre"
+      ],
+      "gratitude": [
+        "Ce weekend sans obligation",
+        "Ma créativité qui s'exprime librement",
+        "Le confort de mon chez-moi"
+      ],
+      "bestMoment": "J'ai passé l'après-midi à créer sans but précis, juste pour le plaisir. L'art pour l'art.",
+      "sleep": "9",
+      "exercise": "Promenade tranquille 1 heure",
+      "nutrition": "Good",
+      "productiveHabits": "Création artistique, repos actif, temps pour soi",
+      "slippedHabits": "J'ai un peu trop mangé de sucreries",
+      "challenges": "Ne pas culpabiliser de ne 'rien faire' de productif",
+      "reaction": "J'ai redéfini 'productif' pour inclure le repos et la créativité",
+      "differentApproach": "Valoriser le temps de loisir autant que le temps de travail",
+      "patterns": "Les weekends créatifs rechargent mon âme",
+      "lessons": "L'oisiveté créative n'est pas une perte de temps",
+      "energyGivers": "La création sans pression, le jeu, l'exploration",
+      "energyDrainers": "La culpabilité de ne pas être 'productif'",
+      "improvement": "Planifier des moments créatifs réguliers",
+      "affirmation": "Je mérite de jouer et de créer sans justification",
+      "extraNotes": "Weekend ressourçant. Je redécouvre le plaisir de créer sans attente de résultat.",
+      "savedAt": "2025-11-08T20:30:00.000Z"
+    },
+    {
+      "date": "2025-11-09",
+      "day": "Dimanche",
+      "mood": "7",
+      "feelingWords": [
+        "Serein",
+        "Préparé",
+        "Confiant"
+      ],
+      "gratitude": [
+        "Ce weekend qui m'a ressourcé",
+        "Ma capacité à me préparer pour la semaine",
+        "Le sentiment de contrôle sur ma vie"
+      ],
+      "bestMoment": "Préparer ma semaine avec soin, organiser mon espace, me sentir ready pour ce qui vient.",
+      "sleep": "8",
+      "exercise": "Yoga doux 30 minutes",
+      "nutrition": "Excellent",
+      "productiveHabits": "Planification hebdomadaire, meal prep, organisation de l'espace",
+      "slippedHabits": "Rien aujourd'hui",
+      "challenges": "Éviter l'anxiété du dimanche soir",
+      "reaction": "J'ai transformé l'anxiété en excitation pour la semaine à venir",
+      "differentApproach": "Voir le dimanche comme un tremplin plutôt qu'une fin",
+      "patterns": "La préparation réduit considérablement mon stress",
+      "lessons": "Prendre soin de mon futur moi est un acte d'amour",
+      "energyGivers": "L'organisation, la préparation, la clarté",
+      "energyDrainers": "Le chaos et l'improvisation constante",
+      "improvement": "Maintenir cette routine de préparation hebdomadaire",
+      "affirmation": "Je suis prêt à accueillir la nouvelle semaine avec confiance",
+      "extraNotes": "Excellent dimanche de préparation. Je me sens aligné et prêt pour la semaine.",
+      "savedAt": "2025-11-09T21:00:00.000Z"
+    },
+    {
+      "date": "2025-11-10",
+      "day": "Lundi",
+      "mood": "8",
+      "feelingWords": [
+        "Dynamique",
+        "Focalisé",
+        "Enthousiaste"
+      ],
+      "gratitude": [
+        "Ce lundi qui commence bien grâce à ma préparation",
+        "Mon énergie matinale qui me propulse",
+        "Les opportunités qui s'offrent à moi"
+      ],
+      "bestMoment": "Avoir attaqué la semaine avec force et clarté. Je me sens dans mon élément.",
+      "sleep": "7.5",
+      "exercise": "Course matinale 5km",
+      "nutrition": "Excellent",
+      "productiveHabits": "Réveil à l'heure, routine matinale parfaite, priorités claires",
+      "slippedHabits": "Rien, excellent démarrage",
+      "challenges": "Maintenir cette énergie toute la semaine",
+      "reaction": "J'ai planifié des moments de repos pour ne pas m'épuiser",
+      "differentApproach": "Penser marathon plutôt que sprint",
+      "patterns": "Un bon démarrage donne le ton pour toute la semaine",
+      "lessons": "L'énergie du lundi se cultive le dimanche",
+      "energyGivers": "Le mouvement matinal, les victoires rapides, la clarté d'intention",
+      "energyDrainers": "Rien aujourd'hui",
+      "improvement": "Continuer ce qui fonctionne",
+      "affirmation": "Je commence cette semaine avec force et détermination",
+      "extraNotes": "Excellent lundi ! La préparation du weekend porte ses fruits. Je suis dans un flow magnifique.",
+      "savedAt": "2025-11-10T21:30:00.000Z"
+    },
+    {
+      "date": "2025-11-11",
+      "day": "Mardi",
+      "mood": "7",
+      "feelingWords": [
+        "Stable",
+        "Persévérant",
+        "Tranquille"
+      ],
+      "gratitude": [
+        "Ma capacité à rester constant",
+        "Les petites routines qui facilitent ma vie",
+        "Un repas partagé avec un proche"
+      ],
+      "bestMoment": "Un déjeuner tranquille avec un ami, prendre le temps de vraiment discuter.",
+      "sleep": "7",
+      "exercise": "Musculation 45 minutes",
+      "nutrition": "Good",
+      "productiveHabits": "Constance dans les routines, temps social de qualité",
+      "slippedHabits": "J'ai oublié ma séance de lecture du soir",
+      "challenges": "Éviter la monotonie tout en maintenant la constance",
+      "reaction": "J'ai ajouté de petites variations à mes routines",
+      "differentApproach": "Flexibilité dans la structure",
+      "patterns": "La variété dans la constance maintient mon intérêt",
+      "lessons": "La routine n'est pas l'ennemi de la créativité",
+      "energyGivers": "Les conversations profondes, l'exercice physique",
+      "energyDrainers": "La répétition sans conscience",
+      "improvement": "Rester présent même dans les routines",
+      "affirmation": "Je trouve la magie dans l'ordinaire",
+      "extraNotes": "Bonne journée stable. La régularité devient naturelle.",
+      "savedAt": "2025-11-11T21:00:00.000Z"
+    },
+    {
+      "date": "2025-11-12",
+      "day": "Mercredi",
+      "mood": "8",
+      "feelingWords": [
+        "Accompli",
+        "Fier",
+        "Satisfait"
+      ],
+      "gratitude": [
+        "Mes compétences qui se développent",
+        "Les retours positifs que je reçois",
+        "Ma persévérance qui paye"
+      ],
+      "bestMoment": "Recevoir des félicitations pour un travail bien fait. La reconnaissance fait du bien.",
+      "sleep": "7.5",
+      "exercise": "Natation 50 minutes",
+      "nutrition": "Excellent",
+      "productiveHabits": "Excellence dans le travail, humilité dans le succès",
+      "slippedHabits": "Rien de notable",
+      "challenges": "Accepter les compliments sans les minimiser",
+      "reaction": "J'ai dit merci simplement, sans diminuer mon effort",
+      "differentApproach": "Reconnaître ma valeur et mes accomplissements",
+      "patterns": "Le travail régulier finit toujours par porter ses fruits",
+      "lessons": "Je suis digne des bonnes choses qui m'arrivent",
+      "energyGivers": "La reconnaissance, le sentiment d'accomplissement",
+      "energyDrainers": "L'auto-sabotage et le syndrome de l'imposteur",
+      "improvement": "Célébrer mes victoires, petites et grandes",
+      "affirmation": "Je suis compétent et mérite le succès que je crée",
+      "extraNotes": "Très bonne journée. J'apprends à recevoir autant qu'à donner.",
+      "savedAt": "2025-11-12T22:00:00.000Z"
+    },
+    {
+      "date": "2025-11-13",
+      "day": "Jeudi",
+      "mood": "7",
+      "feelingWords": [
+        "Résilient",
+        "Adaptable",
+        "Fort"
+      ],
+      "gratitude": [
+        "Ma capacité à faire face aux imprévus",
+        "Les leçons cachées dans les défis",
+        "Mon réseau de soutien"
+      ],
+      "bestMoment": "Avoir géré un imprévu avec calme et créativité. Je grandis à travers les défis.",
+      "sleep": "6.5",
+      "exercise": "Marche active 40 minutes",
+      "nutrition": "Average",
+      "productiveHabits": "Adaptabilité, résolution de problèmes, communication",
+      "slippedHabits": "Moins bien dormi à cause du stress",
+      "challenges": "Un problème inattendu qui a bouleversé mes plans",
+      "reaction": "J'ai pris du recul, respiré, et trouvé une solution créative",
+      "differentApproach": "Voir les obstacles comme des opportunités de croissance",
+      "patterns": "Je suis plus résilient que je ne le crois",
+      "lessons": "La flexibilité est une force, pas une faiblesse",
+      "energyGivers": "Résoudre des problèmes, surmonter des défis",
+      "energyDrainers": "Le stress initial face à l'inattendu",
+      "improvement": "Développer encore plus ma capacité d'adaptation",
+      "affirmation": "Je peux gérer tout ce que la vie me présente",
+      "extraNotes": "Journée challengeante mais enrichissante. Je suis fier de ma gestion de la situation.",
+      "savedAt": "2025-11-13T21:45:00.000Z"
+    },
+    {
+      "date": "2025-11-14",
+      "day": "Vendredi",
+      "mood": "9",
+      "feelingWords": [
+        "Soulagé",
+        "Joyeux",
+        "Léger"
+      ],
+      "gratitude": [
+        "La fin d'une semaine intense mais productive",
+        "Ma capacité à rebondir rapidement",
+        "Les moments de légèreté après l'effort"
+      ],
+      "bestMoment": "Célébrer la fin de semaine avec des amis, rire aux éclats, me sentir vivant et léger.",
+      "sleep": "8",
+      "exercise": "Sortie vélo 1 heure",
+      "nutrition": "Good",
+      "productiveHabits": "Célébration, connexion sociale, lâcher-prise",
+      "slippedHabits": "Rien, parfait équilibre",
+      "challenges": "Laisser partir le stress de la semaine",
+      "reaction": "J'ai consciemment choisi de lâcher prise et profiter",
+      "differentApproach": "Le plaisir est aussi important que le travail",
+      "patterns": "Après l'effort vient la récompense méritée",
+      "lessons": "Savoir déconnecter est essentiel pour la santé mentale",
+      "energyGivers": "Le rire, les amis, la liberté du weekend",
+      "energyDrainers": "Rien, parfaite harmonie",
+      "improvement": "Continuer à équilibrer effort et plaisir",
+      "affirmation": "Je mérite de profiter de la vie et de m'amuser",
+      "extraNotes": "Excellente fin de semaine ! La tempête est passée, place au soleil. Je me sens fort et heureux.",
+      "savedAt": "2025-11-14T23:00:00.000Z"
+    },
+    {
+      "date": "2025-11-15",
+      "day": "Samedi",
+      "mood": "8",
+      "feelingWords": [
+        "Régénéré",
+        "Paisible",
+        "Inspiré"
+      ],
+      "gratitude": [
+        "Ce temps pour me ressourcer pleinement",
+        "La beauté qui m'entoure",
+        "Ma capacité à apprécier les choses simples"
+      ],
+      "bestMoment": "Une matinée lente et douce, café en main, regardant le lever du soleil. Pure sérénité.",
+      "sleep": "9",
+      "exercise": "Randonnée 3 heures en montagne",
+      "nutrition": "Excellent",
+      "productiveHabits": "Connexion avec la nature, slow living, présence",
+      "slippedHabits": "Aucun, c'est le weekend de récupération",
+      "challenges": "Résister à l'envie de 'faire' et juste 'être'",
+      "reaction": "J'ai embrassé le non-faire comme une forme d'action",
+      "differentApproach": "La productivité inclut le repos profond",
+      "patterns": "Les meilleurs insights viennent dans le calme",
+      "lessons": "Je n'ai pas besoin de mériter le repos, il fait partie de la vie",
+      "energyGivers": "La nature, le silence, la lenteur choisie",
+      "energyDrainers": "Rien, journée parfaite",
+      "improvement": "Intégrer plus de ces moments dans ma routine",
+      "affirmation": "Je suis en paix avec le rythme naturel de ma vie",
+      "extraNotes": "Weekend de rêve. La montagne m'a rappelé ce qui compte vraiment. Je me sens reconnecté à moi-même.",
+      "savedAt": "2025-11-15T20:00:00.000Z"
+    },
+    {
+      "date": "2025-11-16",
+      "day": "Dimanche",
+      "mood": "8",
+      "feelingWords": [
+        "Centré",
+        "Prêt",
+        "Optimiste"
+      ],
+      "gratitude": [
+        "Ce weekend régénérateur",
+        "La clarté mentale retrouvée",
+        "L'excitation pour la semaine à venir"
+      ],
+      "bestMoment": "Me sentir parfaitement aligné et prêt pour une nouvelle semaine. Je suis exactement où je dois être.",
+      "sleep": "8",
+      "exercise": "Yoga et méditation 1 heure",
+      "nutrition": "Excellent",
+      "productiveHabits": "Préparation intentionnelle, visualisation positive, gratitude",
+      "slippedHabits": "Rien",
+      "challenges": "Maintenir cet équilibre dans la durée",
+      "reaction": "J'ai créé un plan durable, pas un sprint",
+      "differentApproach": "Penser long terme, célébrer le processus",
+      "patterns": "Trois semaines de constance créent une vraie transformation",
+      "lessons": "Je suis capable de changements durables quand je reste engagé",
+      "energyGivers": "La clarté, l'alignement, la gratitude",
+      "energyDrainers": "Rien, tout est en harmonie",
+      "improvement": "Continuer ce qui fonctionne, affiner ce qui peut l'être",
+      "affirmation": "Je suis fier du chemin parcouru et excité pour la suite",
+      "extraNotes": "Trois semaines complètes d'engagement ! Je vois vraiment la différence. Les habitudes deviennent naturelles, je me sens transformé. La constance est magique.",
+      "savedAt": "2025-11-16T21:00:00.000Z"
+    },
+    {
+      "date": "2025-11-16",
+      "savedAt": "2025-11-16T11:05:14.438Z",
+      "day": "Dimanche",
+      "mood": "6",
+      "moodWords": [
+        "Exalté",
+        "Excité",
+        "Rigoureux"
+      ],
+      "feelingWords": [
+        "Exalté",
+        "Excité",
+        "Rigoureux"
+      ],
+      "positiveElements": [
+        "Développer mon réseau et ma présentation en ligne",
+        "Discuter honnêtement avec mes parents",
+        "Contrôle de soi et de ses paroles par la respiration"
+      ],
+      "gratitude": [
+        "Développer mon réseau et ma présentation en ligne",
+        "Discuter honnêtement avec mes parents",
+        "Contrôle de soi et de ses paroles par la respiration"
+      ],
+      "primaryEmotion": "frustration",
+      "emotionIntensity": "3",
+      "bestMoment": "Quand je suis allé voir Noa hier soir et que je suis rentré en Stop.",
+      "positiveEmotion": "serenity",
+      "sleep": "10",
+      "exercise": "Je suis retourné à Bois d'olive en bus :)",
+      "copingStrategies": "Lorsque j'étais à la maison avec mes parents, c'était compliqué. Maman flippe pour le commerce qu'elle doit ouvrir et Papa s'imagine devenir barber...\nAlors bon, on soutiens comme on peut :)",
+      "socialActivity": "low",
+      "tomorrowPriorities": "Lire, Travailler, Réflechir",
+      "improve": "Travailler et rester concentrer sur ce que j'aime",
+      "affirmation": "Je suis capable.",
+      "resourceMobilization": "emotional",
+      "sleepGoal": "9",
+      "extraNotes": "J'ai bien avancé sur Moodyjournal, je suis satisfait de ce que j'ai pu réalisé et des apprentissages que j'ai eu.",
+      "nutrition": "Good",
+      "selectedQuestions": {
+        "mood": [
+          {
+            "label": "Notez votre humeur générale du jour (1-10)",
+            "id": "mood-1",
+            "type": "radio"
+          },
+          {
+            "label": "Quels 3 mots résument votre état émotionnel ?",
+            "id": "",
+            "type": "text"
+          },
+          {
+            "label": "Évaluation globale de l'humeur (1-10)",
+            "id": "mood-score",
+            "type": "text"
+          },
+          {
+            "label": "L'émotion la plus présente aujourd'hui",
+            "id": "primary-emotion",
+            "type": "select-one"
+          },
+          {
+            "label": "L'émotion la plus présente aujourd'hui",
+            "id": "primary-emotion",
+            "type": "select-one"
+          },
+          {
+            "label": "Intensité émotionnelle (1-5)",
+            "id": "emotion-intensity",
+            "type": "select-one"
+          }
+        ],
+        "gratitude": [
+          {
+            "label": "Éléments positifs identifiés aujourd'hui :",
+            "id": "",
+            "type": "text"
+          },
+          {
+            "label": "Meilleur moment / Point culminant de la journée",
+            "id": "best-moment",
+            "type": "textarea"
+          },
+          {
+            "label": "Quelle émotion positive a coloré votre journée ?",
+            "id": "positive-emotion",
+            "type": "select-one"
+          }
+        ],
+        "habits": [
+          {
+            "label": "Temps de sommeil total",
+            "id": "sleep",
+            "type": "number"
+          },
+          {
+            "label": "Comment avez-vous bougé aujourd'hui ?",
+            "id": "exercise",
+            "type": "text"
+          },
+          {
+            "label": "Nutrition",
+            "id": "",
+            "type": "radio"
+          },
+          {
+            "label": "Routines positives respectées",
+            "id": "good-habits",
+            "type": "textarea"
+          },
+          {
+            "label": "Routines manquées ou oubliées",
+            "id": "bad-habits",
+            "type": "textarea"
+          }
+        ],
+        "challenges": [
+          {
+            "label": "Quelles difficultés avez-vous rencontrées ?",
+            "id": "challenges",
+            "type": "textarea"
+          },
+          {
+            "label": "Comment ai-je réagi ?",
+            "id": "reaction",
+            "type": "textarea"
+          },
+          {
+            "label": "Quelle stratégie alternative pourriez-vous utiliser ?",
+            "id": "approach",
+            "type": "textarea"
+          }
+        ],
+        "reflections": [
+          {
+            "label": "Quels patterns récurrents avez-vous observés ?",
+            "id": "patterns",
+            "type": "textarea"
+          },
+          {
+            "label": "Quelle leçon personnelle tirez-vous de cette journée ?",
+            "id": "lessons",
+            "type": "textarea"
+          },
+          {
+            "label": "Sources d'énergie positive du jour",
+            "id": "energy-givers",
+            "type": "textarea"
+          },
+          {
+            "label": "Qu'est-ce qui a drainé mon énergie ?",
+            "id": "energy-drainers",
+            "type": "textarea"
+          }
+        ],
+        "consciousness": [
+          {
+            "label": "Comment avez-vous géré le stress ?",
+            "id": "coping-strategies",
+            "type": "textarea"
+          },
+          {
+            "label": "Déclencheurs émotionnels repérés",
+            "id": "emotional-triggers",
+            "type": "textarea"
+          },
+          {
+            "label": "Quel a été mon niveau d'activité sociale aujourd'hui ?",
+            "id": "social-activity",
+            "type": "select-one"
+          }
+        ],
+        "intention": [
+          {
+            "label": "Vos 2-3 priorités pour demain",
+            "id": "tomorrow-priorities",
+            "type": "textarea"
+          },
+          {
+            "label": "Point d'amélioration pour demain",
+            "id": "improve",
+            "type": "text"
+          },
+          {
+            "label": "Un rappel ou une affirmation pour moi-même",
+            "id": "affirmation",
+            "type": "textarea"
+          },
+          {
+            "label": "Quelle ressource vais-je mobiliser ?",
+            "id": "resource-mobilization",
+            "type": "select-one"
+          },
+          {
+            "label": "Objectif de repos pour cette nuit",
+            "id": "sleep-goal",
+            "type": "number"
+          }
+        ],
+        "notes": []
+      }
     }
   ]
 }

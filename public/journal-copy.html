@@ -8,7 +8,6 @@
     <!-- Styles et Scripts essentiels -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="js/navbar.js"></script>
     <!-- Scripts UI avec chargement optimisé -->
     <script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -230,159 +229,45 @@
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
         }
-
-        /* Modal de confirmation personnalisé en bas de page */
-        .custom-confirm-modal {
-            position: fixed;
-            bottom: -300px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 2000;
-            width: 90%;
-            max-width: 500px;
-            background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
-            border-radius: 20px 20px 0 0;
-            box-shadow: 0 -10px 40px rgba(5, 150, 105, 0.3);
-            transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            border: 2px solid #10b981;
-            border-bottom: none;
-        }
-
-        .custom-confirm-modal.show {
-            bottom: 0;
-        }
-
-        .custom-confirm-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 1999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(2px);
-        }
-
-        .custom-confirm-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .custom-confirm-content {
-            padding: 2rem;
-        }
-
-        .custom-confirm-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 1rem;
-            background: linear-gradient(135deg, #10b981, #059669);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: bounceIn 0.6s ease;
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .custom-confirm-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .custom-confirm-btn {
-            flex: 1;
-            padding: 0.875rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-        }
-
-        .custom-confirm-btn-yes {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .custom-confirm-btn-yes:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-        }
-
-        .custom-confirm-btn-no {
-            background: white;
-            color: #6b7280;
-            border: 2px solid #e5e7eb;
-        }
-
-        .custom-confirm-btn-no:hover {
-            background: #f9fafb;
-            border-color: #d1d5db;
-        }
     </style>
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
     <!-- Header avec navbar -->
-    <!-- Navbar Container -->
-    <div id="navbar-container" style="position: fixed; top: 0; left: 0; right: 0; z-index: 50;"></div>
+    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200 fixed top-0 left-0 right-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                    <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
+                    <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
+                </a>
 
-    <!-- Bouton burger pour afficher/masquer le sommaire -->
-    <button id="summary-toggle" class="hidden lg:flex fixed left-4 top-32 w-12 h-12 bg-emerald-500/20 hover:bg-emerald-500/40 text-emerald-700 rounded-xl shadow-lg items-center justify-center z-50 transition-all duration-300 backdrop-blur-sm border border-emerald-300/50">
-        <svg id="burger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-    </button>
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
+                    <a href="journal.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Écrire</a>
+                    <a href="view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
+                    <a href="blog.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Blog</a>
+                    <a href="chat.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
+                    <a href="settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
+                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
+                </nav>
 
-    <!-- Sommaire flottant à gauche -->
-    <div id="journal-summary" class="hidden lg:block fixed left-16 top-32 z-40 max-h-[calc(100vh-200px)] overflow-y-auto transition-all duration-200" style="opacity: 0;">
-        <nav id="summary-nav" class="space-y-1">
-            <!-- Les liens seront générés dynamiquement -->
-        </nav>
-    </div>
-
-    <!-- Bouton de paramétrage flottant à droite -->
-    <button id="settings-toggle" class="hidden lg:flex fixed right-4 top-32 w-12 h-12 bg-blue-500/20 hover:bg-blue-500/40 text-blue-700 rounded-xl shadow-lg items-center justify-center z-40 transition-all duration-300 backdrop-blur-sm border border-blue-300/50">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        </svg>
-    </button>
-
-    <!-- Indicateur du mode paramétrage -->
-    <div id="settings-mode-indicator" class="hidden fixed top-24 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center gap-2">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-        </svg>
-        <span class="font-semibold">Mode Paramétrage Actif</span>
-        <button id="exit-settings-mode" class="ml-2 hover:bg-blue-700 px-3 py-1 rounded-full transition-colors">
-            ✕ Quitter
-        </button>
-    </div>
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-emerald-100 transition-colors">
+                    <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
 
     <div class="container mx-auto px-4 py-8 pt-24">
-        <div class="text-center mb-12 mt-8" data-aos="fade-down">
+        <div class="text-center mb-12" data-aos="fade-down">
             <h1 class="text-4xl md:text-5xl font-bold text-emerald-800 mb-4">📊 Journal d'Analyse Comportementale</h1>
             <p class="text-lg text-emerald-600">Analysez vos émotions, comportements et stratégies d'adaptation de manière scientifique</p>
         </div>
 
-        <div class="max-w-4xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden" id="journal-content">
+        <div class="max-w-4xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
             <!-- Date Section -->
             <div class="p-6 border-b border-gray-100">
                 <div class="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -782,35 +667,22 @@
         </footer>
     </div>
 
-    <!-- Modal de confirmation personnalisé -->
-    <div class="custom-confirm-overlay" id="customConfirmOverlay"></div>
-    <div class="custom-confirm-modal" id="customConfirmModal">
-        <div class="custom-confirm-content">
-            <div class="custom-confirm-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                    <polyline points="7 3 7 8 15 8"></polyline>
-                </svg>
+    <!-- Modal pour les questions annexes -->
+    <div id="followup-modal" class="modal">
+        <div class="modal-content">
+            <div class="text-center mb-6">
+                <h2 class="text-3xl font-bold text-emerald-800 mb-2">🌱 Suivi Complémentaire</h2>
+                <p class="text-gray-600">Prenons quelques instants pour approfondir votre réflexion</p>
             </div>
-            <h3 class="text-xl font-bold text-center text-emerald-800 mb-2" id="customConfirmTitle">Sauvegarder les questions ?</h3>
-            <p class="text-center text-gray-600 text-sm leading-relaxed" id="customConfirmMessage">
-                Voulez-vous sauvegarder les questions actuellement affichées ?<br>
-                <span class="text-xs text-emerald-600 mt-1 inline-block">Cela vous permettra de les retrouver lors de votre prochaine visite.</span>
-            </p>
-            <div class="custom-confirm-buttons">
-                <button class="custom-confirm-btn custom-confirm-btn-no" id="customConfirmNo">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                    Non merci
+
+            <div id="followup-questions"></div>
+
+            <div class="flex justify-end gap-4 mt-6">
+                <button id="skip-followup" class="px-6 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 font-medium rounded-lg transition">
+                    Ignorer pour l'instant
                 </button>
-                <button class="custom-confirm-btn custom-confirm-btn-yes" id="customConfirmYes">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                    </svg>
-                    Oui, sauvegarder
+                <button id="save-followup" class="px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg transition">
+                    Sauvegarder mes réponses
                 </button>
             </div>
         </div>
@@ -1020,508 +892,124 @@
             }
         }
 
+        // Questions annexes personnalisées selon l'humeur
+        function generateFollowupQuestions(journalData) {
+            const mood = parseInt(journalData.mood);
+            const questions = [];
 
-        // Variables globales pour le mode paramétrage
-        let settingsMode = false;
-        let journalQuestions = null;
+            // Questions basées sur l'humeur
+            if (mood <= 4) {
+                questions.push({
+                    id: 'support',
+                    title: 'Recherche de soutien',
+                    question: 'Qui pourriez-vous contacter pour obtenir du soutien aujourd\'hui ?',
+                    hint: 'Pensez à un ami, un membre de la famille, ou un professionnel'
+                });
+                questions.push({
+                    id: 'self-care',
+                    title: 'Auto-soin',
+                    question: 'Quelle petite action pourriez-vous faire maintenant pour prendre soin de vous ?',
+                    hint: 'Même un petit geste compte'
+                });
+            } else if (mood >= 7) {
+                questions.push({
+                    id: 'share-positivity',
+                    title: 'Partage de positivité',
+                    question: 'Comment pourriez-vous partager cette énergie positive avec les autres ?',
+                    hint: 'Un message, un appel, un geste...'
+                });
+            }
 
-        // Charger les questions du journal depuis le JSON
-        async function loadJournalQuestions() {
+            // Questions sur les déclencheurs
+            if (journalData.emotionalTriggers) {
+                questions.push({
+                    id: 'trigger-prevention',
+                    title: 'Prévention',
+                    question: 'Quelles stratégies pourriez-vous mettre en place pour mieux gérer ces déclencheurs à l\'avenir ?',
+                    hint: 'Pensez à des techniques concrètes'
+                });
+            }
+
+            // Question sur la gratitude
+            questions.push({
+                id: 'gratitude-depth',
+                title: 'Approfondissement de la gratitude',
+                question: 'Pourquoi ces éléments positifs sont-ils importants pour vous ?',
+                hint: 'Explorez vos valeurs profondes'
+            });
+
+            // Question sur l'intention
+            questions.push({
+                id: 'tomorrow-intention',
+                title: 'Intention pour demain',
+                question: 'Quelle est votre intention principale pour demain ? Comment allez-vous l\'incarner ?',
+                hint: 'Soyez spécifique et réaliste'
+            });
+
+            return questions;
+        }
+
+        // Afficher le modal de questions annexes
+        function showFollowupModal(journalData) {
+            const modal = document.getElementById('followup-modal');
+            const questionsContainer = document.getElementById('followup-questions');
+            
+            const questions = generateFollowupQuestions(journalData);
+            
+            questionsContainer.innerHTML = questions.map(q => `
+                <div class="question-card">
+                    <h4>${q.title}</h4>
+                    <p>${q.question}</p>
+                    ${q.hint ? `<p class="text-xs text-gray-500 mb-2"><em>${q.hint}</em></p>` : ''}
+                    <textarea 
+                        id="followup-${q.id}" 
+                        rows="3"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                        placeholder="Votre réponse..."></textarea>
+                </div>
+            `).join('');
+
+            modal.classList.add('active');
+        }
+
+        // Sauvegarder les réponses aux questions annexes
+        async function saveFollowupAnswers(journalDate) {
+            const answers = {};
+            const textareas = document.querySelectorAll('[id^="followup-"]');
+            
+            textareas.forEach(textarea => {
+                const questionId = textarea.id.replace('followup-', '');
+                answers[questionId] = textarea.value;
+            });
+
             try {
-                console.log('📥 Tentative de chargement de journal-questions.json...');
-                const response = await fetch('/data/journal-questions.json');
-                console.log('   Réponse HTTP:', response.status, response.statusText);
-                
+                const response = await fetch('/api/save-followup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin',
+                    body: JSON.stringify({
+                        date: journalDate,
+                        answers: answers,
+                        savedAt: new Date().toISOString()
+                    }),
+                });
+
                 if (response.ok) {
-                    journalQuestions = await response.json();
-                    console.log('✅ Questions du journal chargées avec succès!');
-                    console.log('   Sections disponibles:', Object.keys(journalQuestions.sections));
-                    console.log('   Nombre total de sections:', Object.keys(journalQuestions.sections).length);
-                    return journalQuestions;
+                    console.log('✅ Réponses aux questions annexes sauvegardées !');
+                    return true;
                 } else {
-                    console.error('❌ Erreur HTTP lors du chargement:', response.status);
+                    console.error('❌ Échec de la sauvegarde des réponses');
+                    return false;
                 }
             } catch (err) {
-                console.error('❌ Erreur chargement questions:', err);
+                console.error('❌ Erreur lors de la sauvegarde des réponses:', err);
+                return false;
             }
-            return null;
-        }
-
-        // Générer le sommaire dynamiquement
-        function generateSummary() {
-            const summaryNav = document.getElementById('summary-nav');
-            if (!summaryNav) return;
-
-            summaryNav.innerHTML = '';
-            
-            // Récupérer toutes les sections visibles
-            const sections = document.querySelectorAll('.section-card:not(.hidden-section)');
-            
-            // Noms simplifiés pour chaque section
-            const sectionNames = {
-                'mood': 'Émotions',
-                'gratitude': 'Positif',
-                'habits': 'Habitudes',
-                'challenges': 'Défis',
-                'reflections': 'Réflexions',
-                'consciousness': 'Analyse',
-                'intention': 'Planification',
-                'notes': 'Notes',
-                'tca': 'TCA',
-                'addiction': 'Addictions',
-                'mental-health': 'Santé mentale',
-                'physical-health': 'Santé physique',
-                'social': 'Social',
-                'productivity': 'Productivité'
-            };
-            
-            sections.forEach((section, index) => {
-                const sectionName = section.getAttribute('data-section') || section.getAttribute('data-category');
-                const simpleName = sectionNames[sectionName] || `Section ${index + 1}`;
-                
-                // Ajouter un ID à la section si elle n'en a pas
-                if (!section.id) {
-                    section.id = `section-${sectionName || index}`;
-                }
-                
-                const link = document.createElement('a');
-                link.href = `#${section.id}`;
-                link.className = 'block px-4 py-2 text-base font-medium text-emerald-600/80 hover:text-emerald-700 hover:bg-emerald-500/10 rounded-lg transition-all duration-200 cursor-pointer backdrop-blur-sm';
-                link.textContent = simpleName;
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                });
-                
-                summaryNav.appendChild(link);
-            });
-        }
-
-        // Afficher/masquer le sommaire
-        function toggleSummary() {
-            const summary = document.getElementById('journal-summary');
-            const burgerBtn = document.getElementById('summary-toggle');
-            const burgerIcon = document.getElementById('burger-icon');
-            
-            if (summary.classList.contains('hidden')) {
-                // Afficher le sommaire
-                summary.classList.remove('hidden');
-                summary.style.opacity = '1';
-                burgerBtn.style.transform = 'translateX(200px)';
-                burgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>';
-            } else {
-                // Masquer le sommaire
-                summary.style.opacity = '0';
-                setTimeout(() => {
-                    summary.classList.add('hidden');
-                }, 200);
-                burgerBtn.style.transform = 'translateX(0)';
-                burgerIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>';
-            }
-        }
-
-        // Activer/désactiver le mode paramétrage
-        function toggleSettingsMode() {
-            settingsMode = !settingsMode;
-            const indicator = document.getElementById('settings-mode-indicator');
-            const settingsBtn = document.getElementById('settings-toggle');
-            
-            if (settingsMode) {
-                indicator.classList.remove('hidden');
-                indicator.classList.add('flex');
-                settingsBtn.classList.add('bg-blue-500/40');
-                addSettingsControls();
-            } else {
-                indicator.classList.add('hidden');
-                indicator.classList.remove('flex');
-                settingsBtn.classList.remove('bg-blue-500/40');
-                removeSettingsControls();
-            }
-        }
-
-        // Ajouter les contrôles de paramétrage (boutons -, aléatoire, +)
-        function addSettingsControls() {
-            // Ajouter boutons - et aléatoire à chaque question (apparaissent au survol)
-            const allQuestions = document.querySelectorAll('.section-card .space-y-4 > div, .section-card .grid > div');
-            
-            allQuestions.forEach((questionDiv, index) => {
-                if (questionDiv.querySelector('.question-controls')) return; // Déjà ajouté
-                
-                const label = questionDiv.querySelector('label');
-                if (!label) return;
-                
-                // Ajouter une classe pour gérer le survol
-                questionDiv.classList.add('question-item-editable');
-                questionDiv.style.position = 'relative';
-                
-                // Bouton retirer (à droite du label)
-                const removeBtn = document.createElement('button');
-                removeBtn.type = 'button';
-                removeBtn.className = 'remove-question-btn absolute -right-2 top-0 w-7 h-7 bg-red-100/90 hover:bg-red-200 text-red-600 rounded-lg transition-all flex items-center justify-center shadow-sm opacity-0 hover:opacity-100';
-                removeBtn.title = 'Retirer cette question';
-                removeBtn.innerHTML = '<span class="text-lg font-bold">−</span>';
-                removeBtn.addEventListener('click', () => removeQuestion(questionDiv));
-                
-                // Bouton alternative (à droite de la question/input)
-                const randomBtn = document.createElement('button');
-                randomBtn.type = 'button';
-                randomBtn.className = 'random-question-btn absolute -right-2 bottom-2 w-7 h-7 bg-blue-100/90 hover:bg-blue-200 text-blue-600 rounded-lg transition-all flex items-center justify-center shadow-sm opacity-0 hover:opacity-100';
-                randomBtn.title = 'Question alternative';
-                randomBtn.innerHTML = `
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                `;
-                randomBtn.addEventListener('click', () => replaceWithAlternative(questionDiv, label));
-                
-                questionDiv.appendChild(removeBtn);
-                questionDiv.appendChild(randomBtn);
-                
-                // Afficher les contrôles au survol du questionDiv
-                questionDiv.addEventListener('mouseenter', () => {
-                    removeBtn.classList.remove('opacity-0');
-                    removeBtn.classList.add('opacity-100');
-                    randomBtn.classList.remove('opacity-0');
-                    randomBtn.classList.add('opacity-100');
-                });
-                questionDiv.addEventListener('mouseleave', () => {
-                    if (!removeBtn.matches(':hover') && !randomBtn.matches(':hover')) {
-                        removeBtn.classList.add('opacity-0');
-                        removeBtn.classList.remove('opacity-100');
-                        randomBtn.classList.add('opacity-0');
-                        randomBtn.classList.remove('opacity-100');
-                    }
-                });
-            });
-            
-            // Ajouter bouton + à chaque section
-            const sections = document.querySelectorAll('.section-card');
-            sections.forEach(section => {
-                if (section.querySelector('.add-question-section-btn')) return; // Déjà ajouté
-                
-                const title = section.querySelector('h2');
-                if (!title) return;
-                
-                const addBtn = document.createElement('button');
-                addBtn.type = 'button';
-                addBtn.className = 'add-question-section-btn ml-3 text-xs bg-emerald-100 hover:bg-emerald-200 text-emerald-700 px-3 py-1 rounded-full transition-colors inline-flex items-center gap-1';
-                addBtn.innerHTML = `
-                    <span>+</span> Ajouter une question
-                `;
-                addBtn.addEventListener('click', () => openAddQuestionMenu(section));
-                
-                title.appendChild(addBtn);
-            });
-        }
-
-        // Retirer les contrôles de paramétrage
-        function removeSettingsControls() {
-            document.querySelectorAll('.remove-question-btn').forEach(el => el.remove());
-            document.querySelectorAll('.random-question-btn').forEach(el => el.remove());
-            document.querySelectorAll('.add-question-section-btn').forEach(el => el.remove());
-            document.querySelectorAll('.question-item-editable').forEach(el => {
-                el.classList.remove('question-item-editable');
-                el.style.position = '';
-            });
-        }
-
-        // Retirer une question
-        function removeQuestion(questionDiv) {
-            if (confirm('Êtes-vous sûr de vouloir retirer cette question ?')) {
-                questionDiv.style.transition = 'opacity 0.3s';
-                questionDiv.style.opacity = '0';
-                setTimeout(() => {
-                    questionDiv.remove();
-                    showNotification('Question retirée', 'info');
-                    generateSummary();
-                }, 300);
-            }
-        }
-
-        // Remplacer par une question alternative
-        function replaceWithAlternative(questionDiv, labelEl) {
-            let currentLabel = labelEl.textContent.trim();
-            
-            // Retirer les boutons de contrôle du texte du label si présents
-            const labelClone = labelEl.cloneNode(true);
-            const buttons = labelClone.querySelectorAll('button');
-            buttons.forEach(btn => btn.remove());
-            currentLabel = labelClone.textContent.trim();
-            
-            console.log('🔄 Tentative de remplacement pour:', currentLabel);
-            
-            // Chercher une alternative dans journal-questions.json
-            if (!journalQuestions) {
-                console.error('❌ journalQuestions est null');
-                showNotification('Fichier de questions non chargé. Rechargez la page.', 'error');
-                return;
-            }
-            
-            console.log('   Sections disponibles:', Object.keys(journalQuestions.sections));
-            
-            // Trouver la question correspondante et une alternative
-            let found = false;
-            let usedAlternatives = questionDiv.getAttribute('data-used-alternatives');
-            usedAlternatives = usedAlternatives ? usedAlternatives.split(',') : [];
-            
-            let matchCount = 0;
-            for (const [sectionKey, sectionData] of Object.entries(journalQuestions.sections)) {
-                for (const question of sectionData.questions) {
-                    // Chercher par label original ou alternatives
-                    const allPossibleLabels = [question.label, ...(question.alternatives || [])];
-                    
-                    if (allPossibleLabels.some(l => l === currentLabel)) {
-                        matchCount++;
-                        console.log('✓ Question trouvée dans section:', sectionKey);
-                        console.log('   Alternatives disponibles:', question.alternatives ? question.alternatives.length : 0);
-                        
-                        const availableAlternatives = question.alternatives ? question.alternatives.filter(alt => !usedAlternatives.includes(alt) && alt !== currentLabel) : [];
-                        
-                        if (availableAlternatives.length > 0) {
-                            const randomAlt = availableAlternatives[Math.floor(Math.random() * availableAlternatives.length)];
-                            console.log('   Utilisation de l\'alternative:', randomAlt);
-                            
-                            // Remplacer le texte du label
-                            labelEl.textContent = randomAlt;
-                            
-                            usedAlternatives.push(randomAlt);
-                            questionDiv.setAttribute('data-used-alternatives', usedAlternatives.join(','));
-                            
-                            showNotification('Question remplacée !', 'success');
-                            found = true;
-                            break;
-                        } else if (question.label !== currentLabel) {
-                            // Retour au label original
-                            console.log('   Retour à la question originale');
-                            labelEl.textContent = question.label;
-                            questionDiv.removeAttribute('data-used-alternatives');
-                            showNotification('Retour à la question originale', 'info');
-                            found = true;
-                            break;
-                        } else {
-                            console.log('   Aucune alternative disponible (toutes utilisées)');
-                            showNotification('Toutes les alternatives ont été utilisées', 'info');
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-                if (found) break;
-            }
-            
-            if (!found) {
-                console.warn('❌ Aucune correspondance trouvée pour:', currentLabel);
-                console.log('   Tentatives de match:', matchCount);
-                showNotification('Aucune alternative disponible pour cette question', 'info');
-            }
-        }
-
-        // Ouvrir le menu pour ajouter une question
-        function openAddQuestionMenu(section) {
-            const sectionName = section.getAttribute('data-section') || section.getAttribute('data-category');
-            
-            console.log('🔍 Ouverture menu ajout pour section:', sectionName);
-            console.log('   journalQuestions existe?', !!journalQuestions);
-            if (journalQuestions) {
-                console.log('   Sections dans JSON:', Object.keys(journalQuestions.sections));
-                console.log('   Section recherchée existe?', !!journalQuestions.sections[sectionName]);
-            }
-            
-            if (!journalQuestions) {
-                showNotification('Fichier de questions non chargé. Rechargez la page.', 'error');
-                return;
-            }
-            
-            if (!journalQuestions.sections[sectionName]) {
-                showNotification(`Questions non disponibles pour: ${sectionName}`, 'error');
-                return;
-            }
-            
-            const sectionData = journalQuestions.sections[sectionName];
-            const questionsContainer = section.querySelector('.space-y-4');
-            
-            // Créer un menu temporaire
-            const menu = document.createElement('div');
-            menu.className = 'bg-emerald-50 border-2 border-emerald-300 rounded-lg p-4 mb-4';
-            menu.innerHTML = `
-                <p class="text-sm font-semibold text-emerald-800 mb-3">Sélectionnez une question à ajouter :</p>
-                <div class="space-y-2">
-                    ${sectionData.questions.map((q, idx) => `
-                        <button type="button" class="add-question-option w-full text-left px-3 py-2 bg-white hover:bg-emerald-100 rounded-lg text-sm transition-colors" data-question-index="${idx}">
-                            ${q.label}
-                        </button>
-                    `).join('')}
-                </div>
-                <button type="button" class="cancel-add-question mt-3 w-full px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-lg text-sm">
-                    Annuler
-                </button>
-            `;
-            
-            questionsContainer.insertBefore(menu, questionsContainer.firstChild);
-            
-            // Event listeners
-            menu.querySelectorAll('.add-question-option').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const questionIndex = parseInt(btn.getAttribute('data-question-index'));
-                    const questionData = sectionData.questions[questionIndex];
-                    addQuestionToSection(questionsContainer, questionData, sectionName);
-                    menu.remove();
-                });
-            });
-            
-            menu.querySelector('.cancel-add-question').addEventListener('click', () => menu.remove());
-        }
-
-        // Ajouter une nouvelle question à une section
-        function addQuestionToSection(container, questionData, sectionName) {
-            const questionDiv = document.createElement('div');
-            questionDiv.innerHTML = `
-                <label class="block text-sm font-medium text-gray-700 mb-2">${questionData.label}</label>
-                ${generateQuestionInput(questionData, sectionName)}
-            `;
-            
-            // Insérer avant le dernier élément (bouton ajouter)
-            const lastChild = container.lastElementChild;
-            container.insertBefore(questionDiv, lastChild);
-            
-            showNotification('Question ajoutée !', 'success');
-            
-            // Réactiver les contrôles pour cette nouvelle question si en mode paramétrage
-            if (settingsMode) {
-                questionDiv.classList.add('question-item-editable');
-                questionDiv.style.position = 'relative';
-                
-                const label = questionDiv.querySelector('label');
-                
-                // Bouton retirer (à droite du label)
-                const removeBtn = document.createElement('button');
-                removeBtn.type = 'button';
-                removeBtn.className = 'remove-question-btn absolute -right-2 top-0 w-7 h-7 bg-red-100/90 hover:bg-red-200 text-red-600 rounded-lg transition-all flex items-center justify-center shadow-sm opacity-0 hover:opacity-100';
-                removeBtn.title = 'Retirer cette question';
-                removeBtn.innerHTML = '<span class="text-lg font-bold">−</span>';
-                removeBtn.addEventListener('click', () => removeQuestion(questionDiv));
-                
-                // Bouton alternative (à droite de la question/input)
-                const randomBtn = document.createElement('button');
-                randomBtn.type = 'button';
-                randomBtn.className = 'random-question-btn absolute -right-2 bottom-2 w-7 h-7 bg-blue-100/90 hover:bg-blue-200 text-blue-600 rounded-lg transition-all flex items-center justify-center shadow-sm opacity-0 hover:opacity-100';
-                randomBtn.title = 'Question alternative';
-                randomBtn.innerHTML = `
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                    </svg>
-                `;
-                randomBtn.addEventListener('click', () => replaceWithAlternative(questionDiv, label));
-                
-                questionDiv.appendChild(removeBtn);
-                questionDiv.appendChild(randomBtn);
-                
-                // Afficher les contrôles au survol du questionDiv
-                questionDiv.addEventListener('mouseenter', () => {
-                    removeBtn.classList.remove('opacity-0');
-                    removeBtn.classList.add('opacity-100');
-                    randomBtn.classList.remove('opacity-0');
-                    randomBtn.classList.add('opacity-100');
-                });
-                questionDiv.addEventListener('mouseleave', () => {
-                    if (!removeBtn.matches(':hover') && !randomBtn.matches(':hover')) {
-                        removeBtn.classList.add('opacity-0');
-                        removeBtn.classList.remove('opacity-100');
-                        randomBtn.classList.add('opacity-0');
-                        randomBtn.classList.remove('opacity-100');
-                    }
-                });
-            }
-        }
-
-        // Générer l'input pour une question
-        function generateQuestionInput(question, sectionName) {
-            const commonClasses = 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500';
-            
-            if (question.type === 'textarea') {
-                return `<textarea id="${question.id}" class="${commonClasses}" rows="${question.rows || 3}" data-category="${sectionName}"></textarea>`;
-            } else if (question.type === 'select') {
-                const options = question.options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
-                return `<select id="${question.id}" class="${commonClasses}" data-category="${sectionName}"><option value="">Sélectionnez...</option>${options}</select>`;
-            } else if (question.type === 'number') {
-                return `<input type="number" id="${question.id}" class="${commonClasses}" min="${question.min || 0}" max="${question.max || 100}" step="${question.step || 1}" data-category="${sectionName}">`;
-            } else {
-                return `<input type="text" id="${question.id}" class="${commonClasses}" data-category="${sectionName}">`;
-            }
-        }
-
-        // Fonction de confirmation personnalisée (remplace confirm())
-        function customConfirm(message, title = 'Confirmation') {
-            return new Promise((resolve) => {
-                const modal = document.getElementById('customConfirmModal');
-                const overlay = document.getElementById('customConfirmOverlay');
-                const titleEl = document.getElementById('customConfirmTitle');
-                const messageEl = document.getElementById('customConfirmMessage');
-                const yesBtn = document.getElementById('customConfirmYes');
-                const noBtn = document.getElementById('customConfirmNo');
-                
-                // Mettre à jour le contenu
-                titleEl.textContent = title;
-                messageEl.innerHTML = message;
-                
-                // Afficher le modal
-                overlay.classList.add('show');
-                setTimeout(() => modal.classList.add('show'), 10);
-                
-                // Fonction pour fermer le modal
-                const closeModal = () => {
-                    modal.classList.remove('show');
-                    setTimeout(() => overlay.classList.remove('show'), 300);
-                };
-                
-                // Gérer les clics
-                const handleYes = () => {
-                    closeModal();
-                    yesBtn.removeEventListener('click', handleYes);
-                    noBtn.removeEventListener('click', handleNo);
-                    overlay.removeEventListener('click', handleNo);
-                    resolve(true);
-                };
-                
-                const handleNo = () => {
-                    closeModal();
-                    yesBtn.removeEventListener('click', handleYes);
-                    noBtn.removeEventListener('click', handleNo);
-                    overlay.removeEventListener('click', handleNo);
-                    resolve(false);
-                };
-                
-                yesBtn.addEventListener('click', handleYes);
-                noBtn.addEventListener('click', handleNo);
-                overlay.addEventListener('click', handleNo);
-            });
-        }
-
-        // Fonction utilitaire pour afficher des notifications
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-24 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 ${
-                type === 'success' ? 'bg-emerald-600' : 
-                type === 'error' ? 'bg-red-600' : 
-                'bg-blue-600'
-            }`;
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.style.opacity = '0';
-                notification.style.transition = 'opacity 0.3s';
-                setTimeout(() => notification.remove(), 300);
-            }, 3000);
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
-            // Initialiser la navbar
-            initNavbar('journal.html');
-            
-            // Charger les questions du journal
-            await loadJournalQuestions();
-            
             // Charger les préférences utilisateur
             await loadUserPreferences();
 
@@ -1544,223 +1032,115 @@
                 dayRadio.checked = true;
             }
 
-            // Générer le sommaire
-            generateSummary();
-            setTimeout(() => {
-                generateSummary();
-                // Randomiser certaines questions par défaut (30% des questions)
-                randomizeDefaultQuestions();
-            }, 1000); // Régénérer après le chargement complet
-
-            // Event listeners pour le mode paramétrage
-            document.getElementById('settings-toggle').addEventListener('click', toggleSettingsMode);
-            document.getElementById('exit-settings-mode').addEventListener('click', toggleSettingsMode);
-            document.getElementById('summary-toggle').addEventListener('click', toggleSummary);
-            
-            // Event listener pour la sauvegarde
-            document.getElementById("save-journal").addEventListener("click", handleSaveJournal);
-        });
-
-        // Randomiser certaines questions par défaut au chargement
-        function randomizeDefaultQuestions() {
-            if (!journalQuestions) return;
-            
-            const allLabels = document.querySelectorAll('.section-card .space-y-4 > div label, .section-card .grid > div label');
-            
-            allLabels.forEach(label => {
-                // 30% de chance de randomiser chaque question
-                if (Math.random() > 0.7) return;
-                
-                let currentLabel = label.textContent.trim();
-                
-                // Chercher dans journal-questions.json
-                for (const [sectionKey, sectionData] of Object.entries(journalQuestions.sections)) {
-                    for (const question of sectionData.questions) {
-                        if (question.label === currentLabel && question.alternatives && question.alternatives.length > 0) {
-                            // Choisir une alternative aléatoire
-                            const randomAlt = question.alternatives[Math.floor(Math.random() * question.alternatives.length)];
-                            label.textContent = randomAlt;
-                            return;
-                        }
-                    }
-                }
-            });
-        }
-
-        // Collecter et sauvegarder le journal (fonction séparée)
-        async function handleSaveJournal() {
-            try {
-                // Demander à l'utilisateur s'il veut sauvegarder les questions affichées
-                const saveQuestions = await customConfirm(
-                    'Voulez-vous sauvegarder les questions actuellement affichées ?<br><span class="text-xs text-emerald-600 mt-1 inline-block">Cela vous permettra de les retrouver lors de votre prochaine visite.</span>',
-                    '💾 Sauvegarder les questions ?'
-                );
-                
-                let selectedQuestions = null;
-                
-                if (saveQuestions) {
-                    // Collecter les questions sélectionnées (labels affichés)
-                    selectedQuestions = {};
-                    const sections = document.querySelectorAll('.section-card:not(.hidden-section)');
+            // Gestion de la sauvegarde
+            document.getElementById("save-journal").addEventListener("click", async function () {
+                try {
+                    // Collecter les données du formulaire
+                    const moodWordsArray = Array.from(document.querySelectorAll(".mood-words")).map(input => input.value);
+                    const gratitudeArray = Array.from(document.querySelectorAll(".gratitude-input")).map(input => input.value);
                     
-                    sections.forEach(section => {
-                        const sectionName = section.getAttribute('data-section') || section.getAttribute('data-category');
-                        if (!sectionName) return;
-                        
-                        selectedQuestions[sectionName] = [];
-                        
-                        const questionDivs = section.querySelectorAll('.space-y-4 > div, .grid > div');
-                        questionDivs.forEach(div => {
-                            const label = div.querySelector('label');
-                            const input = div.querySelector('input, select, textarea');
-                            if (label && input) {
-                                selectedQuestions[sectionName].push({
-                                    label: label.textContent.trim(),
-                                    id: input.id || '',
-                                    type: input.type || input.tagName.toLowerCase()
-                                });
-                            }
-                        });
-                    });
-                }
-                
-                // Collecter UNIQUEMENT les données du formulaire qui sont remplies
-                const journalData = {
-                    date: document.getElementById("journal-date").value,
-                    savedAt: new Date().toISOString()
-                };
-                
-                // Ajouter le jour si sélectionné
-                const dayChecked = document.querySelector('input[name="day"]:checked');
-                if (dayChecked) {
-                    journalData.day = dayChecked.value;
-                }
-                
-                // Ajouter l'humeur si sélectionnée
-                const moodChecked = document.querySelector('input[name="mood"]:checked');
-                if (moodChecked) {
-                    journalData.mood = moodChecked.value;
-                }
-                
-                // Collecter les mots d'humeur (seulement ceux remplis)
-                const moodWordsArray = Array.from(document.querySelectorAll(".mood-words"))
-                    .map(input => input.value.trim())
-                    .filter(val => val !== "");
-                if (moodWordsArray.length > 0) {
-                    journalData.moodWords = moodWordsArray;
-                    journalData.feelingWords = moodWordsArray; // Alias pour compatibilité
-                }
-                
-                // Collecter les éléments de gratitude (seulement ceux remplis)
-                const gratitudeArray = Array.from(document.querySelectorAll(".gratitude-input"))
-                    .map(input => input.value.trim())
-                    .filter(val => val !== "");
-                if (gratitudeArray.length > 0) {
-                    journalData.positiveElements = gratitudeArray;
-                    journalData.gratitude = gratitudeArray; // Alias pour compatibilité
-                }
-                
-                // Fonction helper pour ajouter un champ seulement s'il est rempli
-                const addIfFilled = (fieldId, fieldName) => {
-                    const element = document.getElementById(fieldId);
-                    if (element) {
-                        const value = element.value?.trim();
-                        if (value && value !== "") {
-                            journalData[fieldName] = value;
-                        }
-                    }
-                };
-                
-                // Ajouter tous les champs texte s'ils sont remplis
-                addIfFilled("primary-emotion", "primaryEmotion");
-                addIfFilled("emotion-intensity", "emotionIntensity");
-                addIfFilled("best-moment", "bestMoment");
-                addIfFilled("positive-emotion", "positiveEmotion");
-                addIfFilled("sleep", "sleep");
-                addIfFilled("exercise", "exercise");
-                addIfFilled("good-habits", "goodHabits");
-                addIfFilled("bad-habits", "badHabits");
-                addIfFilled("challenges", "challenges");
-                addIfFilled("reaction", "reaction");
-                addIfFilled("approach", "approach");
-                addIfFilled("patterns", "patterns");
-                addIfFilled("lessons", "lessons");
-                addIfFilled("energy-givers", "energyGivers");
-                addIfFilled("energy-drainers", "energyDrainers");
-                addIfFilled("coping-strategies", "copingStrategies");
-                addIfFilled("emotional-triggers", "emotionalTriggers");
-                addIfFilled("social-activity", "socialActivity");
-                addIfFilled("tomorrow-priorities", "tomorrowPriorities");
-                addIfFilled("improve", "improve");
-                addIfFilled("affirmation", "affirmation");
-                addIfFilled("resource-mobilization", "resourceMobilization");
-                addIfFilled("sleep-goal", "sleepGoal");
-                addIfFilled("extra-notes", "extraNotes");
-                
-                // Ajouter la nutrition si sélectionnée
-                const nutritionChecked = document.querySelector('input[name="nutrition"]:checked');
-                if (nutritionChecked) {
-                    journalData.nutrition = nutritionChecked.value;
-                }
+                    const journalData = {
+                        date: document.getElementById("journal-date").value,
+                        day: document.querySelector('input[name="day"]:checked')?.value,
+                        mood: document.querySelector('input[name="mood"]:checked')?.value,
+                        // Compatibilité avec anciennes entrées : utiliser les deux noms
+                        moodWords: moodWordsArray,
+                        feelingWords: moodWordsArray, // Alias pour compatibilité
+                        primaryEmotion: document.getElementById("primary-emotion")?.value || "",
+                        emotionIntensity: document.getElementById("emotion-intensity")?.value || "",
+                        // Compatibilité avec anciennes entrées : utiliser les deux noms
+                        positiveElements: gratitudeArray,
+                        gratitude: gratitudeArray, // Alias pour compatibilité
+                        bestMoment: document.getElementById("best-moment")?.value || "",
+                        positiveEmotion: document.getElementById("positive-emotion")?.value || "",
+                        sleep: document.getElementById("sleep")?.value || "",
+                        exercise: document.getElementById("exercise")?.value || "",
+                        nutrition: document.querySelector('input[name="nutrition"]:checked')?.value || "",
+                        goodHabits: document.getElementById("good-habits")?.value || "",
+                        badHabits: document.getElementById("bad-habits")?.value || "",
+                        challenges: document.getElementById("challenges")?.value || "",
+                        reaction: document.getElementById("reaction")?.value || "",
+                        approach: document.getElementById("approach")?.value || "",
+                        patterns: document.getElementById("patterns")?.value || "",
+                        lessons: document.getElementById("lessons")?.value || "",
+                        energyGivers: document.getElementById("energy-givers")?.value || "",
+                        energyDrainers: document.getElementById("energy-drainers")?.value || "",
+                        copingStrategies: document.getElementById("coping-strategies")?.value || "",
+                        emotionalTriggers: document.getElementById("emotional-triggers")?.value || "",
+                        socialActivity: document.getElementById("social-activity")?.value || "",
+                        tomorrowPriorities: document.getElementById("tomorrow-priorities")?.value || "",
+                        improve: document.getElementById("improve")?.value || "",
+                        affirmation: document.getElementById("affirmation")?.value || "",
+                        resourceMobilization: document.getElementById("resource-mobilization")?.value || "",
+                        sleepGoal: document.getElementById("sleep-goal")?.value || "",
+                        extraNotes: document.getElementById("extra-notes")?.value || "",
+                        savedAt: new Date().toISOString()
+                    };
 
-                // Collecter les données des catégories de suivi complémentaires (seulement si remplies)
-                const trackingData = {};
-                const trackingInputs = document.querySelectorAll('.tracking-input');
-                trackingInputs.forEach(input => {
-                    const value = input.value?.trim();
-                    if (value && value !== "") {
+                    // Collecter les données des catégories de suivi complémentaires
+                    const trackingData = {};
+                    const trackingInputs = document.querySelectorAll('.tracking-input');
+                    trackingInputs.forEach(input => {
                         const category = input.getAttribute('data-category');
                         if (!trackingData[category]) {
                             trackingData[category] = {};
                         }
-                        trackingData[category][input.id] = value;
-                    }
-                });
+                        trackingData[category][input.id] = input.value || "";
+                    });
 
-                // Ajouter les données de suivi au journal seulement s'il y en a
-                if (Object.keys(trackingData).length > 0) {
-                    journalData.trackingData = trackingData;
-                    journalData.trackingCategories = Object.keys(trackingData);
+                    // Ajouter les données de suivi au journal
+                    if (Object.keys(trackingData).length > 0) {
+                        journalData.trackingData = trackingData;
+                        journalData.trackingCategories = Object.keys(trackingData);
+                    }
+
+                    console.log("💾 Sauvegarde du journal:", journalData);
+
+                    // Envoyer au serveur
+                    const response = await fetch("/api/save-journal", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        credentials: 'same-origin',
+                        body: JSON.stringify(journalData),
+                    });
+
+                    if (response.ok) {
+                        console.log("✅ Journal sauvegardé !");
+                        info_popup();
+                        
+                        // Afficher les questions annexes
+                        setTimeout(() => {
+                            showFollowupModal(journalData);
+                        }, 1000);
+                    } else {
+                        console.error("❌ Échec de la sauvegarde");
+                        const error = await response.json();
+                        console.error("Erreur:", error);
+                    }
+
+                } catch (err) {
+                    console.error("❌ Erreur lors de la sauvegarde:", err);
+                }
+            });
+
+            // Gestion des boutons du modal
+            document.getElementById('skip-followup').addEventListener('click', function() {
+                document.getElementById('followup-modal').classList.remove('active');
+            });
+
+            document.getElementById('save-followup').addEventListener('click', async function() {
+                const journalDate = document.getElementById("journal-date").value;
+                const saved = await saveFollowupAnswers(journalDate);
+                
+                if (saved) {
+                    info_popup();
                 }
                 
-                // Ajouter les questions sauvegardées si demandé
-                if (selectedQuestions && Object.keys(selectedQuestions).length > 0) {
-                    journalData.selectedQuestions = selectedQuestions;
-                }
-
-                console.log("💾 Sauvegarde du journal (champs remplis uniquement):", journalData);
-
-                // Envoyer au serveur
-                const response = await fetch("/api/save-journal", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: 'same-origin',
-                    body: JSON.stringify(journalData),
-                });
-
-                if (response.ok) {
-                    console.log("✅ Journal sauvegardé !");
-                    if (saveQuestions) {
-                        showNotification("✅ Journal et questions sauvegardés avec succès !", "success");
-                    } else {
-                        showNotification("✅ Journal sauvegardé avec succès !", "success");
-                    }
-                    info_popup();
-                } else {
-                    console.error("❌ Échec de la sauvegarde");
-                    const error = await response.json();
-                    console.error("Erreur:", error);
-                    showNotification("❌ Erreur lors de la sauvegarde", "error");
-                }
-
-            } catch (err) {
-                console.error("❌ Erreur lors de la sauvegarde:", err);
-                showNotification("❌ Erreur lors de la sauvegarde", "error");
-            }
-        }
-
+                document.getElementById('followup-modal').classList.remove('active');
+            });
+        });
     </script>
 </body>
 </html>

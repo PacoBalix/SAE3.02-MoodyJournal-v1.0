@@ -1,0 +1,3 @@
+# Ce fichier permet de garder le dossier data/ dans Git
+# Les fichiers de données sensibles sont exclus par .gitignore
+

@@ -1,0 +1,20 @@
+[
+  {
+    "from": 1,
+    "to": 7,
+    "text": "Salut, encore merci pour aujourd'hui c'était génial :)",
+    "timestamp": 1763148175549
+  },
+  {
+    "from": 7,
+    "to": 1,
+    "text": "Coucou Alix, pas de soucis t'inquiètes",
+    "timestamp": 1763148193307
+  },
+  {
+    "from": 7,
+    "to": 1,
+    "text": "Nous aussi on a passé un très bon moment",
+    "timestamp": 1763148199486
+  }
+]

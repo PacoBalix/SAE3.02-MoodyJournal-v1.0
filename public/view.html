@@ -3,1231 +3,1335 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Analyse - MoodyJournal</title>
+  <title>Mon Espace - MoodyJournal</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+  <script src="js/navbar.js"></script>
+  <style>
+    .section-card {
+      transition: all 0.3s ease;
+    }
+    .section-card.collapsed .section-content {
+      display: none;
+    }
+    .section-card:hover {
+      transform: translateY(-2px);
+    }
+    .favorite-star {
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .favorite-star:hover {
+      transform: scale(1.2);
+    }
+    .favorite-star.active {
+      color: #fbbf24;
+    }
+    .widget-compact {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      backdrop-filter: blur(10px);
+    }
+    .drag-handle {
+      cursor: move;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+    .drag-handle:hover {
+      opacity: 1;
+    }
+    .search-highlight {
+      background-color: #fef08a;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+  </style>
 </head>
 
 <body class="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100 min-h-screen">
-  <!-- Header -->
-  <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200 mb-8">
-    <div class="max-w-7xl mx-auto px-6 py-4">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-          <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
-            <span class="text-xl font-bold text-emerald-800">MoodyJournal</span>
-          </a>
+  <!-- Navbar Container -->
+  <div id="navbar-container" class="mb-8"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
+    <!-- Message Personnalisé / Mot du Jour -->
+    <div id="daily-message" class="mb-8 fade-in">
+      <div class="widget-compact rounded-2xl p-6 sm:p-8 shadow-xl border border-emerald-200">
+        <div class="flex items-start gap-4">
+          <div class="text-5xl sm:text-6xl">💚</div>
+          <div class="flex-1">
+            <h1 class="text-2xl sm:text-3xl font-bold text-emerald-800 mb-2" id="greeting-text">Bonjour !</h1>
+            <p id="personalized-message" class="text-gray-700 text-base sm:text-lg leading-relaxed">
+              Chargement de votre bilan personnalisé...
+            </p>
+          </div>
         </div>
-        <nav class="hidden md:flex items-center space-x-6">
-          <a href="index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
-          <a href="journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
-          <a href="view.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Consulter</a>
-          <a href="chat.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
-          <a href="settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
-          <button id="exportBtn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors shadow-md">
-            📊 Exporter
-          </button>
-          <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
-        </nav>
-        <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-emerald-100 transition-colors">
-          <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
+      </div>
+    </div>
+
+    <!-- Barre de recherche et filtres -->
+    <div class="mb-6 flex flex-col sm:flex-row gap-4">
+      <div class="flex-1 relative">
+        <input 
+          type="text" 
+          id="search-input" 
+          placeholder="🔍 Rechercher dans mes entrées..." 
+          class="w-full px-4 py-3 rounded-xl border-2 border-emerald-200 focus:border-emerald-500 focus:outline-none shadow-sm"
+        />
+      </div>
+      <div class="flex gap-2">
+        <input 
+          type="date" 
+          id="filter-date-start" 
+          class="px-4 py-3 rounded-xl border-2 border-emerald-200 focus:border-emerald-500 focus:outline-none shadow-sm"
+          placeholder="Du"
+        />
+        <input 
+          type="date" 
+          id="filter-date-end" 
+          class="px-4 py-3 rounded-xl border-2 border-emerald-200 focus:border-emerald-500 focus:outline-none shadow-sm"
+          placeholder="Au"
+        />
+        <button id="clear-filters" class="px-4 py-3 bg-gray-200 hover:bg-gray-300 rounded-xl transition-colors text-sm font-medium">
+          ✕ Effacer
         </button>
       </div>
     </div>
-  </header>
 
-  <div class="max-w-7xl mx-auto px-6 pb-12">
-    <!-- Titre de la section -->
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-bold text-emerald-800 mb-3">📊 Tableau de Bord</h1>
-      <p class="text-gray-600 text-lg">Visualisez votre évolution et vos progrès</p>
+    <!-- Widgets Compacts - Statistiques Clés -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 fade-in">
+      <div class="widget-compact rounded-xl p-4 shadow-lg border border-emerald-200 hover:shadow-xl transition-shadow cursor-pointer" onclick="scrollToSection('insights-section')">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">😊</span>
+          <span id="quick-mood" class="text-3xl font-bold text-emerald-700">--</span>
+        </div>
+        <p class="text-xs text-gray-600 font-medium">Humeur moyenne</p>
+      </div>
+
+      <div class="widget-compact rounded-xl p-4 shadow-lg border border-purple-200 hover:shadow-xl transition-shadow cursor-pointer" onclick="scrollToSection('sleep-section')">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">💤</span>
+          <span id="quick-sleep" class="text-3xl font-bold text-purple-700">--</span>
+        </div>
+        <p class="text-xs text-gray-600 font-medium">Sommeil moyen</p>
+      </div>
+
+      <div class="widget-compact rounded-xl p-4 shadow-lg border border-orange-200 hover:shadow-xl transition-shadow cursor-pointer" onclick="scrollToSection('streak-section')">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">🔥</span>
+          <span id="quick-streak" class="text-3xl font-bold text-orange-700">--</span>
+        </div>
+        <p class="text-xs text-gray-600 font-medium">Série actuelle</p>
+      </div>
+
+      <div class="widget-compact rounded-xl p-4 shadow-lg border border-blue-200 hover:shadow-xl transition-shadow cursor-pointer" onclick="scrollToSection('entries-section')">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">📝</span>
+          <span id="quick-entries" class="text-3xl font-bold text-blue-700">--</span>
+        </div>
+        <p class="text-xs text-gray-600 font-medium">Total d'entrées</p>
+      </div>
     </div>
 
-    <!-- Stats Overview -->
-    <div class="grid md:grid-cols-4 gap-6 mb-8">
-      <div class="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl p-6 shadow-lg text-white transform hover:scale-105 transition-transform">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-emerald-100 text-sm mb-1">Total d'entrées</p>
-            <p id="total-entries" class="text-4xl font-bold">0</p>
+    <!-- Sections Réorganisables -->
+    <div id="sortable-sections" class="space-y-6">
+      
+      <!-- Section: Insights & Recommandations -->
+      <div class="section-card widget-compact rounded-2xl shadow-xl border border-emerald-200" data-section="insights" id="insights-section">
+        <div class="section-header p-5 sm:p-6 flex items-center justify-between cursor-pointer border-b border-gray-200" onclick="toggleSection(this)">
+          <div class="flex items-center gap-3">
+            <span class="drag-handle text-2xl">⋮⋮</span>
+            <span class="text-2xl sm:text-3xl">💡</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Insights & Recommandations</h2>
           </div>
-          <div class="text-5xl opacity-20">📊</div>
-        </div>
-      </div>
-
-      <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 shadow-lg text-white transform hover:scale-105 transition-transform">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-blue-100 text-sm mb-1">Humeur moyenne</p>
-            <p id="avg-mood" class="text-4xl font-bold">0/10</p>
+          <div class="flex items-center gap-3">
+            <button class="favorite-star text-2xl" onclick="toggleFavorite(event, 'insights')" title="Favoriser cette section">
+              ★
+            </button>
+            <svg class="toggle-icon w-6 h-6 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
           </div>
-          <div class="text-5xl opacity-20">😊</div>
         </div>
-      </div>
-
-      <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-6 shadow-lg text-white transform hover:scale-105 transition-transform">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-purple-100 text-sm mb-1">Sommeil moyen</p>
-            <p id="avg-sleep" class="text-4xl font-bold">0h</p>
+        <div class="section-content p-5 sm:p-6">
+          <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 border-l-4 border-emerald-500">
+              <p class="text-sm text-gray-600 mb-1">Meilleure humeur</p>
+              <p id="best-mood" class="text-lg font-bold text-emerald-700">--</p>
+            </div>
+            <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-lg p-4 border-l-4 border-red-500">
+              <p class="text-sm text-gray-600 mb-1">Humeur la plus basse</p>
+              <p id="worst-mood" class="text-lg font-bold text-red-700">--</p>
+            </div>
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border-l-4 border-blue-500">
+              <p class="text-sm text-gray-600 mb-1">Tendance</p>
+              <p id="mood-trend" class="text-lg font-bold text-blue-700">--</p>
+            </div>
           </div>
-          <div class="text-5xl opacity-20">💤</div>
-        </div>
-      </div>
-
-      <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-6 shadow-lg text-white transform hover:scale-105 transition-transform">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-orange-100 text-sm mb-1">Série actuelle</p>
-            <p id="current-streak" class="text-4xl font-bold">0 jours</p>
+          <div id="insights-text" class="p-4 bg-amber-50 rounded-lg border-l-4 border-amber-400">
+            <p class="text-gray-700">Chargement de vos insights personnalisés...</p>
           </div>
-          <div class="text-5xl opacity-20">🔥</div>
         </div>
       </div>
-    </div>
 
-    <!-- Insights Section -->
-    <div class="bg-white rounded-xl p-6 shadow-lg mb-8">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-        <span class="text-3xl mr-3">💡</span>
-        Insights & Tendances
-      </h3>
-      <div class="grid md:grid-cols-3 gap-4">
-        <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 border-l-4 border-emerald-500">
-          <p class="text-sm text-gray-600 mb-1">Meilleure humeur</p>
-          <p id="best-mood" class="text-xl font-bold text-emerald-700">--</p>
+      <!-- Section: Moments Positifs (Favoris) -->
+      <div class="section-card widget-compact rounded-2xl shadow-xl border border-yellow-200" data-section="positive" id="positive-section">
+        <div class="section-header p-5 sm:p-6 flex items-center justify-between cursor-pointer border-b border-gray-200" onclick="toggleSection(this)">
+          <div class="flex items-center gap-3">
+            <span class="drag-handle text-2xl">⋮⋮</span>
+            <span class="text-2xl sm:text-3xl">✨</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Moments Positifs</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="favorite-star text-2xl" onclick="toggleFavorite(event, 'positive')" title="Favoriser cette section">
+              ★
+            </button>
+            <svg class="toggle-icon w-6 h-6 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
         </div>
-        <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-lg p-4 border-l-4 border-red-500">
-          <p class="text-sm text-gray-600 mb-1">Humeur la plus basse</p>
-          <p id="worst-mood" class="text-xl font-bold text-red-700">--</p>
-        </div>
-        <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border-l-4 border-blue-500">
-          <p class="text-sm text-gray-600 mb-1">Tendance</p>
-          <p id="mood-trend" class="text-xl font-bold text-blue-700">--</p>
-        </div>
-      </div>
-      <div id="insights-text" class="mt-4 p-4 bg-amber-50 rounded-lg border-l-4 border-amber-400">
-        <p class="text-gray-700"></p>
-      </div>
-    </div>
-
-    <!-- Charts Section -->
-    <div class="grid lg:grid-cols-2 gap-8 mb-8">
-      <!-- Mood Chart -->
-      <div class="bg-white rounded-xl p-6 shadow-lg">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Évolution de l'humeur</h3>
-        <canvas id="moodChart" width="400" height="200"></canvas>
-      </div>
-
-      <!-- Sleep Chart -->
-      <div class="bg-white rounded-xl p-6 shadow-lg">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Heures de sommeil</h3>
-        <canvas id="sleepChart" width="400" height="200"></canvas>
-      </div>
-    </div>
-
-    <!-- Mood Distribution -->
-    <div class="bg-white rounded-xl p-6 shadow-lg mb-8">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-        <span class="text-3xl mr-3">📈</span>
-        Distribution des humeurs
-      </h3>
-      <p class="text-gray-600 mb-4">Fréquence de vos différents niveaux d'humeur</p>
-      <div id="mood-distribution" class="grid grid-cols-10 gap-2">
-        <!-- Mood bars will be generated here -->
-      </div>
-    </div>
-
-    <!-- Weekly Average -->
-    <div class="bg-white rounded-xl p-6 shadow-lg mb-8">
-      <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
-        <span class="text-3xl mr-3">📅</span>
-        Humeur par jour de la semaine
-      </h3>
-      <p class="text-gray-600 mb-4">Identifiez les jours où vous vous sentez le mieux</p>
-      <canvas id="weeklyChart" width="400" height="200"></canvas>
-    </div>
-
-    <!-- Nouveaux graphiques pour les catégories de suivi -->
-    <div class="grid lg:grid-cols-2 gap-8 mb-8">
-      <!-- Catégories les plus utilisées -->
-      <div class="bg-white rounded-xl p-6 shadow-lg">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Catégories de suivi utilisées</h3>
-        <canvas id="categoriesChart" width="400" height="200"></canvas>
-      </div>
-
-      <!-- Évolution de la conscience -->
-      <div class="bg-white rounded-xl p-6 shadow-lg">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Évolution de la conscience</h3>
-        <canvas id="consciousnessChart" width="400" height="200"></canvas>
-      </div>
-    </div>
-
-    <!-- Entries Navigation -->
-    <div class="bg-white rounded-xl p-6 shadow-lg">
-      <h2 class="text-2xl font-bold text-emerald-800 mb-6 text-center">Mes Entrées de Journal</h2>
-
-      <div class="max-w-3xl mx-auto bg-white/90 rounded-xl p-6 shadow-lg">
-        <div class="flex justify-between mb-4">
-          <button id="prevBtn" class="px-4 py-2 bg-emerald-700 text-white rounded hover:bg-emerald-600">Précédent</button>
-          <input type="date" id="datePicker" class="border rounded px-3 py-2" />
-          <button id="nextBtn" class="px-4 py-2 bg-emerald-700 text-white rounded hover:bg-emerald-600">Suivant</button>
-        </div>
-        <div id="entryDisplay" class="space-y-4">
-          <!-- Contenu des entrées affiché ici -->
-        </div>
-        <div class="mt-6 text-center">
-          <a href="index.html" class="text-emerald-700 hover:underline">Retour à l'accueil</a>
+        <div class="section-content p-5 sm:p-6">
+          <div id="positive-moments" class="space-y-4">
+            <p class="text-gray-500 text-center">Chargement de vos moments positifs...</p>
+          </div>
         </div>
       </div>
+
+      <!-- Section: Graphiques & Tendances -->
+      <div class="section-card widget-compact rounded-2xl shadow-xl border border-blue-200" data-section="charts" id="charts-section">
+        <div class="section-header p-5 sm:p-6 flex items-center justify-between cursor-pointer border-b border-gray-200" onclick="toggleSection(this)">
+          <div class="flex items-center gap-3">
+            <span class="drag-handle text-2xl">⋮⋮</span>
+            <span class="text-2xl sm:text-3xl">📈</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Graphiques & Tendances</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="favorite-star text-2xl" onclick="toggleFavorite(event, 'charts')" title="Favoriser cette section">
+              ★
+            </button>
+            <svg class="toggle-icon w-6 h-6 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="section-content p-5 sm:p-6">
+          <div class="grid lg:grid-cols-2 gap-6 mb-6">
+            <div class="bg-white rounded-xl p-4 shadow">
+              <h3 class="text-base font-semibold text-gray-800 mb-4">Évolution de l'humeur</h3>
+              <canvas id="moodChart" width="400" height="200"></canvas>
+            </div>
+            <div class="bg-white rounded-xl p-4 shadow">
+              <h3 class="text-base font-semibold text-gray-800 mb-4">Heures de sommeil</h3>
+              <canvas id="sleepChart" width="400" height="200"></canvas>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow mb-6">
+            <h3 class="text-base font-semibold text-gray-800 mb-4">Humeur par jour de la semaine</h3>
+            <canvas id="weeklyChart" width="400" height="200"></canvas>
+          </div>
+          <div class="bg-white rounded-xl p-4 shadow">
+            <h3 class="text-base font-semibold text-gray-800 mb-4">Distribution des humeurs</h3>
+            <div id="mood-distribution" class="grid grid-cols-10 gap-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Série & Régularité -->
+      <div class="section-card widget-compact rounded-2xl shadow-xl border border-orange-200" data-section="streak" id="streak-section">
+        <div class="section-header p-5 sm:p-6 flex items-center justify-between cursor-pointer border-b border-gray-200" onclick="toggleSection(this)">
+          <div class="flex items-center gap-3">
+            <span class="drag-handle text-2xl">⋮⋮</span>
+            <span class="text-2xl sm:text-3xl">🔥</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Ma Série & Régularité</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="favorite-star text-2xl" onclick="toggleFavorite(event, 'streak')" title="Favoriser cette section">
+              ★
+            </button>
+            <svg class="toggle-icon w-6 h-6 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="section-content p-5 sm:p-6">
+          <div class="text-center mb-6">
+            <div class="inline-block bg-gradient-to-r from-orange-500 to-red-500 rounded-2xl p-8 text-white shadow-xl">
+              <p class="text-sm opacity-90 mb-2">Série actuelle</p>
+              <p id="current-streak" class="text-5xl font-bold">0 jours</p>
+            </div>
+          </div>
+          <div id="streak-details" class="space-y-3">
+            <!-- Sera rempli dynamiquement -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Sommeil & Habitudes -->
+      <div class="section-card widget-compact rounded-2xl shadow-xl border border-purple-200" data-section="sleep" id="sleep-section">
+        <div class="section-header p-5 sm:p-6 flex items-center justify-between cursor-pointer border-b border-gray-200" onclick="toggleSection(this)">
+          <div class="flex items-center gap-3">
+            <span class="drag-handle text-2xl">⋮⋮</span>
+            <span class="text-2xl sm:text-3xl">💤</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Sommeil & Habitudes</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="favorite-star text-2xl" onclick="toggleFavorite(event, 'sleep')" title="Favoriser cette section">
+              ★
+            </button>
+            <svg class="toggle-icon w-6 h-6 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="section-content p-5 sm:p-6">
+          <div class="grid md:grid-cols-2 gap-4 mb-6">
+            <div class="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-500">
+              <p class="text-sm text-gray-600 mb-1">Sommeil moyen</p>
+              <p id="avg-sleep" class="text-3xl font-bold text-purple-700">0h</p>
+            </div>
+            <div class="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-500">
+              <p class="text-sm text-gray-600 mb-1">Qualité du sommeil</p>
+              <p id="sleep-quality" class="text-lg font-bold text-blue-700">--</p>
+            </div>
+          </div>
+          <div id="sleep-insights" class="p-4 bg-purple-50 rounded-lg">
+            <!-- Sera rempli dynamiquement -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Mes Entrées de Journal -->
+      <div class="section-card widget-compact rounded-2xl shadow-xl border border-emerald-200" data-section="entries" id="entries-section">
+        <div class="section-header p-5 sm:p-6 flex items-center justify-between cursor-pointer border-b border-gray-200" onclick="toggleSection(this)">
+          <div class="flex items-center gap-3">
+            <span class="drag-handle text-2xl">⋮⋮</span>
+            <span class="text-2xl sm:text-3xl">📖</span>
+            <h2 class="text-xl sm:text-2xl font-bold text-gray-800">Mes Entrées de Journal</h2>
+          </div>
+          <div class="flex items-center gap-3">
+            <button class="favorite-star text-2xl" onclick="toggleFavorite(event, 'entries')" title="Favoriser cette section">
+              ★
+            </button>
+            <svg class="toggle-icon w-6 h-6 text-gray-600 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </div>
+        </div>
+        <div class="section-content p-5 sm:p-6">
+          <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+            <button id="prevBtn" class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors shadow-md font-medium">
+              ← Précédent
+            </button>
+            <input type="date" id="datePicker" class="border-2 border-emerald-300 rounded-lg px-4 py-3 focus:border-emerald-500 focus:outline-none" />
+            <button id="nextBtn" class="px-6 py-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors shadow-md font-medium">
+              Suivant →
+            </button>
+          </div>
+          <div id="entryDisplay" class="space-y-4">
+            <p class="text-center text-gray-500">Chargement de vos entrées...</p>
+          </div>
+        </div>
+      </div>
+
     </div>
+  </div>
 
-    <script>
-      let entries = [];
-      let currentIndex = 0;
-      let moodChart = null;
-      let sleepChart = null;
-      let categoriesChart = null;
-      let consciousnessChart = null;
-      let weeklyChart = null;
+  <script>
+    let entries = [];
+    let filteredEntries = [];
+    let currentIndex = 0;
+    let moodChart = null;
+    let sleepChart = null;
+    let weeklyChart = null;
+    let userPreferences = {
+      sectionOrder: ['insights', 'positive', 'charts', 'streak', 'sleep', 'entries'],
+      collapsedSections: [],
+      favoriteSections: [],
+      favoriteEntries: []
+    };
 
-      // Vérifier la session avant de permettre l'accès
-      async function checkSession() {
-        try {
-          const response = await fetch('/api/session');
-          const data = await response.json();
+    // ========== GESTION DES PRÉFÉRENCES UTILISATEUR ==========
+    
+    function loadPreferences() {
+      const saved = localStorage.getItem('moody-view-preferences');
+      if (saved) {
+        userPreferences = { ...userPreferences, ...JSON.parse(saved) };
+      }
+      applyPreferences();
+    }
 
-          if (!data.authenticated) {
-            console.log('❌ Non connecté, redirection vers login');
-            window.location.href = '/index.html?login';
-          } else {
-            console.log(`✅ Connecté en tant que: ${data.user}`);
-          }
-        } catch (err) {
-          console.error('❌ Erreur de vérification de session:', err);
+    function savePreferences() {
+      localStorage.setItem('moody-view-preferences', JSON.stringify(userPreferences));
+    }
+
+    function applyPreferences() {
+      // Appliquer l'ordre des sections
+      const container = document.getElementById('sortable-sections');
+      userPreferences.sectionOrder.forEach(sectionId => {
+        const section = document.querySelector(`[data-section="${sectionId}"]`);
+        if (section) {
+          container.appendChild(section);
+        }
+      });
+
+      // Appliquer les sections réduites
+      userPreferences.collapsedSections.forEach(sectionId => {
+        const section = document.querySelector(`[data-section="${sectionId}"]`);
+        if (section) {
+          section.classList.add('collapsed');
+          const icon = section.querySelector('.toggle-icon');
+          if (icon) icon.style.transform = 'rotate(-90deg)';
+        }
+      });
+
+      // Appliquer les favoris
+      userPreferences.favoriteSections.forEach(sectionId => {
+        const section = document.querySelector(`[data-section="${sectionId}"]`);
+        if (section) {
+          const star = section.querySelector('.favorite-star');
+          if (star) star.classList.add('active');
+        }
+      });
+    }
+
+    // ========== GESTION DES SECTIONS ==========
+    
+    function toggleSection(header) {
+      const section = header.parentElement;
+      const icon = header.querySelector('.toggle-icon');
+      const sectionId = section.dataset.section;
+      
+      section.classList.toggle('collapsed');
+      
+      if (section.classList.contains('collapsed')) {
+        icon.style.transform = 'rotate(-90deg)';
+        if (!userPreferences.collapsedSections.includes(sectionId)) {
+          userPreferences.collapsedSections.push(sectionId);
+        }
+      } else {
+        icon.style.transform = 'rotate(0deg)';
+        userPreferences.collapsedSections = userPreferences.collapsedSections.filter(id => id !== sectionId);
+      }
+      
+      savePreferences();
+    }
+
+    function toggleFavorite(event, sectionId) {
+      event.stopPropagation();
+      const star = event.target;
+      star.classList.toggle('active');
+      
+      if (star.classList.contains('active')) {
+        if (!userPreferences.favoriteSections.includes(sectionId)) {
+          userPreferences.favoriteSections.push(sectionId);
+        }
+      } else {
+        userPreferences.favoriteSections = userPreferences.favoriteSections.filter(id => id !== sectionId);
+      }
+      
+      savePreferences();
+    }
+
+    function scrollToSection(sectionId) {
+      const section = document.getElementById(sectionId);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Ouvrir la section si elle est réduite
+        if (section.classList.contains('collapsed')) {
+          const header = section.querySelector('.section-header');
+          if (header) toggleSection(header);
+        }
+      }
+    }
+
+    // ========== DRAG & DROP ==========
+    
+    function initDragAndDrop() {
+      const container = document.getElementById('sortable-sections');
+      new Sortable(container, {
+        animation: 150,
+        handle: '.drag-handle',
+        ghostClass: 'opacity-50',
+        onEnd: function(evt) {
+          // Mettre à jour l'ordre
+          const sections = Array.from(container.children);
+          userPreferences.sectionOrder = sections.map(section => section.dataset.section);
+          savePreferences();
+        }
+      });
+    }
+
+    // ========== SESSION & DONNÉES ==========
+    
+    async function checkSession() {
+      try {
+        const response = await fetch('/api/session');
+        const data = await response.json();
+
+        if (!data.authenticated) {
+          console.log('❌ Non connecté, redirection vers login');
           window.location.href = '/index.html?login';
+        } else {
+          console.log(`✅ Connecté en tant que: ${data.user}`);
+          updateGreeting(data.user);
+        }
+      } catch (err) {
+        console.error('❌ Erreur de vérification de session:', err);
+        window.location.href = '/index.html?login';
+      }
+    }
+
+    function updateGreeting(username) {
+      const hour = new Date().getHours();
+      let greeting = 'Bonsoir';
+      if (hour < 12) greeting = 'Bonjour';
+      else if (hour < 18) greeting = 'Bon après-midi';
+      
+      document.getElementById('greeting-text').textContent = `${greeting}, ${username} !`;
+    }
+
+    // ========== RECHERCHE & FILTRES ==========
+    
+    let searchTimeout;
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        applyFilters();
+      }, 300);
+    });
+
+    document.getElementById('filter-date-start').addEventListener('change', applyFilters);
+    document.getElementById('filter-date-end').addEventListener('change', applyFilters);
+
+    document.getElementById('clear-filters').addEventListener('click', () => {
+      document.getElementById('search-input').value = '';
+      document.getElementById('filter-date-start').value = '';
+      document.getElementById('filter-date-end').value = '';
+      applyFilters();
+    });
+
+    function applyFilters() {
+      const searchTerm = document.getElementById('search-input').value.toLowerCase();
+      const dateStart = document.getElementById('filter-date-start').value;
+      const dateEnd = document.getElementById('filter-date-end').value;
+
+      filteredEntries = entries.filter(entry => {
+        // Filtre de recherche
+        if (searchTerm) {
+          const searchableText = JSON.stringify(entry).toLowerCase();
+          if (!searchableText.includes(searchTerm)) return false;
+        }
+
+        // Filtre de date
+        if (dateStart && entry.date < dateStart) return false;
+        if (dateEnd && entry.date > dateEnd) return false;
+
+        return true;
+      });
+
+      // Mettre à jour l'affichage
+      updateAllVisualizationsFeedback(filteredEntries);
+      if (filteredEntries.length > 0) {
+        currentIndex = filteredEntries.length - 1;
+        displayEntry(filteredEntries[currentIndex]);
+        document.getElementById('datePicker').value = filteredEntries[currentIndex].date;
+      } else {
+        document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500 py-8">Aucune entrée ne correspond à votre recherche.</p>';
+      }
+    }
+
+    function updateAllVisualizationsFeedback(dataToShow) {
+      const stats = calculateStats(dataToShow);
+      updateStats(dataToShow);
+      updateWidgets(stats);
+      updatePersonalizedMessage(dataToShow, stats);
+      createMoodChart(dataToShow);
+      createSleepChart(dataToShow);
+      createWeeklyChart(dataToShow);
+      createMoodDistribution(dataToShow);
+      updatePositiveMoments(dataToShow);
+      updateStreakSection(dataToShow, stats);
+      updateSleepSection(dataToShow, stats);
+    }
+
+    // ========== CALCULS & STATISTIQUES ==========
+    
+    function calculateStats(entries) {
+      if (entries.length === 0) return {
+        total: 0,
+        avgMood: 0,
+        avgSleep: 0,
+        streak: 0
+      };
+
+      const total = entries.length;
+      const moods = entries.map(e => parseInt(e.mood) || 0).filter(m => m > 0);
+      const sleeps = entries.map(e => parseFloat(e.sleep) || 0).filter(s => s > 0);
+
+      const avgMood = moods.length > 0 ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1) : 0;
+      const avgSleep = sleeps.length > 0 ? (sleeps.reduce((a, b) => a + b, 0) / sleeps.length).toFixed(1) : 0;
+
+      // Calculer la série
+      let streak = 0;
+      const today = new Date();
+      const sortedEntries = [...entries].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      for (let i = 0; i < sortedEntries.length; i++) {
+        const entryDate = new Date(sortedEntries[i].date);
+        const daysDiff = Math.floor((today - entryDate) / (1000 * 60 * 60 * 24));
+
+        if (daysDiff === i) {
+          streak++;
+        } else {
+          break;
         }
       }
 
-      // Calculer les statistiques
-      function calculateStats(entries) {
-        if (entries.length === 0) return {
-          total: 0,
-          avgMood: 0,
-          avgSleep: 0,
-          streak: 0,
-          categoryUsage: {},
-          consciousnessEvolution: []
-        };
+      return { total, avgMood, avgSleep, streak };
+    }
 
-        const total = entries.length;
+    function updateWidgets(stats) {
+      document.getElementById('quick-mood').textContent = stats.avgMood > 0 ? `${stats.avgMood}/10` : '--';
+      document.getElementById('quick-sleep').textContent = stats.avgSleep > 0 ? `${stats.avgSleep}h` : '--';
+      document.getElementById('quick-streak').textContent = stats.streak > 0 ? `${stats.streak}j` : '--';
+      document.getElementById('quick-entries').textContent = stats.total;
+    }
+
+    function updateStats(entries) {
+      const stats = calculateStats(entries);
+      document.getElementById('current-streak').textContent = `${stats.streak} jours`;
+      document.getElementById('avg-sleep').textContent = `${stats.avgSleep}h`;
+      
+      // Mettre à jour les insights
+      if (entries.length > 0) {
         const moods = entries.map(e => parseInt(e.mood) || 0).filter(m => m > 0);
-        const sleeps = entries.map(e => parseFloat(e.sleep) || 0).filter(s => s > 0);
-
-        const avgMood = moods.length > 0 ? (moods.reduce((a, b) => a + b, 0) / moods.length).toFixed(1) : 0;
-        const avgSleep = sleeps.length > 0 ? (sleeps.reduce((a, b) => a + b, 0) / sleeps.length).toFixed(1) : 0;
-
-        // Calculer la série actuelle (jours consécutifs)
-        let streak = 0;
-        const today = new Date();
-        const sortedEntries = entries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        for (let i = 0; i < sortedEntries.length; i++) {
-          const entryDate = new Date(sortedEntries[i].date);
-          const daysDiff = Math.floor((today - entryDate) / (1000 * 60 * 60 * 24));
-
-          if (daysDiff === i) {
-            streak++;
-          } else {
-            break;
-          }
-        }
-
-        // Calculer l'utilisation des catégories
-        const categoryUsage = {};
-        entries.forEach(entry => {
-          if (entry.trackingCategories) {
-            entry.trackingCategories.forEach(category => {
-              categoryUsage[category] = (categoryUsage[category] || 0) + 1;
-            });
-          }
-        });
-
-        // Calculer l'évolution de la conscience (basé sur la longueur des notes)
-        const consciousnessEvolution = entries.map((entry, index) => {
-          const totalLength = (entry.extraNotes?.length || 0) +
-                           (entry.selfDiscovery?.length || 0) +
-                           (entry.thoughtPatterns?.length || 0) +
-                           (entry.challengesReaction?.length || 0);
-          return {
-            x: index,
-            y: totalLength / 100 // Normalisé
-          };
-        });
-
-        return { total, avgMood, avgSleep, streak, categoryUsage, consciousnessEvolution };
-      }
-
-      // Mettre à jour les statistiques
-      function updateStats(entries) {
-        const stats = calculateStats(entries);
-
-        document.getElementById('total-entries').textContent = stats.total;
-        document.getElementById('avg-mood').textContent = `${stats.avgMood}/10`;
-        document.getElementById('avg-sleep').textContent = `${stats.avgSleep}h`;
-        document.getElementById('current-streak').textContent = `${stats.streak} jours`;
         
-        // Mettre à jour les insights
-        if (entries.length > 0) {
-          const moods = entries.map(e => parseInt(e.mood) || 0).filter(m => m > 0);
+        if (moods.length > 0) {
+          const bestMood = Math.max(...moods);
+          const worstMood = Math.min(...moods);
           
-          if (moods.length > 0) {
-            const bestMood = Math.max(...moods);
-            const worstMood = Math.min(...moods);
+          const bestEntry = entries.find(e => parseInt(e.mood) === bestMood);
+          const worstEntry = entries.find(e => parseInt(e.mood) === worstMood);
+          
+          document.getElementById('best-mood').textContent = `${bestMood}/10 (${new Date(bestEntry.date).toLocaleDateString('fr-FR')})`;
+          document.getElementById('worst-mood').textContent = `${worstMood}/10 (${new Date(worstEntry.date).toLocaleDateString('fr-FR')})`;
+          
+          // Tendance
+          if (moods.length >= 7) {
+            const recent = moods.slice(-7);
+            const previous = moods.slice(-14, -7);
             
-            // Trouver les dates correspondantes
-            const bestEntry = entries.find(e => parseInt(e.mood) === bestMood);
-            const worstEntry = entries.find(e => parseInt(e.mood) === worstMood);
+            const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
+            const previousAvg = previous.length > 0 ? previous.reduce((a, b) => a + b, 0) / previous.length : recentAvg;
             
-            document.getElementById('best-mood').textContent = `${bestMood}/10 (${new Date(bestEntry.date).toLocaleDateString('fr-FR')})`;
-            document.getElementById('worst-mood').textContent = `${worstMood}/10 (${new Date(worstEntry.date).toLocaleDateString('fr-FR')})`;
+            const diff = recentAvg - previousAvg;
+            let trendText = '';
             
-            // Calculer la tendance (7 derniers jours vs 7 jours précédents)
-            if (moods.length >= 7) {
-              const recent = moods.slice(-7);
-              const previous = moods.slice(-14, -7);
-              
-              const recentAvg = recent.reduce((a, b) => a + b, 0) / recent.length;
-              const previousAvg = previous.length > 0 ? previous.reduce((a, b) => a + b, 0) / previous.length : recentAvg;
-              
-              const diff = recentAvg - previousAvg;
-              let trendText = '';
-              let trendEmoji = '';
-              
-              if (diff > 0.5) {
-                trendText = '↗️ En hausse';
-                trendEmoji = '📈';
-              } else if (diff < -0.5) {
-                trendText = '↘️ En baisse';
-                trendEmoji = '📉';
-              } else {
-                trendText = '→ Stable';
-                trendEmoji = '➡️';
-              }
-              
-              document.getElementById('mood-trend').innerHTML = `${trendEmoji} ${trendText}`;
-              
-              // Générer un insight personnalisé
-              generateInsight(stats, diff, entries);
+            if (diff > 0.5) {
+              trendText = '↗️ En amélioration';
+            } else if (diff < -0.5) {
+              trendText = '↘️ En baisse';
             } else {
-              document.getElementById('mood-trend').textContent = '→ Pas assez de données';
-              document.getElementById('insights-text').innerHTML = '<p class="text-gray-700">Continuez à tenir votre journal pour obtenir des insights personnalisés !</p>';
+              trendText = '→ Stable';
             }
+            
+            document.getElementById('mood-trend').textContent = trendText;
+            generateInsight(stats, diff, entries);
+          } else {
+            document.getElementById('mood-trend').textContent = '→ Pas assez de données';
+            document.getElementById('insights-text').innerHTML = '<p class="text-gray-700">Continuez à tenir votre journal pour obtenir des insights personnalisés ! 💪</p>';
           }
+        }
+      }
+    }
+
+    function generateInsight(stats, moodTrend, entries) {
+      const insightsContainer = document.getElementById('insights-text');
+      let insights = [];
+      let recommendations = [];
+      
+      // Analyser
+      const recentEntries = entries.slice(-7);
+      const moodValues = recentEntries.map(e => parseInt(e.mood) || 0);
+      const variance = calculateVariance(moodValues);
+      
+      // Tendance
+      if (moodTrend > 0.5) {
+        insights.push(`✨ <strong>Excellente progression !</strong> Votre humeur s'améliore.`);
+        recommendations.push(`Identifiez ce qui contribue à cette amélioration.`);
+      } else if (moodTrend < -0.5) {
+        insights.push(`💙 <strong>Période difficile détectée</strong>. Vous n'êtes pas seul·e.`);
+        recommendations.push(`Parlez à un proche ou un professionnel de ce que vous vivez.`);
+      } else {
+        insights.push(`➡️ <strong>Humeur stable</strong>, c'est une constance positive.`);
+      }
+      
+      // Sommeil
+      if (stats.avgSleep > 0) {
+        if (stats.avgSleep < 6) {
+          insights.push(`😴 <strong>Sommeil insuffisant</strong> (${stats.avgSleep}h/nuit).`);
+          recommendations.push(`Priorité : augmenter votre temps de sommeil.`);
+        } else if (stats.avgSleep >= 7 && stats.avgSleep <= 9) {
+          insights.push(`✅ <strong>Sommeil optimal</strong> (${stats.avgSleep}h).`);
         }
       }
       
-      // Générer des insights personnalisés avancés
-      function generateInsight(stats, moodTrend, entries) {
-        const insightsContainer = document.getElementById('insights-text');
-        let insights = [];
-        let recommendations = [];
-        
-        // Analyser les patterns d'humeur
-        const recentEntries = entries.slice(-7);
-        const moodValues = recentEntries.map(e => parseInt(e.mood) || 0);
-        const variance = calculateVariance(moodValues);
-        
-        // 1. Insight sur la tendance avec recommandations
-        if (moodTrend > 0.5) {
-          insights.push(`✨ <strong>Excellente progression !</strong> Votre humeur s'améliore (+${moodTrend.toFixed(1)} pts).`);
-          recommendations.push(`Identifiez ce qui contribue à cette amélioration pour le reproduire.`);
-        } else if (moodTrend < -0.5) {
-          insights.push(`💙 <strong>Période difficile détectée</strong> (-${Math.abs(moodTrend).toFixed(1)} pts).`);
-          recommendations.push(`Considérez parler à un proche ou un professionnel de ce que vous vivez.`);
-          recommendations.push(`Revisitez vos stratégies d'adaptation qui ont fonctionné par le passé.`);
-        } else {
-          insights.push(`➡️ <strong>Humeur stable</strong>, c'est une forme de constance positive.`);
-        }
-        
-        // 2. Analyse de la variabilité émotionnelle
-        if (variance > 6) {
-          insights.push(`📊 <strong>Variations émotionnelles importantes</strong> détectées.`);
-          recommendations.push(`Essayez d'identifier les déclencheurs de ces variations dans vos entrées.`);
-        } else if (variance < 2 && stats.avgMood > 5) {
-          insights.push(`🎯 <strong>Grande stabilité émotionnelle</strong>, continuez vos bonnes pratiques !`);
-        }
-        
-        // 3. Insight sur le sommeil avec corrélations
-        if (stats.avgSleep > 0) {
-          const sleepMoodCorrelation = analyzeSleepMoodCorrelation(entries);
-          if (stats.avgSleep < 6) {
-            insights.push(`😴 <strong>Sommeil insuffisant</strong> (${stats.avgSleep}h/nuit en moyenne).`);
-            recommendations.push(`Établissez une routine de coucher fixe et évitez les écrans 1h avant de dormir.`);
-            if (sleepMoodCorrelation > 0.3) {
-              recommendations.push(`⚠️ Votre sommeil impacte directement votre humeur - priorité absolue !`);
-            }
-          } else if (stats.avgSleep >= 7 && stats.avgSleep <= 9) {
-            insights.push(`✅ <strong>Sommeil optimal</strong> (${stats.avgSleep}h) - excellent pour le bien-être !`);
-          } else if (stats.avgSleep > 9) {
-            insights.push(`😮 <strong>Sommeil important</strong> (${stats.avgSleep}h). Si c'est inhabituel, consultez un professionnel.`);
-          }
-        }
-        
-        // 4. Analyse des catégories de suivi
-        const trackingInsights = analyzeTrackingCategories(entries);
-        if (trackingInsights.length > 0) {
-          insights.push(...trackingInsights.map(i => `📊 ${i}`));
-        }
-        
-        // 5. Insight sur la régularité
-        if (stats.streak >= 14) {
-          insights.push(`🔥 <strong>Série exceptionnelle !</strong> ${stats.streak} jours consécutifs - vous êtes un champion de la régularité !`);
-        } else if (stats.streak >= 7) {
-          insights.push(`🔥 <strong>Belle série !</strong> ${stats.streak} jours consécutifs. La constance paie !`);
-        } else if (stats.streak >= 3) {
-          insights.push(`👍 <strong>Bonne lancée</strong> avec ${stats.streak} jours consécutifs !`);
-          recommendations.push(`Continuez sur cette voie pour développer une habitude durable.`);
-        } else if (stats.streak === 0) {
-          recommendations.push(`📝 Essayez de tenir votre journal quotidiennement, même brièvement.`);
-        }
-        
-        // 6. Insight sur la moyenne d'humeur
-        if (stats.avgMood >= 7.5) {
-          insights.push(`😊 <strong>Humeur excellente</strong> (${stats.avgMood}/10) ! Profitez de cette belle énergie.`);
-        } else if (stats.avgMood >= 6 && stats.avgMood < 7.5) {
-          insights.push(`🙂 <strong>Humeur globalement positive</strong> (${stats.avgMood}/10).`);
-        } else if (stats.avgMood >= 4 && stats.avgMood < 6) {
-          insights.push(`😐 <strong>Humeur mitigée</strong> (${stats.avgMood}/10).`);
-          recommendations.push(`Identifiez les moments positifs de vos journées et amplifiez-les.`);
-        } else {
-          insights.push(`💙 <strong>Humeur basse</strong> (${stats.avgMood}/10). Votre bien-être est important.`);
-          recommendations.push(`🆘 N'hésitez vraiment pas à chercher du soutien professionnel.`);
-          recommendations.push(`Contactez un proche de confiance ou utilisez notre chat communautaire.`);
-        }
-        
-        // 7. Patterns de jour de la semaine
-        const weekdayPattern = analyzeWeekdayPatterns(entries);
-        if (weekdayPattern.best && weekdayPattern.worst && weekdayPattern.best !== weekdayPattern.worst) {
-          insights.push(`📅 Pattern détecté : votre humeur est meilleure le <strong>${weekdayPattern.best}</strong>, plus difficile le <strong>${weekdayPattern.worst}</strong>.`);
-          recommendations.push(`Planifiez des activités ressourçantes le ${weekdayPattern.worst}.`);
-        }
-        
-        // 8. Pratique de la gratitude
-        const gratitudePractice = analyzeGratitudePractice(entries);
-        if (gratitudePractice.consistency > 0.7) {
-          insights.push(`🙏 <strong>Excellente pratique de la gratitude</strong> (${Math.round(gratitudePractice.consistency * 100)}% des entrées).`);
-        } else if (gratitudePractice.consistency < 0.3 && gratitudePractice.consistency > 0) {
-          recommendations.push(`💡 Essayez de pratiquer la gratitude plus régulièrement - effet prouvé sur le bien-être.`);
-        }
-        
-        // Formater l'affichage
-        let html = '';
-        if (insights.length > 0) {
-          html += `<div class="mb-3"><p class="text-gray-800 leading-relaxed">${insights.join(' ')}</p></div>`;
-        }
-        
-        if (recommendations.length > 0) {
-          html += `
-            <div class="mt-4 pt-4 border-t border-amber-200">
-              <p class="font-semibold text-amber-900 mb-2">💡 Recommandations personnalisées :</p>
-              <ul class="space-y-1 text-sm text-gray-700">
-                ${recommendations.map(r => `<li class="flex items-start"><span class="mr-2">→</span><span>${r}</span></li>`).join('')}
-              </ul>
-            </div>
-          `;
-        }
-        
-        insightsContainer.innerHTML = html || '<p class="text-gray-700">Continuez à tenir votre journal pour obtenir des insights personnalisés !</p>';
-      }
-
-      // Calculer la variance (stabilité émotionnelle)
-      function calculateVariance(values) {
-        if (values.length === 0) return 0;
-        const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
-        const squareDiffs = values.map(val => Math.pow(val - mean, 2));
-        return Math.sqrt(squareDiffs.reduce((sum, val) => sum + val, 0) / values.length);
-      }
-
-      // Analyser la corrélation sommeil-humeur
-      function analyzeSleepMoodCorrelation(entries) {
-        const validEntries = entries.filter(e => e.sleep && e.mood);
-        if (validEntries.length < 5) return 0;
-        
-        const sleepValues = validEntries.map(e => parseFloat(e.sleep));
-        const moodValues = validEntries.map(e => parseInt(e.mood));
-        
-        const meanSleep = sleepValues.reduce((a, b) => a + b, 0) / sleepValues.length;
-        const meanMood = moodValues.reduce((a, b) => a + b, 0) / moodValues.length;
-        
-        let correlation = 0;
-        let sleepVariance = 0;
-        let moodVariance = 0;
-        
-        for (let i = 0; i < validEntries.length; i++) {
-          const sleepDiff = sleepValues[i] - meanSleep;
-          const moodDiff = moodValues[i] - meanMood;
-          correlation += sleepDiff * moodDiff;
-          sleepVariance += sleepDiff * sleepDiff;
-          moodVariance += moodDiff * moodDiff;
-        }
-        
-        return correlation / Math.sqrt(sleepVariance * moodVariance) || 0;
-      }
-
-      // Analyser les patterns par jour de la semaine
-      function analyzeWeekdayPatterns(entries) {
-        const weekdays = {};
-        const dayNames = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
-        
-        entries.forEach(entry => {
-          if (!entry.date || !entry.mood) return;
-          const day = new Date(entry.date).getDay();
-          const dayName = dayNames[day];
-          if (!weekdays[dayName]) {
-            weekdays[dayName] = { total: 0, count: 0 };
-          }
-          weekdays[dayName].total += parseInt(entry.mood);
-          weekdays[dayName].count++;
-        });
-        
-        let bestDay = null;
-        let worstDay = null;
-        let bestAvg = 0;
-        let worstAvg = 10;
-        
-        for (const [day, data] of Object.entries(weekdays)) {
-          if (data.count < 2) continue;
-          const avg = data.total / data.count;
-          if (avg > bestAvg) {
-            bestAvg = avg;
-            bestDay = day;
-          }
-          if (avg < worstAvg) {
-            worstAvg = avg;
-            worstDay = day;
-          }
-        }
-        
-        return { best: bestDay, worst: worstDay };
-      }
-
-      // Analyser la pratique de la gratitude
-      function analyzeGratitudePractice(entries) {
-        let count = 0;
-        entries.forEach(entry => {
-          if (!entry) return;
-          
-          // Vérifier gratitude ou positiveElements (compatibilité)
-          const gratitudeArray = entry.gratitude || entry.positiveElements || [];
-          if (Array.isArray(gratitudeArray) && gratitudeArray.filter(g => g && g.trim()).length > 0) {
-            count++;
-          }
-        });
-        return { consistency: entries.length > 0 ? count / entries.length : 0 };
-      }
-
-      // Analyser les catégories de suivi
-      function analyzeTrackingCategories(entries) {
-        const insights = [];
-        const categoryCounts = {};
-        
-        // Compter les utilisations de chaque catégorie
-        entries.forEach(entry => {
-          if (entry.trackingCategories && Array.isArray(entry.trackingCategories)) {
-            entry.trackingCategories.forEach(cat => {
-              categoryCounts[cat] = (categoryCounts[cat] || 0) + 1;
-            });
-          }
-        });
-        
-        // Analyser les données de suivi spécifiques
-        const recentEntries = entries.slice(-7);
-        
-        // Addiction
-        if (categoryCounts['addiction']) {
-          const addictionData = recentEntries.filter(e => e && e.trackingData && e.trackingData.addiction);
-          if (addictionData.length > 0) {
-            const cravingsValues = addictionData
-              .map(e => {
-                try {
-                  return parseFloat(e.trackingData.addiction['addiction-cravings']) || 0;
-                } catch (err) {
-                  return 0;
-                }
-              })
-              .filter(v => v > 0);
-            
-            if (cravingsValues.length > 0) {
-              const avgCravings = cravingsValues.reduce((a, b) => a + b, 0) / cravingsValues.length;
-              
-              if (avgCravings <= 3) {
-                insights.push(`<strong>Addictions :</strong> Envies faibles (${avgCravings.toFixed(1)}/10) - excellent contrôle ! ⚠️✅`);
-              } else if (avgCravings <= 6) {
-                insights.push(`<strong>Addictions :</strong> Envies modérées (${avgCravings.toFixed(1)}/10) - restez vigilant. ⚠️`);
-              } else {
-                insights.push(`<strong>Addictions :</strong> Envies intenses (${avgCravings.toFixed(1)}/10) - cherchez du soutien. ⚠️🆘`);
-              }
-            }
-          }
-        }
-        
-        // Santé mentale
-        if (categoryCounts['mental-health']) {
-          const mentalData = recentEntries.filter(e => e && e.trackingData && e.trackingData['mental-health']);
-          if (mentalData.length > 0) {
-            const anxietyValues = mentalData
-              .map(e => {
-                try {
-                  return parseFloat(e.trackingData['mental-health']['mental-anxiety']) || 0;
-                } catch (err) {
-                  return 0;
-                }
-              })
-              .filter(v => v > 0);
-            
-            if (anxietyValues.length > 0) {
-              const avgAnxiety = anxietyValues.reduce((a, b) => a + b, 0) / anxietyValues.length;
-              
-              if (avgAnxiety > 7) {
-                insights.push(`<strong>Santé mentale :</strong> Anxiété élevée (${avgAnxiety.toFixed(1)}/10). Considérez des techniques de relaxation. 🧠`);
-              } else if (avgAnxiety <= 4) {
-                insights.push(`<strong>Santé mentale :</strong> Anxiété bien gérée (${avgAnxiety.toFixed(1)}/10). 🧠✅`);
-              }
-            }
-          }
-        }
-        
-        return insights;
-      }
-
-      // Créer le graphique d'humeur
-      function createMoodChart(entries) {
-        const ctx = document.getElementById('moodChart').getContext('2d');
-
-        if (moodChart) {
-          moodChart.destroy();
-        }
-
-        const sortedEntries = entries.sort((a, b) => new Date(a.date) - new Date(b.date));
-        const labels = sortedEntries.map(e => new Date(e.date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }));
-        const moodData = sortedEntries.map(e => parseInt(e.mood) || 0);
-
-        moodChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Humeur (/10)',
-              data: moodData,
-              borderColor: '#10b981',
-              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              tension: 0.4,
-              fill: true
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 10,
-                ticks: {
-                  stepSize: 1
-                }
-              }
-            },
-            plugins: {
-              legend: {
-                display: false
-              }
-            }
-          }
-        });
-      }
-
-      // Créer le graphique de sommeil
-      function createSleepChart(entries) {
-        const ctx = document.getElementById('sleepChart').getContext('2d');
-
-        if (sleepChart) {
-          sleepChart.destroy();
-        }
-
-        const sortedEntries = entries.sort((a, b) => new Date(a.date) - new Date(b.date));
-        const labels = sortedEntries.map(e => new Date(e.date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }));
-        const sleepData = sortedEntries.map(e => parseFloat(e.sleep) || 0);
-
-        sleepChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Heures de sommeil',
-              data: sleepData,
-              backgroundColor: '#8b5cf6',
-              borderColor: '#7c3aed',
-              borderWidth: 1
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 12,
-                ticks: {
-                  stepSize: 1
-                }
-              }
-            },
-            plugins: {
-              legend: {
-                display: false
-              }
-            }
-          }
-        });
-      }
-
-      // Créer la distribution des humeurs
-      function createMoodDistribution(entries) {
-        const distribution = {};
-        for (let i = 1; i <= 10; i++) {
-          distribution[i] = 0;
-        }
-
-        entries.forEach(entry => {
-          const mood = parseInt(entry.mood);
-          if (mood >= 1 && mood <= 10) {
-            distribution[mood]++;
-          }
-        });
-
-        const container = document.getElementById('mood-distribution');
-        container.innerHTML = '';
-
-        for (let mood = 1; mood <= 10; mood++) {
-          const count = distribution[mood];
-          const maxCount = Math.max(...Object.values(distribution));
-          const height = maxCount > 0 ? (count / maxCount) * 100 : 0;
-
-          const moodDiv = document.createElement('div');
-          moodDiv.className = 'flex flex-col items-center hover:scale-105 transition-transform cursor-pointer';
-          moodDiv.innerHTML = `
-            <div class="w-full bg-gray-100 rounded-t-lg relative shadow-inner" style="height: 120px;">
-              <div class="absolute bottom-0 w-full rounded-t-lg transition-all duration-500 shadow-lg"
-                   style="height: ${height}%; background: ${getMoodColor(mood)};"></div>
-            </div>
-            <span class="text-sm font-bold text-gray-700 mt-2">${mood}</span>
-            <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full mt-1">${count}x</span>
-          `;
-          container.appendChild(moodDiv);
-        }
+      // Série
+      if (stats.streak >= 14) {
+        insights.push(`🔥 <strong>Série exceptionnelle !</strong> ${stats.streak} jours - continuez !`);
+      } else if (stats.streak >= 7) {
+        insights.push(`🔥 <strong>Belle série !</strong> ${stats.streak} jours.`);
+      } else if (stats.streak === 0) {
+        recommendations.push(`📝 Essayez d'écrire quotidiennement, même brièvement.`);
       }
       
-      // Créer le graphique hebdomadaire
-      function createWeeklyChart(entries) {
-        const ctx = document.getElementById('weeklyChart').getContext('2d');
-
-        if (weeklyChart) {
-          weeklyChart.destroy();
-        }
-
-        // Calculer la moyenne par jour de la semaine
-        const weeklyData = {
-          'Lundi': [],
-          'Mardi': [],
-          'Mercredi': [],
-          'Jeudi': [],
-          'Vendredi': [],
-          'Samedi': [],
-          'Dimanche': []
-        };
-
-        entries.forEach(entry => {
-          const mood = parseInt(entry.mood);
-          if (mood > 0 && entry.date) {
-            const date = new Date(entry.date);
-            const dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' });
-            const capitalizedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
-            
-            if (weeklyData[capitalizedDay]) {
-              weeklyData[capitalizedDay].push(mood);
-            }
-          }
-        });
-
-        const days = Object.keys(weeklyData);
-        const averages = days.map(day => {
-          const moods = weeklyData[day];
-          return moods.length > 0 ? moods.reduce((a, b) => a + b, 0) / moods.length : 0;
-        });
-
-        weeklyChart = new Chart(ctx, {
-          type: 'bar',
-          data: {
-            labels: days,
-            datasets: [{
-              label: 'Humeur moyenne',
-              data: averages,
-              backgroundColor: averages.map(avg => getMoodColor(Math.round(avg))),
-              borderColor: '#065f46',
-              borderWidth: 2,
-              borderRadius: 8
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 10,
-                ticks: {
-                  stepSize: 1
-                },
-                title: {
-                  display: true,
-                  text: 'Humeur moyenne (/10)'
-                }
-              }
-            },
-            plugins: {
-              legend: {
-                display: false
-              },
-              tooltip: {
-                callbacks: {
-                  label: function(context) {
-                    return `Moyenne: ${context.parsed.y.toFixed(1)}/10`;
-                  }
-                }
-              }
-            }
-          }
-        });
+      // Humeur globale
+      if (stats.avgMood >= 7.5) {
+        insights.push(`😊 <strong>Humeur excellente</strong> (${stats.avgMood}/10) !`);
+      } else if (stats.avgMood < 4) {
+        insights.push(`💙 <strong>Humeur basse</strong> (${stats.avgMood}/10).`);
+        recommendations.push(`🆘 N'hésitez pas à chercher du soutien professionnel.`);
       }
-
-      // Créer le graphique des catégories
-      function createCategoriesChart(categoryUsage) {
-        const ctx = document.getElementById('categoriesChart').getContext('2d');
-
-        if (categoriesChart) {
-          categoriesChart.destroy();
-        }
-
-        const labels = Object.keys(categoryUsage);
-        const data = Object.values(categoryUsage);
-
-        categoriesChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: {
-            labels: labels.map(label => label.charAt(0).toUpperCase() + label.slice(1)),
-            datasets: [{
-              data: data,
-              backgroundColor: [
-                '#ef4444', // TCA
-                '#f59e0b', // Addiction
-                '#3b82f6', // Mental Health
-                '#10b981', // Physical Health
-                '#8b5cf6', // Social
-                '#f97316'  // Productivity
-              ]
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: 'bottom'
-              }
-            }
-          }
-        });
+      
+      // Formater
+      let html = '';
+      if (insights.length > 0) {
+        html += `<div class="mb-3"><p class="text-gray-800 leading-relaxed">${insights.join(' ')}</p></div>`;
       }
-
-      // Créer le graphique de l'évolution de la conscience
-      function createConsciousnessChart(consciousnessEvolution) {
-        const ctx = document.getElementById('consciousnessChart').getContext('2d');
-
-        if (consciousnessChart) {
-          consciousnessChart.destroy();
-        }
-
-        consciousnessChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: consciousnessEvolution.map((_, index) => `Jour ${index + 1}`),
-            datasets: [{
-              label: 'Profondeur de réflexion',
-              data: consciousnessEvolution.map(point => point.y),
-              borderColor: '#10b981',
-              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              tension: 0.4,
-              fill: true
-            }]
-          },
-          options: {
-            responsive: true,
-            scales: {
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: 'Profondeur (caractères/100)'
-                }
-              }
-            }
-          }
-        });
-      }
-
-      // Obtenir la couleur selon l'humeur
-      function getMoodColor(mood) {
-        if (mood <= 3) return '#ef4444'; // Rouge
-        if (mood <= 5) return '#f59e0b'; // Orange
-        if (mood <= 7) return '#eab308'; // Jaune
-        if (mood <= 9) return '#22c55e'; // Vert
-        return '#10b981'; // Vert émeraude
-      }
-
-      // Convertit la date ISO string en format affichable
-      function formatDate(dateStr) {
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateStr).toLocaleDateString('fr-FR', options);
-      }
-
-      // Affiche une entrée donnée dans #entryDisplay
-      function displayEntry(entry) {
-        if (!entry) {
-          document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500">Aucune entrée pour cette date</p>';
-          return;
-        }
-
-        const mood = parseInt(entry.mood) || 0;
-        const moodEmoji = getMoodEmoji(mood);
-        const moodColor = getMoodColor(mood);
-
-        let html = `
-          <div class="bg-white rounded-xl p-6 shadow-lg">
-            <div class="flex items-center justify-between mb-6">
-              <h2 class="text-2xl font-bold text-gray-800">${formatDate(entry.date)}</h2>
-              <div class="flex items-center space-x-4">
-                <div class="text-center">
-                  <div class="text-3xl">${moodEmoji}</div>
-                  <div class="text-sm text-gray-600">Humeur</div>
-                </div>
-                <div class="text-center">
-                  <div class="text-2xl font-bold" style="color: ${moodColor}">${mood}/10</div>
-                  <div class="text-sm text-gray-600">Score</div>
-                </div>
-              </div>
-            </div>
+      
+      if (recommendations.length > 0) {
+        html += `
+          <div class="mt-4 pt-4 border-t border-amber-200">
+            <p class="font-semibold text-amber-900 mb-2">💡 Recommandations :</p>
+            <ul class="space-y-1 text-sm text-gray-700">
+              ${recommendations.map(r => `<li class="flex items-start"><span class="mr-2">→</span><span>${r}</span></li>`).join('')}
+            </ul>
+          </div>
         `;
+      }
+      
+      insightsContainer.innerHTML = html || '<p class="text-gray-700">Continuez à tenir votre journal ! 💪</p>';
+    }
 
-        // Ajouter les catégories de suivi utilisées
-        if (entry.trackingCategories && entry.trackingCategories.length > 0) {
-          html += `
-            <div class="mb-6">
-              <h3 class="text-lg font-semibold text-gray-800 mb-3">📊 Catégories suivies aujourd'hui</h3>
-              <div class="flex flex-wrap gap-2">
-          `;
-          entry.trackingCategories.forEach(category => {
-            const categoryInfo = getCategoryInfo(category);
-            html += `<span class="px-3 py-1 rounded-full text-sm" style="background: ${categoryInfo.color}; color: white;">${categoryInfo.name}</span>`;
-          });
-          html += `</div></div>`;
-        }
+    function calculateVariance(values) {
+      if (values.length === 0) return 0;
+      const mean = values.reduce((sum, val) => sum + val, 0) / values.length;
+      const squareDiffs = values.map(val => Math.pow(val - mean, 2));
+      return Math.sqrt(squareDiffs.reduce((sum, val) => sum + val, 0) / values.length);
+    }
 
-        // Afficher les données de suivi complémentaires
-        if (entry.trackingData && Object.keys(entry.trackingData).length > 0) {
-          html += `<div class="mb-6">`;
-          
-          Object.keys(entry.trackingData).forEach(category => {
-            const categoryInfo = getCategoryInfo(category);
-            const categoryData = entry.trackingData[category];
-            
-            // Filtrer les valeurs non vides
-            const nonEmptyData = Object.entries(categoryData).filter(([key, value]) => value && value.trim && value.trim() !== '');
-            
-            if (nonEmptyData.length > 0) {
-              html += `
-                <div class="mb-4 p-4 rounded-lg" style="background: ${categoryInfo.color}20; border-left: 4px solid ${categoryInfo.color};">
-                  <h4 class="font-semibold mb-3" style="color: ${categoryInfo.color};">${categoryInfo.name} - Suivi détaillé</h4>
-                  <div class="space-y-2">
-              `;
-              
-              nonEmptyData.forEach(([key, value]) => {
-                // Convertir l'ID en label lisible
-                const label = key.replace(category + '-', '').replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                html += `
-                  <div class="bg-white bg-opacity-60 p-2 rounded">
-                    <span class="text-sm font-medium text-gray-700">${label}:</span>
-                    <span class="text-sm text-gray-900 ml-2">${value}</span>
-                  </div>
-                `;
-              });
-              
-              html += `
-                  </div>
-                </div>
-              `;
+    // ========== MESSAGE PERSONNALISÉ ==========
+    
+    function updatePersonalizedMessage(entries, stats) {
+      const messageEl = document.getElementById('personalized-message');
+      
+      if (entries.length === 0) {
+        messageEl.textContent = "Bienvenue dans votre espace personnel ! Commencez à écrire votre journal pour voir apparaître votre évolution et vos insights.";
+        return;
+      }
+
+      let messages = [];
+      
+      // Message basé sur la série
+      if (stats.streak >= 7) {
+        messages.push(`Vous êtes sur une belle lancée avec ${stats.streak} jours consécutifs ! 🔥`);
+      } else if (stats.streak > 0) {
+        messages.push(`Vous avez écrit ${stats.streak} jour${stats.streak > 1 ? 's' : ''} d'affilée, continuez ! 💪`);
+      }
+      
+      // Message basé sur l'humeur
+      if (stats.avgMood >= 7) {
+        messages.push(`Votre humeur est globalement excellente (${stats.avgMood}/10). Profitez de cette énergie positive ! ✨`);
+      } else if (stats.avgMood < 5) {
+        messages.push(`Votre humeur moyenne est de ${stats.avgMood}/10. Prenez soin de vous, vous méritez du soutien. 💙`);
+      }
+      
+      // Message basé sur les entrées récentes
+      const today = new Date();
+      const lastEntry = entries[entries.length - 1];
+      const daysSinceLastEntry = Math.floor((today - new Date(lastEntry.date)) / (1000 * 60 * 60 * 24));
+      
+      if (daysSinceLastEntry === 0) {
+        messages.push(`Vous avez écrit aujourd'hui, merci de prendre ce temps pour vous. 🙏`);
+      } else if (daysSinceLastEntry === 1) {
+        messages.push(`Votre dernière entrée date d'hier. Que diriez-vous d'écrire à nouveau aujourd'hui ?`);
+      } else if (daysSinceLastEntry > 3) {
+        messages.push(`Cela fait ${daysSinceLastEntry} jours depuis votre dernière entrée. Prenez quelques minutes pour vous reconnecter à vous-même.`);
+      }
+      
+      messageEl.innerHTML = messages.join('<br><br>');
+    }
+
+    // ========== MOMENTS POSITIFS ==========
+    
+    function updatePositiveMoments(entries) {
+      const container = document.getElementById('positive-moments');
+      
+      // Récupérer les entrées avec les meilleures humeurs et gratitudes
+      const positiveEntries = entries
+        .filter(e => {
+          const mood = parseInt(e.mood) || 0;
+          const hasGratitude = e.gratitude && e.gratitude.filter(g => g.trim()).length > 0;
+          const hasBestMoment = e.bestMoment && e.bestMoment.trim();
+          return mood >= 7 || hasGratitude || hasBestMoment;
+        })
+        .sort((a, b) => parseInt(b.mood) - parseInt(a.mood))
+        .slice(0, 5);
+      
+      if (positiveEntries.length === 0) {
+        container.innerHTML = '<p class="text-gray-500 text-center">Continuez à écrire pour voir vos moments positifs apparaître ici ! ✨</p>';
+        return;
+      }
+      
+      let html = '<div class="space-y-4">';
+      positiveEntries.forEach(entry => {
+        const isFavorite = userPreferences.favoriteEntries.includes(entry.date);
+        html += `
+          <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-4 border-l-4 border-yellow-400 hover:shadow-md transition-shadow">
+            <div class="flex items-start justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="text-2xl">${getMoodEmoji(parseInt(entry.mood))}</span>
+                <span class="font-semibold text-gray-800">${new Date(entry.date).toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' })}</span>
+              </div>
+              <button class="favorite-star ${isFavorite ? 'active' : ''} text-xl" onclick="toggleEntryFavorite('${entry.date}')" title="Marquer comme favori">
+                ★
+              </button>
+            </div>
+            ${entry.bestMoment ? `<p class="text-gray-700 italic mb-2">"${entry.bestMoment}"</p>` : ''}
+            ${entry.gratitude && entry.gratitude.filter(g => g.trim()).length > 0 ? `
+              <div class="flex flex-wrap gap-2 mt-2">
+                ${entry.gratitude.filter(g => g.trim()).map(g => `<span class="px-3 py-1 bg-white text-yellow-700 rounded-full text-sm border border-yellow-200">${g}</span>`).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+      });
+      html += '</div>';
+      
+      container.innerHTML = html;
+    }
+
+    function toggleEntryFavorite(date) {
+      if (userPreferences.favoriteEntries.includes(date)) {
+        userPreferences.favoriteEntries = userPreferences.favoriteEntries.filter(d => d !== date);
+      } else {
+        userPreferences.favoriteEntries.push(date);
+      }
+      savePreferences();
+      updatePositiveMoments(filteredEntries.length > 0 ? filteredEntries : entries);
+    }
+
+    // ========== SECTION SÉRIE ==========
+    
+    function updateStreakSection(entries, stats) {
+      const container = document.getElementById('streak-details');
+      
+      let html = '';
+      
+      if (stats.streak > 0) {
+        html += `
+          <div class="bg-green-50 rounded-lg p-4 border-l-4 border-green-500">
+            <p class="text-sm text-gray-600 mb-1">🎯 Objectif suivant</p>
+            <p class="text-lg font-bold text-green-700">
+              ${stats.streak < 7 ? '7 jours' : stats.streak < 14 ? '14 jours' : stats.streak < 30 ? '30 jours' : '100 jours'}
+            </p>
+          </div>
+        `;
+      }
+      
+      // Historique de régularité
+      const last30Days = Array.from({ length: 30 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - (29 - i));
+        return date.toISOString().split('T')[0];
+      });
+      
+      html += `
+        <div class="bg-white rounded-lg p-4">
+          <p class="text-sm font-semibold text-gray-700 mb-3">Derniers 30 jours</p>
+          <div class="grid grid-cols-10 gap-1">
+            ${last30Days.map(date => {
+              const hasEntry = entries.some(e => e.date === date);
+              return `<div class="w-full aspect-square rounded ${hasEntry ? 'bg-emerald-500' : 'bg-gray-200'}" title="${date}"></div>`;
+            }).join('')}
+          </div>
+        </div>
+      `;
+      
+      container.innerHTML = html;
+    }
+
+    // ========== SECTION SOMMEIL ==========
+    
+    function updateSleepSection(entries, stats) {
+      const container = document.getElementById('sleep-insights');
+      
+      const sleepEntries = entries.filter(e => e.sleep && parseFloat(e.sleep) > 0);
+      
+      if (sleepEntries.length === 0) {
+        container.innerHTML = '<p class="text-gray-600">Commencez à suivre votre sommeil pour voir des insights apparaître ici.</p>';
+        return;
+      }
+      
+      const sleepValues = sleepEntries.map(e => parseFloat(e.sleep));
+      const minSleep = Math.min(...sleepValues);
+      const maxSleep = Math.max(...sleepValues);
+      
+      let quality = 'Bonne';
+      let qualityColor = 'text-green-700';
+      if (stats.avgSleep < 6) {
+        quality = 'Insuffisante';
+        qualityColor = 'text-red-700';
+      } else if (stats.avgSleep > 9) {
+        quality = 'Excessive';
+        qualityColor = 'text-orange-700';
+      }
+      
+      document.getElementById('sleep-quality').innerHTML = `<span class="${qualityColor}">${quality}</span>`;
+      
+      let html = `
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Minimum enregistré</span>
+            <span class="font-bold text-gray-800">${minSleep}h</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-gray-600">Maximum enregistré</span>
+            <span class="font-bold text-gray-800">${maxSleep}h</span>
+          </div>
+        </div>
+      `;
+      
+      container.innerHTML = html;
+    }
+
+    // ========== GRAPHIQUES ==========
+    
+    function createMoodChart(entries) {
+      const ctx = document.getElementById('moodChart').getContext('2d');
+      if (moodChart) moodChart.destroy();
+
+      const sortedEntries = [...entries].sort((a, b) => new Date(a.date) - new Date(b.date));
+      const labels = sortedEntries.map(e => new Date(e.date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }));
+      const moodData = sortedEntries.map(e => parseInt(e.mood) || 0);
+
+      moodChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Humeur (/10)',
+            data: moodData,
+            borderColor: '#10b981',
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            tension: 0.4,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 10,
+              ticks: { stepSize: 1 }
             }
-          });
-          
-          html += `</div>`;
+          },
+          plugins: {
+            legend: { display: false }
+          }
         }
+      });
+    }
 
-        // Ajouter les sections selon les préférences
-        if (entry.feelingWords && entry.feelingWords.filter(w => w.trim()).length > 0) {
-          html += `
-            <div class="mb-4">
-              <p class="text-sm text-gray-600 mb-2">Mots qui décrivent :</p>
-              <div class="flex flex-wrap gap-2">
-                ${entry.feelingWords.filter(w => w.trim()).map(word =>
-                  `<span class="px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full text-sm">${word}</span>`
-                ).join('')}
+    function createSleepChart(entries) {
+      const ctx = document.getElementById('sleepChart').getContext('2d');
+      if (sleepChart) sleepChart.destroy();
+
+      const sortedEntries = [...entries].sort((a, b) => new Date(a.date) - new Date(b.date));
+      const labels = sortedEntries.map(e => new Date(e.date).toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }));
+      const sleepData = sortedEntries.map(e => parseFloat(e.sleep) || 0);
+
+      sleepChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Heures',
+            data: sleepData,
+            backgroundColor: '#8b5cf6',
+            borderColor: '#7c3aed',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 12,
+              ticks: { stepSize: 1 }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+
+    function createWeeklyChart(entries) {
+      const ctx = document.getElementById('weeklyChart').getContext('2d');
+      if (weeklyChart) weeklyChart.destroy();
+
+      const weeklyData = {
+        'Lundi': [], 'Mardi': [], 'Mercredi': [], 'Jeudi': [],
+        'Vendredi': [], 'Samedi': [], 'Dimanche': []
+      };
+
+      entries.forEach(entry => {
+        const mood = parseInt(entry.mood);
+        if (mood > 0 && entry.date) {
+          const date = new Date(entry.date);
+          const dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+          const capitalizedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+          
+          if (weeklyData[capitalizedDay]) {
+            weeklyData[capitalizedDay].push(mood);
+          }
+        }
+      });
+
+      const days = Object.keys(weeklyData);
+      const averages = days.map(day => {
+        const moods = weeklyData[day];
+        return moods.length > 0 ? moods.reduce((a, b) => a + b, 0) / moods.length : 0;
+      });
+
+      weeklyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: days,
+          datasets: [{
+            label: 'Humeur moyenne',
+            data: averages,
+            backgroundColor: averages.map(avg => getMoodColor(Math.round(avg))),
+            borderWidth: 2,
+            borderRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 10,
+              ticks: { stepSize: 1 }
+            }
+          },
+          plugins: {
+            legend: { display: false }
+          }
+        }
+      });
+    }
+
+    function createMoodDistribution(entries) {
+      const distribution = {};
+      for (let i = 1; i <= 10; i++) distribution[i] = 0;
+
+      entries.forEach(entry => {
+        const mood = parseInt(entry.mood);
+        if (mood >= 1 && mood <= 10) distribution[mood]++;
+      });
+
+      const container = document.getElementById('mood-distribution');
+      container.innerHTML = '';
+
+      for (let mood = 1; mood <= 10; mood++) {
+        const count = distribution[mood];
+        const maxCount = Math.max(...Object.values(distribution));
+        const height = maxCount > 0 ? (count / maxCount) * 100 : 0;
+
+        const moodDiv = document.createElement('div');
+        moodDiv.className = 'flex flex-col items-center hover:scale-105 transition-transform cursor-pointer';
+        moodDiv.innerHTML = `
+          <div class="w-full bg-gray-100 rounded-t-lg relative shadow-inner" style="height: 100px;">
+            <div class="absolute bottom-0 w-full rounded-t-lg transition-all duration-500"
+                 style="height: ${height}%; background: ${getMoodColor(mood)};"></div>
+          </div>
+          <span class="text-sm font-bold text-gray-700 mt-2">${mood}</span>
+          <span class="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full mt-1">${count}x</span>
+        `;
+        container.appendChild(moodDiv);
+      }
+    }
+
+    function getMoodColor(mood) {
+      if (mood <= 3) return '#ef4444';
+      if (mood <= 5) return '#f59e0b';
+      if (mood <= 7) return '#eab308';
+      if (mood <= 9) return '#22c55e';
+      return '#10b981';
+    }
+
+    function getMoodEmoji(mood) {
+      if (mood <= 2) return '😢';
+      if (mood <= 4) return '😔';
+      if (mood <= 6) return '😐';
+      if (mood <= 8) return '😊';
+      return '😄';
+    }
+
+    // ========== AFFICHAGE DES ENTRÉES ==========
+    
+    function displayEntry(entry) {
+      if (!entry) {
+        document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500 py-8">Aucune entrée pour cette date</p>';
+        return;
+      }
+
+      const mood = parseInt(entry.mood) || 0;
+      const moodEmoji = getMoodEmoji(mood);
+      const moodColor = getMoodColor(mood);
+      const isFavorite = userPreferences.favoriteEntries.includes(entry.date);
+
+      let html = `
+        <div class="bg-gradient-to-br from-white to-emerald-50/30 rounded-2xl shadow-2xl overflow-hidden">
+          <div class="bg-gradient-to-r from-emerald-600 to-teal-600 p-6 text-white">
+            <div class="flex items-center justify-between">
+              <div>
+                <h2 class="text-2xl sm:text-3xl font-bold mb-2">${new Date(entry.date).toLocaleDateString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</h2>
+              </div>
+              <div class="flex items-center gap-4">
+                <button class="favorite-star ${isFavorite ? 'active' : ''} text-3xl" onclick="toggleEntryFavorite('${entry.date}')" title="Marquer comme favori">
+                  ★
+                </button>
+                <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 flex items-center gap-3">
+                  <div class="text-4xl">${moodEmoji}</div>
+                  <div class="text-3xl font-bold">${mood}/10</div>
+                </div>
               </div>
             </div>
-          `;
-        }
+          </div>
+          
+          <div class="p-6 space-y-6">
+      `;
 
+      // Sections de l'entrée (simplifiées pour la lisibilité)
+      
+      // Émotions
+      if (entry.feelingWords && entry.feelingWords.filter(w => w.trim()).length > 0) {
+        html += `
+          <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 border-l-4 border-purple-500">
+            <h3 class="text-lg font-bold text-purple-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">💜</span> Émotions ressenties
+            </h3>
+            <div class="flex flex-wrap gap-2">
+              ${entry.feelingWords.filter(w => w.trim()).map(word =>
+                `<span class="px-3 py-2 bg-white text-purple-700 rounded-full text-sm font-medium shadow-sm border border-purple-200">${word}</span>`
+              ).join('')}
+            </div>
+          </div>
+        `;
+      }
+
+      // Gratitude et moments positifs
+      if ((entry.gratitude && entry.gratitude.filter(g => g.trim()).length > 0) || entry.bestMoment) {
+        html += `
+          <div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 border-l-4 border-yellow-500">
+            <h3 class="text-lg font-bold text-yellow-800 mb-3 flex items-center gap-2">
+              <span class="text-xl">✨</span> Moments positifs
+            </h3>
+        `;
+        
+        if (entry.bestMoment) {
+          html += `<p class="text-gray-800 bg-white p-3 rounded-lg border border-yellow-100 italic mb-3">"${entry.bestMoment}"</p>`;
+        }
+        
         if (entry.gratitude && entry.gratitude.filter(g => g.trim()).length > 0) {
           html += `
-            <div class="mb-4">
-              <p class="text-sm text-gray-600 mb-2">Gratitude :</p>
-              <div class="flex flex-wrap gap-2">
-                ${entry.gratitude.filter(g => g.trim()).map(item =>
-                  `<span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">${item}</span>`
-                ).join('')}
-              </div>
+            <div class="flex flex-wrap gap-2">
+              ${entry.gratitude.filter(g => g.trim()).map(item =>
+                `<span class="px-3 py-2 bg-white text-yellow-700 rounded-full text-sm font-medium shadow-sm border border-yellow-200">${item}</span>`
+              ).join('')}
             </div>
           `;
         }
-
-        if (entry.bestMoment) {
-          html += `
-            <div class="mb-4">
-              <p class="text-sm text-gray-600 mb-2">Meilleur moment :</p>
-              <p class="text-gray-800 bg-green-50 p-3 rounded-lg">${entry.bestMoment}</p>
-            </div>
-          `;
-        }
-
-        if (entry.selfDiscovery || entry.thoughtPatterns || entry.challengesReaction) {
-          html += `
-            <div class="mb-4">
-              <h3 class="text-lg font-semibold text-gray-800 mb-3">💭 Exploration de conscience</h3>
-          `;
-
-          if (entry.selfDiscovery) {
-            html += `
-              <div class="mb-3">
-                <p class="text-sm font-medium text-purple-800 mb-1">Qu'ai-je appris sur moi-même ?</p>
-                <p class="text-gray-700 bg-purple-50 p-3 rounded-lg">${entry.selfDiscovery}</p>
-              </div>
-            `;
-          }
-
-          if (entry.thoughtPatterns) {
-            html += `
-              <div class="mb-3">
-                <p class="text-sm font-medium text-purple-800 mb-1">Patterns observés :</p>
-                <p class="text-gray-700 bg-purple-50 p-3 rounded-lg">${entry.thoughtPatterns}</p>
-              </div>
-            `;
-          }
-
-          if (entry.challengesReaction) {
-            html += `
-              <div class="mb-3">
-                <p class="text-sm font-medium text-purple-800 mb-1">Réaction face aux défis :</p>
-                <p class="text-gray-700 bg-purple-50 p-3 rounded-lg">${entry.challengesReaction}</p>
-              </div>
-            `;
-          }
-
-          html += `</div>`;
-        }
-
-        if (entry.tomorrowQuality || entry.personalAffirmation) {
-          html += `
-            <div class="mb-4">
-              <h3 class="text-lg font-semibold text-gray-800 mb-3">🌙 Intention pour demain</h3>
-          `;
-
-          if (entry.tomorrowQuality) {
-            html += `
-              <div class="mb-3">
-                <p class="text-sm font-medium text-indigo-800 mb-1">Qualité à cultiver :</p>
-                <p class="text-gray-700 bg-indigo-50 p-3 rounded-lg">${entry.tomorrowQuality}</p>
-              </div>
-            `;
-          }
-
-          if (entry.personalAffirmation) {
-            html += `
-              <div class="mb-3">
-                <p class="text-sm font-medium text-indigo-800 mb-1">Affirmation personnelle :</p>
-                <p class="text-gray-700 bg-indigo-50 p-3 rounded-lg italic">"${entry.personalAffirmation}"</p>
-              </div>
-            `;
-          }
-
-          html += `</div>`;
-        }
-
-        if (entry.extraNotes) {
-          html += `
-            <div class="mb-4">
-              <p class="text-sm font-medium text-gray-800 mb-2">📝 Notes libres :</p>
-              <p class="text-gray-700 bg-gray-50 p-3 rounded-lg">${entry.extraNotes}</p>
-            </div>
-          `;
-        }
-
-        html += `</div>`;
-
-        document.getElementById('entryDisplay').innerHTML = html;
-      }
-
-      // Obtenir l'emoji selon l'humeur
-      function getMoodEmoji(mood) {
-        if (mood <= 2) return '😢';
-        if (mood <= 4) return '😔';
-        if (mood <= 6) return '😐';
-        if (mood <= 8) return '😊';
-        return '😄';
-      }
-
-      // Obtenir les informations d'une catégorie
-      function getCategoryInfo(category) {
-        const categories = {
-          'tca': { name: 'TCA', color: '#ef4444' },
-          'addiction': { name: 'Addictions', color: '#f59e0b' },
-          'mental-health': { name: 'Santé Mentale', color: '#3b82f6' },
-          'physical-health': { name: 'Santé Physique', color: '#10b981' },
-          'social': { name: 'Relations Sociales', color: '#8b5cf6' },
-          'productivity': { name: 'Productivité', color: '#f97316' }
-        };
-        return categories[category] || { name: category, color: '#6b7280' };
-      }
-
-      // Normaliser une entrée pour assurer la compatibilité
-      function normalizeEntry(entry) {
-        if (!entry) return entry;
         
-        // Normaliser les noms de champs pour la compatibilité
-        return {
-          ...entry,
-          // Unifier moodWords et feelingWords
-          moodWords: entry.moodWords || entry.feelingWords || [],
-          feelingWords: entry.feelingWords || entry.moodWords || [],
-          // Unifier gratitude et positiveElements
-          gratitude: entry.gratitude || entry.positiveElements || [],
-          positiveElements: entry.positiveElements || entry.gratitude || [],
-          // S'assurer que mood est un nombre
-          mood: entry.mood ? String(entry.mood) : '5'
-        };
+        html += `</div>`;
       }
 
-      // Charge les données depuis le serveur
-      async function loadEntries() {
-        try {
-          const res = await fetch('/api/journal-entries');
-          if (!res.ok) throw new Error('Erreur lors du chargement des entrées.');
-          let rawEntries = await res.json();
-          
-          // Normaliser toutes les entrées
-          entries = rawEntries.map(normalizeEntry);
-          entries.sort((a, b) => new Date(a.date) - new Date(b.date));
-          currentIndex = entries.length - 1; // Commencer par la dernière entrée
-
-          // Mettre à jour toutes les visualisations
-          const stats = calculateStats(entries);
-          updateStats(entries);
-          createMoodChart(entries);
-          createSleepChart(entries);
-          createMoodDistribution(entries);
-          createCategoriesChart(stats.categoryUsage);
-          createConsciousnessChart(stats.consciousnessEvolution);
-          createWeeklyChart(entries);
-
-          if (entries.length > 0) {
-            displayEntry(entries[currentIndex]);
-            document.getElementById('datePicker').value = entries[currentIndex].date;
-          } else {
-            document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500">Aucune entrée trouvée. Commencez à écrire votre journal !</p>';
-          }
-        } catch (e) {
-          document.getElementById('entryDisplay').innerHTML = `<p class="text-red-600 text-center">${e.message}</p>`;
-        }
+      // Sommeil
+      if (entry.sleep) {
+        html += `
+          <div class="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-4 border-l-4 border-blue-500">
+            <h3 class="text-lg font-bold text-blue-800 mb-2 flex items-center gap-2">
+              <span class="text-xl">💤</span> Sommeil
+            </h3>
+            <p class="text-gray-800 bg-white p-3 rounded-lg border border-blue-100">${entry.sleep} heures</p>
+          </div>
+        `;
       }
 
-      // Gestion des boutons et datePicker
-      document.getElementById('prevBtn').addEventListener('click', () => {
-        if (currentIndex > 0) {
-          currentIndex--;
+      // Défis
+      if (entry.challenges) {
+        html += `
+          <div class="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-4 border-l-4 border-red-500">
+            <h3 class="text-lg font-bold text-red-800 mb-2 flex items-center gap-2">
+              <span class="text-xl">⚡</span> Défis rencontrés
+            </h3>
+            <p class="text-gray-800 bg-white p-3 rounded-lg border border-red-100">${entry.challenges}</p>
+          </div>
+        `;
+      }
+
+      // Notes libres
+      if (entry.extraNotes) {
+        html += `
+          <div class="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl p-4 border-l-4 border-gray-400">
+            <h3 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+              <span class="text-xl">📝</span> Notes
+            </h3>
+            <p class="text-gray-800 bg-white p-3 rounded-lg border border-gray-200 leading-relaxed whitespace-pre-wrap">${entry.extraNotes}</p>
+          </div>
+        `;
+      }
+
+      html += `</div></div>`;
+
+      document.getElementById('entryDisplay').innerHTML = html;
+    }
+
+    // ========== NAVIGATION DES ENTRÉES ==========
+    
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      const dataToUse = filteredEntries.length > 0 ? filteredEntries : entries;
+      if (currentIndex > 0) {
+        currentIndex--;
+        displayEntry(dataToUse[currentIndex]);
+        document.getElementById('datePicker').value = dataToUse[currentIndex].date;
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      const dataToUse = filteredEntries.length > 0 ? filteredEntries : entries;
+      if (currentIndex < dataToUse.length - 1) {
+        currentIndex++;
+        displayEntry(dataToUse[currentIndex]);
+        document.getElementById('datePicker').value = dataToUse[currentIndex].date;
+      }
+    });
+
+    document.getElementById('datePicker').addEventListener('change', (e) => {
+      const selectedDate = e.target.value;
+      const dataToUse = filteredEntries.length > 0 ? filteredEntries : entries;
+      const index = dataToUse.findIndex(entry => entry.date === selectedDate);
+      if (index !== -1) {
+        currentIndex = index;
+        displayEntry(dataToUse[currentIndex]);
+      } else {
+        document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500 py-8">Aucune entrée pour cette date</p>';
+      }
+    });
+
+    // ========== CHARGEMENT DES DONNÉES ==========
+    
+    async function loadEntries() {
+      try {
+        const res = await fetch('/api/journal-entries');
+        if (!res.ok) throw new Error('Erreur lors du chargement des entrées.');
+        entries = await res.json();
+        entries.sort((a, b) => new Date(a.date) - new Date(b.date));
+        filteredEntries = [...entries];
+        currentIndex = entries.length - 1;
+
+        if (entries.length > 0) {
+          updateAllVisualizationsFeedback(entries);
           displayEntry(entries[currentIndex]);
           document.getElementById('datePicker').value = entries[currentIndex].date;
-        }
-      });
-
-      document.getElementById('nextBtn').addEventListener('click', () => {
-        if (currentIndex < entries.length - 1) {
-          currentIndex++;
-          displayEntry(entries[currentIndex]);
-          document.getElementById('datePicker').value = entries[currentIndex].date;
-        }
-      });
-
-      document.getElementById('datePicker').addEventListener('change', (e) => {
-        const selectedDate = e.target.value;
-        const index = entries.findIndex(entry => entry.date === selectedDate);
-        if (index !== -1) {
-          currentIndex = index;
-          displayEntry(entries[currentIndex]);
         } else {
-          document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500">Aucune entrée pour cette date</p>';
+          document.getElementById('entryDisplay').innerHTML = '<p class="text-center text-gray-500 py-8">Aucune entrée trouvée. Commencez à écrire votre journal ! ✨</p>';
+          updatePersonalizedMessage([], { total: 0, avgMood: 0, avgSleep: 0, streak: 0 });
         }
-      });
-
-      // Fonction d'export
-      async function exportData() {
-        try {
-          const exportData = {
-            exportDate: new Date().toISOString(),
-            totalEntries: entries.length,
-            entries: entries
-          };
-
-          const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `moody-journal-export-${new Date().toISOString().split('T')[0]}.json`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-
-          alert(`Export terminé ! ${entries.length} entrées exportées.`);
-        } catch (err) {
-          console.error('❌ Erreur lors de l\'export:', err);
-          alert('Erreur lors de l\'export des données.');
-        }
+      } catch (e) {
+        document.getElementById('entryDisplay').innerHTML = `<p class="text-red-600 text-center py-8">${e.message}</p>`;
       }
+    }
 
-      // Gestionnaire d'événement pour le bouton d'export
-      document.getElementById('exportBtn').addEventListener('click', exportData);
+    // ========== EXPORT ==========
+    
+    async function exportData() {
+      try {
+        const exportData = {
+          exportDate: new Date().toISOString(),
+          totalEntries: entries.length,
+          entries: entries
+        };
 
-      // Initialisation
-      checkSession().then(() => {
-        loadEntries();
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `moody-journal-export-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        alert(`✅ Export réussi ! ${entries.length} entrées exportées.`);
+      } catch (err) {
+        console.error('❌ Erreur lors de l\'export:', err);
+        alert('❌ Erreur lors de l\'export des données.');
+      }
+    }
+    
+    // ========== INITIALISATION ==========
+    
+    async function init() {
+      // Initialiser la navbar avec bouton Exporter
+      initNavbar('view.html', {
+        customButtons: `
+          <button id="exportBtn" class="bg-cyan-500/70 hover:bg-cyan-600/80 text-white font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+            Exporter
+          </button>
+        `,
+        customButtonsMobile: `
+          <button id="exportBtnMobile" class="block bg-cyan-500/70 hover:bg-cyan-600/80 text-white font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center w-full">
+            Exporter
+          </button>
+        `,
+        onInit: () => {
+          // Attacher les événements aux boutons d'export
+          const exportBtn = document.getElementById('exportBtn');
+          const exportBtnMobile = document.getElementById('exportBtnMobile');
+          
+          if (exportBtn) {
+            exportBtn.addEventListener('click', exportData);
+          }
+          if (exportBtnMobile) {
+            exportBtnMobile.addEventListener('click', exportData);
+          }
+        }
       });
-    </script>
-  </body>
+      
+      await checkSession();
+      loadPreferences();
+      initDragAndDrop();
+      await loadEntries();
+    }
+
+    init();
+  </script>
+</body>
 </html>

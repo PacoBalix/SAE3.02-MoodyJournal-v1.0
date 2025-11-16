@@ -1,0 +1,1021 @@
+{
+  "sections": {
+    "mood": {
+      "title": "Évaluation émotionnelle",
+      "icon": "activity",
+      "color": "#059669",
+      "questions": [
+        {
+          "id": "mood-score",
+          "label": "Évaluation globale de l'humeur (1-10)",
+          "type": "mood-scale",
+          "required": true,
+          "alternatives": [
+            "Comment évaluez-vous votre bien-être aujourd'hui ? (1-10)",
+            "Sur une échelle de 1 à 10, comment vous sentez-vous ?",
+            "Notez votre humeur générale du jour (1-10)"
+          ]
+        },
+        {
+          "id": "mood-words",
+          "label": "3 mots pour décrire ce que je ressens",
+          "type": "words-multiple",
+          "count": 3,
+          "required": false,
+          "alternatives": [
+            "Décrivez vos émotions en 3 mots",
+            "Quels 3 mots résument votre état émotionnel ?",
+            "Trouvez 3 mots qui capturent vos sentiments"
+          ]
+        },
+        {
+          "id": "primary-emotion",
+          "label": "Émotion principale ressentie",
+          "type": "select",
+          "options": ["Joie", "Tristesse", "Colère", "Peur", "Dégoût", "Surprise", "Anxiété", "Contentement", "Frustration", "Neutre"],
+          "required": false,
+          "alternatives": [
+            "Quelle émotion a dominé votre journée ?",
+            "L'émotion la plus présente aujourd'hui",
+            "Quelle émotion avez-vous principalement ressentie ?"
+          ]
+        },
+        {
+          "id": "emotion-intensity",
+          "label": "Intensité émotionnelle (1-5)",
+          "type": "select",
+          "options": ["1 - Très faible", "2 - Faible", "3 - Modérée", "4 - Forte", "5 - Très forte"],
+          "required": false,
+          "alternatives": [
+            "À quel point vos émotions étaient-elles intenses ?",
+            "Intensité de vos ressentis aujourd'hui (1-5)",
+            "Comment évaluez-vous la force de vos émotions ?"
+          ]
+        },
+        {
+          "id": "emotion-comfort",
+          "label": "Vous êtes-vous senti à l'aise avec vos émotions ?",
+          "type": "select",
+          "options": ["Très à l'aise", "À l'aise", "Neutre", "Un peu inconfortable", "Très inconfortable"],
+          "required": false,
+          "alternatives": [
+            "Quel est votre niveau de confort avec vos émotions du jour ?",
+            "Acceptation de vos émotions aujourd'hui",
+            "Comment vous êtes-vous senti face à vos émotions ?"
+          ]
+        },
+        {
+          "id": "emotional-moments",
+          "label": "Quel moment vous a le plus touché émotionnellement ?",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Moment le plus chargé émotionnellement",
+            "Qu'est-ce qui vous a le plus ému ?",
+            "Situation ayant provoqué la réaction émotionnelle la plus forte"
+          ]
+        }
+      ]
+    },
+    "gratitude": {
+      "title": "Évaluation positive",
+      "icon": "sun",
+      "color": "#059669",
+      "questions": [
+        {
+          "id": "positive-elements",
+          "label": "Éléments positifs identifiés aujourd'hui",
+          "type": "list-multiple",
+          "count": 3,
+          "placeholders": [
+            "1. Accomplissement ou réussite",
+            "2. Moment de connexion sociale",
+            "3. Ressource personnelle mobilisée"
+          ],
+          "required": false,
+          "alternatives": [
+            "Pour quoi êtes-vous reconnaissant aujourd'hui ?",
+            "Listez 3 points positifs de votre journée",
+            "Quelles bonnes choses avez-vous remarquées ?"
+          ]
+        },
+        {
+          "id": "best-moment",
+          "label": "Meilleur moment / Point culminant de la journée",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Quel a été le moment le plus agréable ?",
+            "Décrivez le pic positif de votre journée",
+            "Quel moment vous a apporté le plus de joie ?"
+          ]
+        },
+        {
+          "id": "positive-emotion",
+          "label": "Émotion positive dominante du jour",
+          "type": "select",
+          "options": ["Joie", "Satisfaction", "Gratitude", "Fierté", "Amour", "Amusement", "Espoir", "Sérénité"],
+          "required": false,
+          "alternatives": [
+            "Quelle émotion positive avez-vous le plus ressentie ?",
+            "L'émotion agréable la plus marquante",
+            "Quelle émotion positive a coloré votre journée ?"
+          ]
+        },
+        {
+          "id": "small-victory",
+          "label": "Une petite victoire dont vous êtes fier",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Quelle petite réussite mérite d'être célébrée ?",
+            "Un accomplissement, même minuscule, dont vous êtes content",
+            "Qu'avez-vous bien fait aujourd'hui ?"
+          ]
+        },
+        {
+          "id": "kind-gesture",
+          "label": "Un geste de bienveillance reçu ou donné",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Moment de gentillesse vécu aujourd'hui",
+            "Geste attentionné échangé",
+            "Acte de bonté remarqué"
+          ]
+        }
+      ]
+    },
+    "habits": {
+      "title": "Habitudes & Actions",
+      "icon": "activity",
+      "color": "#059669",
+      "questions": [
+        {
+          "id": "sleep",
+          "label": "Sommeil (heures)",
+          "type": "number",
+          "min": 0,
+          "max": 24,
+          "step": 0.5,
+          "required": false,
+          "alternatives": [
+            "Combien d'heures avez-vous dormi ?",
+            "Durée de votre sommeil cette nuit",
+            "Temps de sommeil total"
+          ]
+        },
+        {
+          "id": "exercise",
+          "label": "Exercice / mouvement",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Quelle activité physique avez-vous pratiquée ?",
+            "Comment avez-vous bougé aujourd'hui ?",
+            "Activités physiques du jour"
+          ]
+        },
+        {
+          "id": "nutrition",
+          "label": "Nutrition",
+          "type": "radio-select",
+          "options": ["🍎 Bonne", "⚡ Moyenne", "💤 Mauvaise"],
+          "required": false,
+          "alternatives": [
+            "Comment évaluez-vous votre alimentation ?",
+            "Qualité de vos repas aujourd'hui",
+            "Votre nutrition était-elle équilibrée ?"
+          ]
+        },
+        {
+          "id": "good-habits",
+          "label": "Habitudes productives suivies aujourd'hui",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Quelles bonnes habitudes avez-vous maintenues ?",
+            "Routines positives respectées",
+            "Habitudes bénéfiques pratiquées"
+          ]
+        },
+        {
+          "id": "bad-habits",
+          "label": "Habitudes que j'ai négligées",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Quelles habitudes souhaiteriez-vous améliorer ?",
+            "Routines manquées ou oubliées",
+            "Points d'amélioration identifiés"
+          ]
+        }
+      ]
+    },
+    "challenges": {
+      "title": "Défis & Problèmes",
+      "icon": "alert-triangle",
+      "color": "#dc2626",
+      "questions": [
+        {
+          "id": "challenges-faced",
+          "label": "Qu'est-ce qui m'a défié aujourd'hui ?",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Quelles difficultés avez-vous rencontrées ?",
+            "Les obstacles du jour",
+            "Qu'est-ce qui a été compliqué aujourd'hui ?"
+          ]
+        },
+        {
+          "id": "reaction",
+          "label": "Comment ai-je réagi ?",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Quelle a été votre réponse face aux défis ?",
+            "Comment avez-vous géré la situation ?",
+            "Votre réaction face aux difficultés"
+          ]
+        },
+        {
+          "id": "approach",
+          "label": "Que pourrais-je essayer différemment la prochaine fois ?",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Quelle stratégie alternative pourriez-vous utiliser ?",
+            "Comment pourriez-vous mieux réagir ?",
+            "Quelle approche différente envisagez-vous ?"
+          ]
+        },
+        {
+          "id": "support-needed",
+          "label": "De quel type de soutien aurais-je pu bénéficier ?",
+          "type": "select",
+          "options": ["Écoute active", "Conseil pratique", "Présence réconfortante", "Aide concrète", "Aucun", "Je ne sais pas"],
+          "required": false,
+          "alternatives": [
+            "Quel soutien vous aurait aidé ?",
+            "Quelle forme d'aide aurait fait la différence ?",
+            "De quoi aviez-vous besoin ?"
+          ]
+        },
+        {
+          "id": "self-compassion",
+          "label": "Ai-je fait preuve de compassion envers moi-même ?",
+          "type": "select",
+          "options": ["Oui, beaucoup", "Oui, un peu", "Pas vraiment", "Non", "Je peux faire mieux"],
+          "required": false,
+          "alternatives": [
+            "Ai-je été bienveillant envers moi-même ?",
+            "Me suis-je traité avec douceur ?",
+            "Niveau d'auto-compassion du jour"
+          ]
+        }
+      ]
+    },
+    "reflections": {
+      "title": "Réflexions & Leçons",
+      "icon": "eye",
+      "color": "#7c3aed",
+      "questions": [
+        {
+          "id": "patterns",
+          "label": "Ai-je remarqué des schémas dans mes pensées/comportements ?",
+          "type": "textarea",
+          "rows": 3,
+          "required": false,
+          "alternatives": [
+            "Quels patterns récurrents avez-vous observés ?",
+            "Avez-vous identifié des tendances dans vos réactions ?",
+            "Quels schémas répétitifs avez-vous remarqués ?"
+          ]
+        },
+        {
+          "id": "lessons",
+          "label": "Qu'ai-je appris sur moi aujourd'hui ?",
+          "type": "textarea",
+          "rows": 3,
+          "required": false,
+          "alternatives": [
+            "Quelle découverte avez-vous faite sur vous-même ?",
+            "Qu'avez-vous compris de nouveau sur vous ?",
+            "Quelle leçon personnelle tirez-vous de cette journée ?"
+          ]
+        },
+        {
+          "id": "energy-givers",
+          "label": "Qu'est-ce qui m'a donné de l'énergie ?",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Qu'est-ce qui vous a revitalisé ?",
+            "Sources d'énergie positive du jour",
+            "Ce qui vous a redonné de la vitalité"
+          ]
+        },
+        {
+          "id": "energy-drainers",
+          "label": "Qu'est-ce qui a drainé mon énergie ?",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Qu'est-ce qui vous a épuisé ?",
+            "Sources d'épuisement identifiées",
+            "Ce qui a diminué votre énergie"
+          ]
+        },
+        {
+          "id": "growth-moment",
+          "label": "Un moment où j'ai grandi ou appris quelque chose",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Situation qui m'a fait évoluer",
+            "Moment d'apprentissage vécu",
+            "Expérience enrichissante du jour"
+          ]
+        },
+        {
+          "id": "value-lived",
+          "label": "Quelle valeur personnelle ai-je incarnée aujourd'hui ?",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Valeur mise en pratique",
+            "Quelle qualité avez-vous exprimée ?",
+            "Principe que vous avez honoré"
+          ]
+        }
+      ]
+    },
+    "consciousness": {
+      "title": "Analyse comportementale",
+      "icon": "users",
+      "color": "#0369a1",
+      "questions": [
+        {
+          "id": "coping-strategies",
+          "label": "Quelles stratégies d'adaptation ai-je utilisées aujourd'hui ?",
+          "type": "textarea",
+          "rows": 3,
+          "required": false,
+          "alternatives": [
+            "Comment avez-vous géré le stress ?",
+            "Méthodes utilisées pour faire face aux difficultés",
+            "Techniques de gestion émotionnelle employées"
+          ]
+        },
+        {
+          "id": "emotional-triggers",
+          "label": "Ai-je identifié des déclencheurs émotionnels aujourd'hui ?",
+          "type": "textarea",
+          "rows": 3,
+          "required": false,
+          "alternatives": [
+            "Qu'est-ce qui a provoqué vos réactions émotionnelles ?",
+            "Déclencheurs émotionnels repérés",
+            "Situations qui ont influencé votre état émotionnel"
+          ]
+        },
+        {
+          "id": "social-activity",
+          "label": "Quel a été mon niveau d'activité sociale aujourd'hui ?",
+          "type": "select",
+          "options": ["Très faible (isolement complet)", "Faible (contacts limités)", "Modéré (quelques interactions)", "Élevé (nombreuses interactions)", "Très élevé (activités sociales intenses)"],
+          "required": false,
+          "alternatives": [
+            "Niveau d'interactions sociales",
+            "À quel point avez-vous été socialement actif ?",
+            "Intensité de vos échanges sociaux"
+          ]
+        },
+        {
+          "id": "boundary-respect",
+          "label": "Ai-je respecté mes limites aujourd'hui ?",
+          "type": "select",
+          "options": ["Oui, complètement", "Plutôt oui", "Pas sûr", "Plutôt non", "Non"],
+          "required": false,
+          "alternatives": [
+            "Respect de mes besoins personnels",
+            "Ai-je dit non quand nécessaire ?",
+            "Mes limites ont-elles été préservées ?"
+          ]
+        },
+        {
+          "id": "self-kindness",
+          "label": "Comment me suis-je parlé intérieurement ?",
+          "type": "select",
+          "options": ["Avec beaucoup de bienveillance", "Avec bienveillance", "De manière neutre", "Un peu durement", "Très durement"],
+          "required": false,
+          "alternatives": [
+            "Qualité de mon dialogue intérieur",
+            "Ton de ma voix intérieure",
+            "Ai-je été mon propre allié ou critique ?"
+          ]
+        }
+      ]
+    },
+    "intention": {
+      "title": "Planification proactive",
+      "icon": "target",
+      "color": "#ea580c",
+      "questions": [
+        {
+          "id": "tomorrow-priorities",
+          "label": "Quelles sont mes priorités pour demain ?",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Objectifs pour la journée à venir",
+            "Que prévoyez-vous d'accomplir demain ?",
+            "Vos 2-3 priorités pour demain"
+          ]
+        },
+        {
+          "id": "improve",
+          "label": "Une chose que je veux améliorer demain",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Point d'amélioration pour demain",
+            "Qu'aimeriez-vous faire mieux demain ?",
+            "Aspect à optimiser dans la journée à venir"
+          ]
+        },
+        {
+          "id": "affirmation",
+          "label": "Un rappel ou une affirmation pour moi-même",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Message positif pour vous-même",
+            "Affirmation personnelle du jour",
+            "Parole encourageante pour votre futur vous"
+          ]
+        },
+        {
+          "id": "resource-mobilization",
+          "label": "Quelle ressource vais-je mobiliser ?",
+          "type": "select",
+          "options": ["Gestion de l'énergie", "Gestion du temps", "Soutien social", "Ressources cognitives", "Régulation émotionnelle"],
+          "required": false,
+          "alternatives": [
+            "Sur quelles forces allez-vous vous appuyer ?",
+            "Ressource personnelle à activer demain",
+            "Quelle capacité allez-vous utiliser ?"
+          ]
+        },
+        {
+          "id": "sleep-goal",
+          "label": "Objectif de sommeil (heures prévues)",
+          "type": "number",
+          "min": 0,
+          "max": 12,
+          "step": 0.5,
+          "required": false,
+          "alternatives": [
+            "Combien d'heures de sommeil visez-vous ?",
+            "Objectif de repos pour cette nuit",
+            "Durée de sommeil souhaitée"
+          ]
+        }
+      ]
+    },
+    "notes": {
+      "title": "Notes libres",
+      "icon": "edit-3",
+      "color": "#6b7280",
+      "questions": [
+        {
+          "id": "extra-notes",
+          "label": "Notes libres",
+          "type": "textarea",
+          "rows": 5,
+          "required": false,
+          "alternatives": [
+            "Espace pour vos pensées libres",
+            "Notez tout ce qui vous vient à l'esprit",
+            "Réflexions spontanées du jour"
+          ]
+        }
+      ]
+    },
+    "tca": {
+      "title": "Suivi TCA",
+      "icon": "activity",
+      "color": "#991b1b",
+      "questions": [
+        {
+          "id": "tca-meals",
+          "label": "Nombre de repas pris aujourd'hui",
+          "type": "number",
+          "min": 0,
+          "max": 10,
+          "required": false,
+          "alternatives": [
+            "Combien de fois avez-vous mangé ?",
+            "Nombre de prises alimentaires",
+            "Repas consommés dans la journée"
+          ]
+        },
+        {
+          "id": "tca-feeling",
+          "label": "Comment je me sens par rapport à mon alimentation",
+          "type": "select",
+          "options": ["Très bien", "Bien", "Neutre", "Difficile", "Très difficile"],
+          "required": false,
+          "alternatives": [
+            "Votre relation à la nourriture aujourd'hui",
+            "Comment vous sentez-vous concernant vos repas ?",
+            "État d'esprit face à l'alimentation"
+          ]
+        },
+        {
+          "id": "tca-triggers",
+          "label": "Déclencheurs ou moments difficiles",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Qu'est-ce qui a rendu l'alimentation difficile ?",
+            "Situations compliquées liées à la nourriture",
+            "Moments de tension alimentaire"
+          ]
+        },
+        {
+          "id": "tca-coping",
+          "label": "Stratégies utilisées pour gérer",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Comment avez-vous fait face aux difficultés ?",
+            "Techniques employées pour gérer",
+            "Méthodes d'adaptation utilisées"
+          ]
+        },
+        {
+          "id": "tca-support",
+          "label": "Soutien reçu aujourd'hui",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Qui vous a aidé aujourd'hui ?",
+            "Support obtenu dans votre parcours",
+            "Aide reçue pour votre alimentation"
+          ]
+        },
+        {
+          "id": "tca-peaceful-meal",
+          "label": "Y a-t-il eu un repas où je me suis senti paisible ?",
+          "type": "select",
+          "options": ["Oui, plusieurs", "Oui, un", "Pas vraiment", "Non", "Je préfère ne pas répondre"],
+          "required": false,
+          "alternatives": [
+            "Moment de paix alimentaire vécu",
+            "Repas pris en toute sérénité",
+            "Avez-vous mangé sans stress ?"
+          ]
+        },
+        {
+          "id": "tca-body-relationship",
+          "label": "Comment ai-je ressenti mon corps aujourd'hui ?",
+          "type": "select",
+          "options": ["Avec beaucoup de bienveillance", "Plutôt bien", "Neutre", "Critique", "Très critique"],
+          "required": false,
+          "alternatives": [
+            "Relation à mon corps aujourd'hui",
+            "Perception corporelle du jour",
+            "Comment ai-je regardé mon corps ?"
+          ]
+        },
+        {
+          "id": "tca-permission",
+          "label": "Me suis-je donné la permission de... ?",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Qu'ai-je accepté pour moi-même ?",
+            "Permission que je me suis accordée",
+            "À quoi me suis-je autorisé ?"
+          ]
+        }
+      ]
+    },
+    "addiction": {
+      "title": "Suivi Addictions",
+      "icon": "alert-circle",
+      "color": "#92400e",
+      "questions": [
+        {
+          "id": "addiction-abstinence",
+          "label": "Jours d'abstinence",
+          "type": "number",
+          "min": 0,
+          "required": false,
+          "alternatives": [
+            "Depuis combien de temps êtes-vous sobre ?",
+            "Durée de votre abstinence",
+            "Nombre de jours sans consommation"
+          ]
+        },
+        {
+          "id": "addiction-cravings",
+          "label": "Intensité des envies (1-10)",
+          "type": "number",
+          "min": 1,
+          "max": 10,
+          "required": false,
+          "alternatives": [
+            "Force des pulsions ressenties",
+            "À quel point les envies étaient-elles fortes ?",
+            "Niveau de désir de consommation"
+          ]
+        },
+        {
+          "id": "addiction-triggers",
+          "label": "Déclencheurs identifiés",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Qu'est-ce qui a provoqué vos envies ?",
+            "Situations à risque rencontrées",
+            "Éléments déclencheurs repérés"
+          ]
+        },
+        {
+          "id": "addiction-strategies",
+          "label": "Stratégies d'adaptation utilisées",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Comment avez-vous géré les envies ?",
+            "Techniques pour résister aux pulsions",
+            "Méthodes utilisées pour rester sobre"
+          ]
+        },
+        {
+          "id": "addiction-wins",
+          "label": "Victoires d'aujourd'hui",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Qu'avez-vous accompli dans votre récupération ?",
+            "Réussites du jour dans votre parcours",
+            "De quoi êtes-vous fier aujourd'hui ?"
+          ]
+        },
+        {
+          "id": "addiction-moment-strength",
+          "label": "Un moment où j'ai puisé dans ma force intérieure",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Situation où vous avez résisté",
+            "Moment de résilience vécu",
+            "Quand avez-vous été fort aujourd'hui ?"
+          ]
+        },
+        {
+          "id": "addiction-why",
+          "label": "Pourquoi est-ce important pour moi de rester sobre ?",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Mes raisons de poursuivre ce chemin",
+            "Ce qui me motive à continuer",
+            "Mon pourquoi profond"
+          ]
+        },
+        {
+          "id": "addiction-gratitude",
+          "label": "Une chose positive que la sobriété m'a apportée",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Bénéfice de la sobriété observé",
+            "Gain remarqué grâce à l'abstinence",
+            "Aspect positif de votre parcours"
+          ]
+        }
+      ]
+    },
+    "mental-health": {
+      "title": "Suivi Santé Mentale",
+      "icon": "brain",
+      "color": "#1e40af",
+      "questions": [
+        {
+          "id": "mental-anxiety",
+          "label": "Niveau d'anxiété (1-10)",
+          "type": "number",
+          "min": 1,
+          "max": 10,
+          "required": false,
+          "alternatives": [
+            "Intensité de votre anxiété",
+            "À quel point vous êtes-vous senti anxieux ?",
+            "Niveau de stress ressenti"
+          ]
+        },
+        {
+          "id": "mental-depression",
+          "label": "Niveau de dépression (1-10)",
+          "type": "number",
+          "min": 1,
+          "max": 10,
+          "required": false,
+          "alternatives": [
+            "Humeur dépressive ressentie",
+            "Intensité de la tristesse",
+            "Niveau de moral aujourd'hui"
+          ]
+        },
+        {
+          "id": "mental-therapy",
+          "label": "Séance de thérapie / suivi aujourd'hui ?",
+          "type": "select",
+          "options": ["Oui", "Non", "Prévue"],
+          "required": false,
+          "alternatives": [
+            "Avez-vous eu un rendez-vous thérapeutique ?",
+            "Consultation psy aujourd'hui ?",
+            "Séance avec votre thérapeute ?"
+          ]
+        },
+        {
+          "id": "mental-medication",
+          "label": "Médicaments pris comme prescrit ?",
+          "type": "select",
+          "options": ["Oui", "Non", "Partiellement", "N/A"],
+          "required": false,
+          "alternatives": [
+            "Avez-vous suivi votre traitement ?",
+            "Observance médicamenteuse",
+            "Prise des médicaments conforme ?"
+          ]
+        },
+        {
+          "id": "mental-selfcare",
+          "label": "Pratiques de bien-être mental",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Qu'avez-vous fait pour votre santé mentale ?",
+            "Activités de soin personnel pratiquées",
+            "Moments dédiés à votre bien-être psychologique"
+          ]
+        },
+        {
+          "id": "mental-safe-space",
+          "label": "Me suis-je senti en sécurité émotionnellement aujourd'hui ?",
+          "type": "select",
+          "options": ["Oui, tout le temps", "La plupart du temps", "Parfois", "Rarement", "Non"],
+          "required": false,
+          "alternatives": [
+            "Sentiment de sécurité émotionnelle",
+            "Ai-je pu être moi-même ?",
+            "Niveau de confort émotionnel ressenti"
+          ]
+        },
+        {
+          "id": "mental-progress",
+          "label": "Un petit progrès dans ma santé mentale",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Amélioration, même minime, remarquée",
+            "Pas en avant dans mon bien-être",
+            "Évolution positive notée"
+          ]
+        }
+      ]
+    },
+    "physical-health": {
+      "title": "Suivi Santé Physique",
+      "icon": "activity",
+      "color": "#065f46",
+      "questions": [
+        {
+          "id": "physical-symptoms",
+          "label": "Symptômes ou douleurs ressentis",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Avez-vous ressenti des douleurs ?",
+            "Manifestations physiques du jour",
+            "Symptômes corporels observés"
+          ]
+        },
+        {
+          "id": "physical-medication",
+          "label": "Médicaments / Traitements pris",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Quels médicaments avez-vous pris ?",
+            "Traitements suivis aujourd'hui",
+            "Prise médicamenteuse du jour"
+          ]
+        },
+        {
+          "id": "physical-doctor",
+          "label": "Rendez-vous médical aujourd'hui ?",
+          "type": "select",
+          "options": ["Oui", "Non", "Prévu"],
+          "required": false,
+          "alternatives": [
+            "Avez-vous consulté un médecin ?",
+            "Rendez-vous médical effectué ?",
+            "Consultation santé du jour"
+          ]
+        },
+        {
+          "id": "physical-energy",
+          "label": "Niveau d'énergie (1-10)",
+          "type": "number",
+          "min": 1,
+          "max": 10,
+          "required": false,
+          "alternatives": [
+            "Votre vitalité physique aujourd'hui",
+            "À quel point vous êtes-vous senti en forme ?",
+            "Niveau de forme physique"
+          ]
+        },
+        {
+          "id": "physical-hydration",
+          "label": "Hydratation (verres d'eau)",
+          "type": "number",
+          "min": 0,
+          "max": 20,
+          "required": false,
+          "alternatives": [
+            "Combien d'eau avez-vous bu ?",
+            "Quantité d'hydratation",
+            "Verres d'eau consommés"
+          ]
+        }
+      ]
+    },
+    "social": {
+      "title": "Suivi Relations Sociales",
+      "icon": "users",
+      "color": "#5b21b6",
+      "questions": [
+        {
+          "id": "social-interactions",
+          "label": "Nombre d'interactions sociales",
+          "type": "number",
+          "min": 0,
+          "max": 50,
+          "required": false,
+          "alternatives": [
+            "Combien de personnes avez-vous côtoyées ?",
+            "Nombre d'échanges sociaux",
+            "Interactions du jour"
+          ]
+        },
+        {
+          "id": "social-quality",
+          "label": "Qualité des interactions (1-10)",
+          "type": "number",
+          "min": 1,
+          "max": 10,
+          "required": false,
+          "alternatives": [
+            "À quel point vos échanges étaient-ils enrichissants ?",
+            "Qualité de vos relations aujourd'hui",
+            "Satisfaction sociale du jour"
+          ]
+        },
+        {
+          "id": "social-people",
+          "label": "Avec qui j'ai interagi",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Qui avez-vous vu aujourd'hui ?",
+            "Personnes rencontrées",
+            "Contacts sociaux du jour"
+          ]
+        },
+        {
+          "id": "social-conflicts",
+          "label": "Conflits ou tensions",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Difficultés relationnelles rencontrées",
+            "Désaccords ou frictions du jour",
+            "Tensions sociales observées"
+          ]
+        },
+        {
+          "id": "social-positive",
+          "label": "Moments de connexion positive",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Échanges chaleureux de la journée",
+            "Moments de complicité vécus",
+            "Connexions significatives établies"
+          ]
+        }
+      ]
+    },
+    "productivity": {
+      "title": "Suivi Productivité",
+      "icon": "trending-up",
+      "color": "#9a3412",
+      "questions": [
+        {
+          "id": "productivity-tasks",
+          "label": "Tâches accomplies / prévues",
+          "type": "text",
+          "required": false,
+          "alternatives": [
+            "Qu'avez-vous réalisé aujourd'hui ?",
+            "Travail accompli vs planifié",
+            "Objectifs atteints du jour"
+          ]
+        },
+        {
+          "id": "productivity-focus",
+          "label": "Niveau de concentration (1-10)",
+          "type": "number",
+          "min": 1,
+          "max": 10,
+          "required": false,
+          "alternatives": [
+            "Qualité de votre attention",
+            "À quel point étiez-vous concentré ?",
+            "Capacité de focus du jour"
+          ]
+        },
+        {
+          "id": "productivity-distractions",
+          "label": "Principales distractions",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Qu'est-ce qui a perturbé votre concentration ?",
+            "Éléments qui vous ont distrait",
+            "Sources d'interruption"
+          ]
+        },
+        {
+          "id": "productivity-wins",
+          "label": "Réalisations du jour",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "De quoi êtes-vous fier aujourd'hui ?",
+            "Accomplissements marquants",
+            "Victoires productives"
+          ]
+        },
+        {
+          "id": "productivity-obstacles",
+          "label": "Obstacles rencontrés",
+          "type": "textarea",
+          "rows": 2,
+          "required": false,
+          "alternatives": [
+            "Qu'est-ce qui a freiné votre productivité ?",
+            "Difficultés dans l'accomplissement des tâches",
+            "Blocages rencontrés"
+          ]
+        }
+      ]
+    }
+  },
+  "defaultSections": ["mood", "gratitude", "habits", "challenges", "reflections", "consciousness", "intention", "notes"],
+  "version": "1.0.0"
+}
+

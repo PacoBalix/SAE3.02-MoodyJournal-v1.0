@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma Récupération - MoodyJournal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sobriety-counter {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            animation: glow 2s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.8); }
+        }
+        
+        .milestone-card {
+            transition: all 0.3s ease;
+        }
+        
+        .milestone-reached {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            transform: scale(1.05);
+        }
+        
+        .milestone-locked {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+        
+        .trigger-heatmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .trigger-item {
+            transition: all 0.3s ease;
+        }
+        
+        .trigger-item:hover {
+            transform: translateY(-2px);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 3rem;
+            padding-bottom: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0.75rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #d1fae5;
+        }
+        
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 0;
+            top: 0.25rem;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid #10b981;
+            display: flex;
+            align-items: center;
+            justify-center;
+        }
+        
+        .savings-animation {
+            animation: countUp 1s ease-out;
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
+    
+    <!-- Navigation -->
+    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                    <img src="/assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
+                    <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
+                </a>
+
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="/index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
+                    <a href="/journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
+                    <a href="/view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
+                    <a href="/habits.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Habitudes</a>
+                    <a href="/recovery.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Récupération</a>
+                    <a href="/chat.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
+                    <a href="/settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
+                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        
+        <!-- En-tête -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold text-emerald-800 mb-2">🛡️ Ma Récupération</h1>
+            <p class="text-gray-600">Chaque jour est une victoire. Vous êtes plus fort que vous ne le pensez.</p>
+        </div>
+
+        <!-- Compteur principal -->
+        <div class="sobriety-counter rounded-3xl shadow-2xl p-12 mb-8 text-white text-center">
+            <div class="text-6xl mb-4">🏆</div>
+            <div class="text-6xl font-bold mb-2" id="main-counter">0</div>
+            <div class="text-2xl opacity-90 mb-6">jours de sobriété</div>
+            <div class="flex justify-center gap-8 text-sm opacity-75">
+                <div>
+                    <div class="font-bold text-2xl" id="hours-counter">0</div>
+                    <div>heures</div>
+                </div>
+                <div>
+                    <div class="font-bold text-2xl" id="minutes-counter">0</div>
+                    <div>minutes</div>
+                </div>
+                <div>
+                    <div class="font-bold text-2xl" id="seconds-counter">0</div>
+                    <div>secondes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jalons -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">🎯 Jalons de Récupération</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="milestones-grid">
+                <!-- Les jalons seront générés ici -->
+            </div>
+        </div>
+
+        <!-- Économies réalisées -->
+        <div class="grid md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-xl p-6 text-white">
+                <div class="text-3xl mb-3">💰</div>
+                <div class="text-4xl font-bold mb-1 savings-animation" id="money-saved">0 €</div>
+                <div class="text-sm opacity-75">économisés</div>
+            </div>
+            
+            <div class="bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl shadow-xl p-6 text-white">
+                <div class="text-3xl mb-3">⏰</div>
+                <div class="text-4xl font-bold mb-1 savings-animation" id="time-saved">0h</div>
+                <div class="text-sm opacity-75">de temps récupéré</div>
+            </div>
+            
+            <div class="bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-xl p-6 text-white">
+                <div class="text-3xl mb-3">❤️</div>
+                <div class="text-4xl font-bold mb-1 savings-animation" id="health-improvement">+0%</div>
+                <div class="text-sm opacity-75">d'amélioration santé</div>
+            </div>
+        </div>
+
+        <!-- Timeline de sevrage -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">📈 Timeline de Récupération</h2>
+            <p class="text-gray-600 mb-8">Voici ce qui se passe dans votre corps pendant la récupération :</p>
+            
+            <div class="timeline" id="recovery-timeline">
+                <!-- La timeline sera générée ici -->
+            </div>
+        </div>
+
+        <!-- Carte des déclencheurs -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-800">🗺️ Carte des Déclencheurs</h2>
+                <button id="add-trigger-btn" class="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Signaler un moment difficile
+                </button>
+            </div>
+            
+            <p class="text-gray-600 mb-6">Identifiez les moments où vous êtes le plus vulnérable pour mieux vous préparer.</p>
+            
+            <div class="trigger-heatmap" id="triggers-grid">
+                <!-- Les triggers seront affichés ici -->
+            </div>
+        </div>
+
+        <!-- Message de motivation -->
+        <div class="bg-gradient-to-r from-emerald-600 to-teal-600 rounded-3xl shadow-xl p-12 text-white text-center">
+            <div class="text-5xl mb-4">💪</div>
+            <h2 class="text-3xl font-bold mb-4" id="motivation-title">Vous êtes un guerrier !</h2>
+            <p class="text-xl opacity-90" id="motivation-message">Chaque jour compte. Continuez ce chemin extraordinaire.</p>
+        </div>
+
+    </main>
+
+    <!-- Modal - Ajouter une addiction -->
+    <div id="addiction-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full mx-4 p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Commencer Mon Suivi</h3>
+            
+            <form id="addiction-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Type d'addiction</label>
+                    <input type="text" id="addiction-name" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 transition-all" placeholder="Ex: Tabac, Alcool, etc.">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date de début de sobriété</label>
+                    <input type="date" id="addiction-start-date" required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Coût quotidien estimé (€)</label>
+                    <input type="number" id="addiction-daily-cost" step="0.01" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 transition-all" placeholder="Ex: 10">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Temps quotidien estimé (minutes)</label>
+                    <input type="number" id="addiction-daily-time" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 transition-all" placeholder="Ex: 60">
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="button" id="cancel-addiction-btn" class="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                        Annuler
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold transition-colors">
+                        Commencer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal - Signaler un déclencheur -->
+    <div id="trigger-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full mx-4 p-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Signaler un Moment Difficile</h3>
+            
+            <form id="trigger-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Type de déclencheur</label>
+                    <select id="trigger-type" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 transition-all">
+                        <option value="stress">😰 Stress</option>
+                        <option value="social">👥 Situation sociale</option>
+                        <option value="morning">🌅 Matin</option>
+                        <option value="afternoon">☀️ Après-midi</option>
+                        <option value="evening">🌆 Soirée</option>
+                        <option value="night">🌙 Nuit</option>
+                        <option value="alone">😔 Solitude</option>
+                        <option value="bored">🥱 Ennui</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Notes (optionnel)</label>
+                    <textarea id="trigger-notes" rows="3" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-emerald-500 transition-all" placeholder="Décrivez ce moment..."></textarea>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="button" id="cancel-trigger-btn" class="flex-1 px-6 py-3 border-2 border-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors">
+                        Annuler
+                    </button>
+                    <button type="submit" class="flex-1 px-6 py-3 bg-amber-600 hover:bg-amber-700 text-white rounded-lg font-bold transition-colors">
+                        Enregistrer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/session-check.js"></script>
+    <script>
+        let currentAddiction = null;
+        let triggers = {};
+        
+        // Jalons prédéfinis
+        const milestones = [
+            { day: 1, name: 'Premier Jour', icon: '🌱', reached: false },
+            { day: 3, name: '3 Jours', icon: '💪', reached: false },
+            { day: 7, name: '1 Semaine', icon: '🔥', reached: false },
+            { day: 14, name: '2 Semaines', icon: '⭐', reached: false },
+            { day: 30, name: '1 Mois', icon: '🏆', reached: false },
+            { day: 60, name: '2 Mois', icon: '💎', reached: false },
+            { day: 90, name: '3 Mois', icon: '👑', reached: false },
+            { day: 180, name: '6 Mois', icon: '🚀', reached: false },
+            { day: 365, name: '1 An', icon: '🎉', reached: false }
+        ];
+        
+        // Timeline de récupération (exemple pour le tabac)
+        const recoveryTimeline = [
+            { time: '20 minutes', description: 'La pression artérielle et le rythme cardiaque reviennent à la normale', icon: '❤️' },
+            { time: '12 heures', description: 'Le niveau de monoxyde de carbone dans le sang revient à la normale', icon: '🫁' },
+            { time: '24 heures', description: 'Le risque d\'accident cardiaque commence à diminuer', icon: '💓' },
+            { time: '48 heures', description: 'Les terminaisons nerveuses commencent à repousser', icon: '🌿' },
+            { time: '72 heures', description: 'La respiration devient plus facile', icon: '💨' },
+            { time: '2 semaines', description: 'La circulation sanguine s\'améliore', icon: '🔄' },
+            { time: '1-9 mois', description: 'Les cils pulmonaires repoussent, réduisant les infections', icon: '🦠' },
+            { time: '1 an', description: 'Le risque de maladie coronarienne diminue de 50%', icon: '💪' },
+            { time: '5 ans', description: 'Le risque d\'AVC devient équivalent à un non-fumeur', icon: '🧠' },
+            { time: '10 ans', description: 'Le risque de cancer du poumon diminue de moitié', icon: '🎗️' },
+            { time: '15 ans', description: 'Le risque de maladie coronarienne égale celui d\'un non-fumeur', icon: '✨' }
+        ];
+        
+        // Initialisation
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadAddiction();
+            
+            if (!currentAddiction) {
+                showAddictionModal();
+            } else {
+                updateCounters();
+                renderMilestones();
+                updateSavings();
+                renderTimeline();
+                renderTriggers();
+                updateMotivationMessage();
+                
+                // Mettre à jour les compteurs chaque seconde
+                setInterval(updateCounters, 1000);
+            }
+            
+            setupEventListeners();
+        });
+        
+        // Charger l'addiction
+        async function loadAddiction() {
+            try {
+                const response = await fetch('/api/addictions');
+                if (response.ok) {
+                    const addictions = await response.json();
+                    currentAddiction = addictions[0]; // Pour l'instant, on ne gère qu'une addiction
+                    
+                    if (currentAddiction) {
+                        triggers = currentAddiction.triggerMap || {};
+                    }
+                }
+            } catch (err) {
+                console.error('Erreur chargement addiction:', err);
+            }
+        }
+        
+        // Mettre à jour les compteurs
+        function updateCounters() {
+            if (!currentAddiction) return;
+            
+            const start = new Date(currentAddiction.startDate);
+            const now = new Date();
+            const diff = now - start;
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('main-counter').textContent = days;
+            document.getElementById('hours-counter').textContent = hours;
+            document.getElementById('minutes-counter').textContent = minutes;
+            document.getElementById('seconds-counter').textContent = seconds;
+        }
+        
+        // Afficher les jalons
+        function renderMilestones() {
+            const container = document.getElementById('milestones-grid');
+            const currentDays = currentAddiction.currentStreak || 0;
+            
+            container.innerHTML = milestones.map(milestone => {
+                const reached = currentDays >= milestone.day;
+                const classes = reached ? 'milestone-reached text-white' : 'milestone-locked bg-gray-100';
+                
+                return `
+                    <div class="milestone-card ${classes} rounded-2xl p-6 text-center">
+                        <div class="text-4xl mb-2">${milestone.icon}</div>
+                        <div class="text-2xl font-bold mb-1">${milestone.day}j</div>
+                        <div class="text-sm opacity-75">${milestone.name}</div>
+                        ${reached ? '<div class="mt-2 text-xs">✓ Atteint</div>' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Mettre à jour les économies
+        function updateSavings() {
+            const days = currentAddiction.currentStreak || 0;
+            const dailyCost = currentAddiction.dailyCost || 0;
+            const dailyTime = currentAddiction.dailyTime || 0;
+            
+            const moneySaved = days * dailyCost;
+            const timeSaved = (days * dailyTime) / 60; // en heures
+            const healthImprovement = Math.min(100, Math.round((days / 365) * 100));
+            
+            document.getElementById('money-saved').textContent = moneySaved.toFixed(2) + ' €';
+            document.getElementById('time-saved').textContent = timeSaved.toFixed(1) + 'h';
+            document.getElementById('health-improvement').textContent = '+' + healthImprovement + '%';
+        }
+        
+        // Afficher la timeline
+        function renderTimeline() {
+            const container = document.getElementById('recovery-timeline');
+            
+            container.innerHTML = recoveryTimeline.map(item => {
+                return `
+                    <div class="timeline-item">
+                        <div class="timeline-dot">
+                            ${item.icon}
+                        </div>
+                        <div class="bg-emerald-50 rounded-xl p-4">
+                            <div class="font-bold text-emerald-800 mb-1">${item.time}</div>
+                            <div class="text-gray-700">${item.description}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Afficher les déclencheurs
+        function renderTriggers() {
+            const container = document.getElementById('triggers-grid');
+            
+            if (Object.keys(triggers).length === 0) {
+                container.innerHTML = '<p class="text-gray-500 col-span-full text-center">Aucun déclencheur enregistré pour l\'instant.</p>';
+                return;
+            }
+            
+            const triggerLabels = {
+                stress: { icon: '😰', label: 'Stress' },
+                social: { icon: '👥', label: 'Social' },
+                morning: { icon: '🌅', label: 'Matin' },
+                afternoon: { icon: '☀️', label: 'Après-midi' },
+                evening: { icon: '🌆', label: 'Soirée' },
+                night: { icon: '🌙', label: 'Nuit' },
+                alone: { icon: '😔', label: 'Solitude' },
+                bored: { icon: '🥱', label: 'Ennui' }
+            };
+            
+            container.innerHTML = Object.entries(triggers).map(([type, count]) => {
+                const info = triggerLabels[type] || { icon: '❓', label: type };
+                const intensity = Math.min(5, Math.ceil(count / 2));
+                
+                return `
+                    <div class="trigger-item bg-amber-${intensity * 100} rounded-2xl p-6 text-center">
+                        <div class="text-4xl mb-2">${info.icon}</div>
+                        <div class="text-xl font-bold text-gray-800 mb-1">${count}x</div>
+                        <div class="text-sm text-gray-700">${info.label}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Message de motivation
+        function updateMotivationMessage() {
+            const days = currentAddiction.currentStreak || 0;
+            const messages = [
+                { threshold: 1, title: 'Félicitations pour ce premier jour !', message: 'Vous venez de franchir la première étape. C\'est énorme !' },
+                { threshold: 7, title: 'Une semaine complète !', message: 'Vous avez prouvé que vous pouvez le faire. Continuez !' },
+                { threshold: 30, title: 'Un mois de victoire !', message: 'Votre corps et votre esprit vous remercient. Vous êtes incroyable !' },
+                { threshold: 90, title: 'Trois mois de force !', message: 'Vous avez transformé votre vie. Continuez ce chemin extraordinaire !' },
+                { threshold: 365, title: 'UNE ANNÉE COMPLÈTE !', message: 'Vous êtes un modèle d\'inspiration. Félicitations pour cette victoire monumentale !' }
+            ];
+            
+            const message = messages.reverse().find(m => days >= m.threshold) || messages[messages.length - 1];
+            
+            document.getElementById('motivation-title').textContent = message.title;
+            document.getElementById('motivation-message').textContent = message.message;
+        }
+        
+        // Event listeners
+        function setupEventListeners() {
+            // Modal d'ajout d'addiction
+            document.getElementById('cancel-addiction-btn')?.addEventListener('click', () => {
+                document.getElementById('addiction-modal').classList.add('hidden');
+            });
+            
+            document.getElementById('addiction-form')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const addictionData = {
+                    addictionId: 'addiction-' + Date.now(),
+                    name: document.getElementById('addiction-name').value,
+                    startDate: document.getElementById('addiction-start-date').value,
+                    dailyCost: parseFloat(document.getElementById('addiction-daily-cost').value) || 0,
+                    dailyTime: parseInt(document.getElementById('addiction-daily-time').value) || 0,
+                    currentStreak: 0,
+                    longestStreak: 0,
+                    milestones: [],
+                    triggerMap: {},
+                    triggerLog: []
+                };
+                
+                try {
+                    const response = await fetch('/api/addictions/save', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(addictionData)
+                    });
+                    
+                    if (response.ok) {
+                        currentAddiction = addictionData;
+                        document.getElementById('addiction-modal').classList.add('hidden');
+                        location.reload();
+                    }
+                } catch (err) {
+                    console.error('Erreur:', err);
+                    alert('Erreur lors de la création du suivi');
+                }
+            });
+            
+            // Modal de déclencheur
+            document.getElementById('add-trigger-btn')?.addEventListener('click', () => {
+                document.getElementById('trigger-modal').classList.remove('hidden');
+                document.getElementById('trigger-modal').classList.add('flex');
+            });
+            
+            document.getElementById('cancel-trigger-btn')?.addEventListener('click', () => {
+                document.getElementById('trigger-modal').classList.add('hidden');
+            });
+            
+            document.getElementById('trigger-form')?.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const triggerType = document.getElementById('trigger-type').value;
+                const notes = document.getElementById('trigger-notes').value;
+                
+                try {
+                    const response = await fetch(`/api/addictions/${currentAddiction.addictionId}/trigger`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ triggerType, notes })
+                    });
+                    
+                    if (response.ok) {
+                        triggers[triggerType] = (triggers[triggerType] || 0) + 1;
+                        renderTriggers();
+                        document.getElementById('trigger-modal').classList.add('hidden');
+                        document.getElementById('trigger-form').reset();
+                    }
+                } catch (err) {
+                    console.error('Erreur:', err);
+                    alert('Erreur lors de l\'enregistrement du déclencheur');
+                }
+            });
+        }
+        
+        // Afficher le modal d'addiction
+        function showAddictionModal() {
+            const modal = document.getElementById('addiction-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Définir la date par défaut à aujourd'hui
+            document.getElementById('addiction-start-date').value = new Date().toISOString().split('T')[0];
+        }
+    </script>
+</body>
+</html>
+

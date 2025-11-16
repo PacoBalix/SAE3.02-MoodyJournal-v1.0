@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog - MoodyJournal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/navbar.js"></script>
     <style>
         .blog-card {
             transition: all 0.3s ease;
@@ -58,32 +59,8 @@
 
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
     <!-- Header -->
-    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-                    <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
-                    <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
-                </a>
-
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
-                    <a href="journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
-                    <a href="view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
-                    <a href="blog.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Blog</a>
-                    <a href="chat.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
-                    <a href="settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
-                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
-                </nav>
-
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-emerald-100 transition-colors">
-                    <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </header>
+    <!-- Navbar Container -->
+    <div id="navbar-container"></div>
 
     <main>
         <!-- Hero Section -->
@@ -109,29 +86,8 @@
                 </div>
             </div>
         </section>
-
-        <!-- Articles Grid -->
-        <section class="max-w-7xl mx-auto px-6 py-16">
-            <div id="articles-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Les articles seront chargés dynamiquement ici -->
-                <div class="text-center col-span-full py-12">
-                    <div class="animate-pulse">
-                        <div class="text-4xl mb-4">📖</div>
-                        <p class="text-gray-600">Chargement des articles...</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Message si aucun article -->
-            <div id="no-articles" class="hidden text-center py-16">
-                <div class="text-6xl mb-6">📝</div>
-                <h3 class="text-2xl font-bold text-gray-800 mb-4">Aucun article pour le moment</h3>
-                <p class="text-gray-600">Les articles arrivent bientôt !</p>
-            </div>
-        </section>
-
         <!-- Featured Article -->
-        <section id="featured-section" class="max-w-6xl mx-auto px-6 pb-16 hidden">
+        <section id="featured-section" class="max-w-6xl mx-auto px-6 pb-16 hidden" style="padding-top: 1rem">
             <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
                 <div class="flex items-center gap-3 mb-4">
                     <span class="bg-white/20 px-4 py-1 rounded-full text-sm font-semibold">⭐ Article à la une</span>
@@ -153,6 +109,26 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
                 </a>
+            </div>
+        </section>
+
+        <!-- Articles Grid -->
+        <section class="max-w-7xl mx-auto px-6 py-16">
+            <div id="articles-container" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Les articles seront chargés dynamiquement ici -->
+                <div class="text-center col-span-full py-12">
+                    <div class="animate-pulse">
+                        <div class="text-4xl mb-4">📖</div>
+                        <p class="text-gray-600">Chargement des articles...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message si aucun article -->
+            <div id="no-articles" class="hidden text-center py-16">
+                <div class="text-6xl mb-6">📝</div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Aucun article pour le moment</h3>
+                <p class="text-gray-600">Les articles arrivent bientôt !</p>
             </div>
         </section>
     </main>
@@ -296,7 +272,13 @@
         });
 
         // Charger au démarrage
-        document.addEventListener('DOMContentLoaded', loadArticles);
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialiser la navbar
+            initNavbar('blog.html');
+            
+            // Charger les articles
+            loadArticles();
+        });
     </script>
     <script src="/js/session-check.js"></script>
 </body>

@@ -99,35 +99,148 @@
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
         }
+
+        .user-avatar {
+            transition: transform 0.2s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        #global-messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #global-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #global-messages::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 10px;
+        }
+
+        #global-messages::-webkit-scrollbar-thumb:hover {
+            background: #059669;
+        }
+
+        #online-users-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #online-users-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        #online-users-list::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+
+        #online-users-list::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .message-bubble-enter {
+            animation: messageBubbleEnter 0.3s ease;
+        }
+
+        @keyframes messageBubbleEnter {
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Style pour justifier le texte dans les messages */
+        .message-text-justify {
+            text-align: justify;
+            text-justify: inter-word;
+        }
     </style>
 </head>
 
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
     <!-- Header -->
-    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
-        <div class="max-w-7xl mx-auto px-6 py-4">
+    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-                        <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
-                        <span class="text-xl font-bold text-emerald-800">MoodyJournal</span>
-                    </a>
-                </div>
+                <!-- Logo -->
+                <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+                    <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-12 sm:h-14">
+                    <div class="hidden sm:block">
+                        <span class="text-xl font-bold text-emerald-800 block">MoodyJournal</span>
+                        <span class="text-xs text-gray-600">Votre compagnon bien-être</span>
+                    </div>
+                </a>
 
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
-                    <a href="journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
-                    <a href="view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
-                    <a href="chat.html" class="text-emerald-600 font-bold border-b-2 border-emerald-600">Discuter</a>
-                    <a href="settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
-                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-3">
+                    <a href="index.html" class="bg-white/66 text-gray-700 hover:bg-emerald-300/50 hover:text-emerald-800 font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+                        Accueil
+                    </a>
+                    <a href="journal.html" class="bg-white/66 text-gray-700 hover:bg-emerald-300/50 hover:text-emerald-800 font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+                        Écrire
+                    </a>
+                    <a href="view.html" class="bg-white/66 text-gray-700 hover:bg-emerald-300/50 hover:text-emerald-800 font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+                        Consulter
+                    </a>
+                    <a href="blog.html" class="bg-white/66 text-gray-700 hover:bg-emerald-300/50 hover:text-emerald-800 font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+                        Blog
+                    </a>
+                    <a href="chat.html" class="bg-emerald-500/70 text-white font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+                        Discuter
+                    </a>
+                    
+                    <!-- User Display (si connecté) -->
+                    <span id="user-display-nav" class="hidden bg-blue-500/70 text-white font-medium px-4 py-2 rounded-full backdrop-blur-sm shadow-sm"></span>
+                    
+                    <!-- Auth Button -->
+                    <a id="auth-button-nav" href="/logout" class="bg-gradient-to-r from-red-400/70 to-orange-400/70 hover:from-red-500/80 hover:to-orange-500/80 text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg backdrop-blur-sm">
+                        Déconnexion
+                    </a>
                 </nav>
 
-                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-emerald-100 transition-colors">
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-full hover:bg-emerald-100 transition-colors">
                     <svg class="w-6 h-6 text-emerald-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
                 </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4 space-y-2">
+                <a href="index.html" class="bg-white/66 text-gray-700 hover:bg-emerald-300/50 block font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+                    Accueil
+                </a>
+                <a href="journal.html" class="bg-white/66 text-gray-700 hover:bg-emerald-300/50 block font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+                    Écrire
+                </a>
+                <a href="view.html" class="bg-white/66 text-gray-700 hover:bg-emerald-300/50 block font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+                    Consulter
+                </a>
+                <a href="blog.html" class="bg-white/66 text-gray-700 hover:bg-emerald-300/50 block font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+                    Blog
+                </a>
+                <a href="chat.html" class="bg-emerald-500/70 text-white block font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+                    Discuter
+                </a>
+                
+                <!-- User Display Mobile -->
+                <div id="user-display-mobile-nav" class="hidden bg-blue-500/70 text-white font-medium px-4 py-3 rounded-lg backdrop-blur-sm shadow-sm text-center"></div>
+                
+                <!-- Auth Button Mobile -->
+                <a id="auth-button-mobile-nav" href="/logout" class="block bg-gradient-to-r from-red-400/70 to-orange-400/70 text-white font-semibold px-4 py-3 rounded-lg transition-all duration-300 shadow-md text-center">
+                    Déconnexion
+                </a>
             </div>
         </div>
     </header>
@@ -151,129 +264,218 @@
         </div>
 
         <!-- Chat Global -->
-        <div id="global-chat-section" class="bg-white rounded-2xl shadow-xl overflow-hidden">
-            <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 p-4">
-                <h2 class="text-white text-xl font-bold flex items-center">
-                    <span class="mr-2">🌍</span>
-                    <span>Chat Global - Tous les utilisateurs</span>
-                    <span id="online-count" class="ml-auto text-sm bg-white/20 px-3 py-1 rounded-full">0 en ligne</span>
-                </h2>
+        <div id="global-chat-section" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            <!-- Section Utilisateurs en ligne (gauche) -->
+            <div class="lg:col-span-1 order-2 lg:order-1">
+                <div class="bg-white rounded-2xl shadow-xl p-6 h-full">
+                    <div class="mb-4 lg:mb-6">
+                        <h2 class="text-lg lg:text-xl font-bold text-gray-800 mb-2 flex items-center">
+                            <span class="mr-2">👥</span>
+                            Utilisateurs en ligne
+                        </h2>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <span class="online-indicator mr-2"></span>
+                            <span id="online-count">0 en ligne</span>
+                        </div>
+                    </div>
+
+                    <!-- Liste des utilisateurs en ligne -->
+                    <div id="online-users-list" class="space-y-2 max-h-[200px] lg:max-h-[600px] overflow-y-auto">
+                        <!-- Les utilisateurs seront ajoutés ici dynamiquement -->
+                    </div>
+
+                    <!-- Message si personne n'est en ligne -->
+                    <div id="no-users-online" class="text-center py-4 lg:py-8 text-gray-400">
+                        <svg class="w-12 h-12 lg:w-16 lg:h-16 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                        <p class="text-sm">Aucun utilisateur en ligne</p>
+                    </div>
+                </div>
             </div>
 
-            <div class="chat-container p-6">
-                <!-- Messages globaux -->
-                <div id="global-messages" class="messages-container mb-4 space-y-3 bg-gray-50 rounded-lg p-4">
-                    <!-- Messages apparaîtront ici -->
-                </div>
+            <!-- Section Messages (droite) -->
+            <div class="lg:col-span-3 order-1 lg:order-2">
+                <div class="bg-white rounded-2xl shadow-xl overflow-hidden h-full">
+                    <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 p-4">
+                        <h2 class="text-white text-xl font-bold flex items-center">
+                            <span class="mr-2">🌍</span>
+                            <span>Chat Global - Conversation</span>
+                        </h2>
+                        <p class="text-emerald-100 text-sm mt-1">Partagez avec toute la communauté MoodyJournal</p>
+                    </div>
 
-                <!-- Input message global -->
-                <form id="global-message-form" class="flex gap-2">
-                    <input type="text" id="global-message-input" 
-                           placeholder="Envoyez un message à tout le monde..." 
-                           class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                           autocomplete="off">
-                    <button type="submit" 
-                            class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                        Envoyer
-                    </button>
-                </form>
+                    <div class="chat-container p-6">
+                        <!-- Messages globaux -->
+                        <div id="global-messages" class="messages-container mb-4 space-y-3 bg-gradient-to-br from-gray-50 to-emerald-50/30 rounded-lg p-4 border border-emerald-100">
+                            <!-- Messages apparaîtront ici -->
+                        </div>
+
+                        <!-- Input message global -->
+                        <form id="global-message-form" class="flex gap-2">
+                            <input type="text" id="global-message-input" 
+                                   placeholder="💬 Envoyez un message à tout le monde..." 
+                                   class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"
+                                   autocomplete="off">
+                            <button type="submit" 
+                                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-all hover:shadow-lg flex items-center gap-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                                Envoyer
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Chats Privés -->
         <div id="private-chat-section" class="hidden">
-            <div class="grid lg:grid-cols-3 gap-6">
-                <!-- Section Contacts -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-2xl shadow-xl p-6">
-                        <div class="flex items-center justify-between mb-6">
-                            <h2 class="text-2xl font-bold text-gray-800">Mes Contacts</h2>
-                            <button id="add-contact-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm">
-                                + Ajouter
-                            </button>
-                        </div>
+            <!-- Section supérieure : Contacts et Demandes d'amis -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 mb-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">👥 Gestion des Contacts</h2>
+                    <button id="add-contact-btn" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Ajouter un ami
+                    </button>
+                </div>
 
-                        <!-- Statut utilisateur -->
-                        <div class="mb-6 p-4 bg-emerald-50 rounded-lg">
-                            <div class="flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <div class="online-indicator"></div>
-                                    <span id="current-user" class="font-semibold text-gray-800">Utilisateur</span>
-                                </div>
-                                <span class="text-xs text-gray-600">En ligne</span>
-                            </div>
+                <!-- Statut utilisateur -->
+                <div class="mb-6 p-4 bg-emerald-50 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="online-indicator"></div>
+                            <span id="current-user" class="font-semibold text-gray-800">Utilisateur</span>
                         </div>
-
-                        <!-- Liste des contacts -->
-                        <div id="contacts-list" class="space-y-3">
-                            <!-- Les contacts seront ajoutés ici dynamiquement -->
-                        </div>
+                        <span class="text-xs text-gray-600">En ligne</span>
                     </div>
                 </div>
 
-                <!-- Section Chat Privé -->
-                <div class="lg:col-span-2">
-                    <div class="bg-white rounded-2xl shadow-xl p-6 chat-container">
-                        <div id="no-chat-selected" class="flex items-center justify-center h-full text-gray-400">
-                            <div class="text-center">
-                                <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
-                                    </path>
-                                </svg>
-                                <p class="text-xl font-semibold">Sélectionnez un contact pour commencer</p>
-                            </div>
+                <!-- Onglets -->
+                <div class="flex justify-center items-center gap-2 mb-6 border-b-2 border-gray-200">
+                    <button id="tab-contacts" class="tab-contact active flex-1 max-w-sm px-6 py-5 text-base md:text-lg font-bold text-gray-700 border-b-4 border-emerald-600 transition-all hover:bg-emerald-50 rounded-t-xl shadow-sm">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <span class="text-3xl">📋</span>
+                            <span class="text-center">Mes Contacts</span>
                         </div>
+                    </button>
+                    <button id="tab-requests-received" class="tab-contact flex-1 max-w-sm px-6 py-5 text-base md:text-lg font-bold text-gray-500 hover:text-gray-700 transition-all hover:bg-blue-50 rounded-t-xl shadow-sm relative">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <span class="text-3xl">📥</span>
+                            <span class="text-center">Demandes reçues</span>
+                            <span id="requests-received-badge" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-7 h-7 flex items-center justify-center animate-pulse shadow-lg">0</span>
+                        </div>
+                    </button>
+                    <button id="tab-requests-sent" class="tab-contact flex-1 max-w-sm px-6 py-5 text-base md:text-lg font-bold text-gray-500 hover:text-gray-700 transition-all hover:bg-amber-50 rounded-t-xl shadow-sm">
+                        <div class="flex flex-col items-center justify-center gap-2">
+                            <span class="text-3xl">📤</span>
+                            <span class="text-center">Demandes envoyées</span>
+                        </div>
+                    </button>
+                </div>
 
-                        <div id="private-chat-window" class="hidden h-full flex flex-col">
-                            <!-- Header du chat -->
-                            <div class="flex items-center justify-between pb-4 border-b-2 border-gray-200 mb-4">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                                        <span id="chat-user-initial">?</span>
-                                    </div>
-                                    <div>
-                                        <h3 id="chat-user-name" class="text-xl font-bold text-gray-800">Nom du contact</h3>
-                                        <p id="chat-user-status" class="text-sm text-gray-600">
-                                            <span class="offline-indicator"></span>
-                                            Hors ligne
-                                        </p>
-                                    </div>
+                <!-- Contenu des onglets -->
+                <!-- Onglet Contacts -->
+                <div id="contacts-tab-content" class="tab-content">
+                    <div id="contacts-list" class="space-y-3 max-h-96 overflow-y-auto">
+                        <!-- Les contacts seront ajoutés ici dynamiquement -->
+                    </div>
+                </div>
+
+                <!-- Onglet Demandes reçues -->
+                <div id="requests-received-tab-content" class="tab-content hidden">
+                    <div id="requests-received-list" class="space-y-3 max-h-96 overflow-y-auto">
+                        <!-- Les demandes reçues seront ajoutées ici -->
+                    </div>
+                    <div id="no-requests-received" class="text-center py-8 text-gray-400">
+                        <svg class="w-16 h-16 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                        </svg>
+                        <p class="text-sm">Aucune demande reçue</p>
+                    </div>
+                </div>
+
+                <!-- Onglet Demandes envoyées -->
+                <div id="requests-sent-tab-content" class="tab-content hidden">
+                    <div id="requests-sent-list" class="space-y-3 max-h-96 overflow-y-auto">
+                        <!-- Les demandes envoyées seront ajoutées ici -->
+                    </div>
+                    <div id="no-requests-sent" class="text-center py-8 text-gray-400">
+                        <svg class="w-16 h-16 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                        </svg>
+                        <p class="text-sm">Aucune demande envoyée</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Chat Privé (pleine largeur) -->
+            <div>
+                <div class="bg-white rounded-2xl shadow-xl p-6 chat-container">
+                    <div id="no-chat-selected" class="flex items-center justify-center h-full text-gray-400">
+                        <div class="text-center">
+                            <svg class="w-24 h-24 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                      d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z">
+                                </path>
+                            </svg>
+                            <p class="text-xl font-semibold">Sélectionnez un contact pour commencer</p>
+                        </div>
+                    </div>
+
+                    <div id="private-chat-window" class="hidden h-full flex flex-col">
+                        <!-- Header du chat -->
+                        <div class="flex items-center justify-between pb-4 border-b-2 border-gray-200 mb-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                                    <span id="chat-user-initial">?</span>
                                 </div>
-                                <button id="close-private-chat" class="text-gray-500 hover:text-gray-700">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                </button>
+                                <div>
+                                    <h3 id="chat-user-name" class="text-xl font-bold text-gray-800">Nom du contact</h3>
+                                    <p id="chat-user-status" class="text-sm text-gray-600">
+                                        <span class="offline-indicator"></span>
+                                        Hors ligne
+                                    </p>
+                                </div>
                             </div>
-
-                            <!-- Messages privés -->
-                            <div id="private-messages" class="messages-container flex-1 overflow-y-auto mb-4 space-y-3">
-                                <!-- Messages apparaîtront ici -->
-                            </div>
-
-                            <!-- Input message privé -->
-                            <form id="private-message-form" class="flex gap-2">
-                                <input type="text" id="private-message-input" 
-                                       placeholder="Tapez votre message..." 
-                                       class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                                       autocomplete="off">
-                                <button type="submit" 
-                                        class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                                    Envoyer
-                                </button>
-                            </form>
+                            <button id="close-private-chat" class="text-gray-500 hover:text-gray-700">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                            </button>
                         </div>
+
+                        <!-- Messages privés -->
+                        <div id="private-messages" class="messages-container flex-1 overflow-y-auto mb-4 space-y-3">
+                            <!-- Messages apparaîtront ici -->
+                        </div>
+
+                        <!-- Input message privé -->
+                        <form id="private-message-form" class="flex gap-2">
+                            <input type="text" id="private-message-input" 
+                                   placeholder="Tapez votre message..." 
+                                   class="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                                   autocomplete="off">
+                            <button type="submit" 
+                                    class="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                Envoyer
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Modal d'ajout de contact -->
+    <!-- Modal d'ajout de contact / envoi de demande -->
     <div id="add-contact-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
         <div class="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4">Ajouter un contact</h3>
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Envoyer une demande d'ami</h3>
+            <p class="text-sm text-gray-600 mb-4">Entrez le nom d'utilisateur de la personne que vous souhaitez ajouter</p>
             <input type="text" id="contact-username" 
                    placeholder="Nom d'utilisateur" 
                    class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 mb-4">
@@ -284,7 +486,7 @@
                 </button>
                 <button id="confirm-add-contact" 
                         class="flex-1 px-6 py-3 bg-emerald-600 text-white rounded-lg font-medium hover:bg-emerald-700 transition-colors">
-                    Ajouter
+                    Envoyer la demande
                 </button>
             </div>
         </div>
@@ -311,14 +513,88 @@
         let currentChatUserId = null;
         let contacts = [];
         let onlineUsers = new Set();
+        let lastGlobalMessageDate = null;
+        let lastPrivateMessageDate = null;
 
         // Initialisation
         document.addEventListener('DOMContentLoaded', async function() {
             await checkSession();
+            updateNavbarAuth();
             initializeSocket();
             loadContacts();
+            loadFriendRequests();
             setupEventListeners();
+            setupMobileMenu();
         });
+        
+        // Mettre à jour l'affichage de la navbar selon la session
+        async function updateNavbarAuth() {
+            try {
+                const response = await fetch('/api/session');
+                const data = await response.json();
+                
+                const userDisplayNav = document.getElementById('user-display-nav');
+                const userDisplayMobileNav = document.getElementById('user-display-mobile-nav');
+                const authButtonNav = document.getElementById('auth-button-nav');
+                const authButtonMobileNav = document.getElementById('auth-button-mobile-nav');
+                
+                if (data.authenticated && data.user) {
+                    // Afficher le nom d'utilisateur
+                    if (userDisplayNav) {
+                        userDisplayNav.textContent = data.user;
+                        userDisplayNav.classList.remove('hidden');
+                    }
+                    if (userDisplayMobileNav) {
+                        userDisplayMobileNav.textContent = data.user;
+                        userDisplayMobileNav.classList.remove('hidden');
+                    }
+                    
+                    // Bouton Déconnexion
+                    if (authButtonNav) {
+                        authButtonNav.href = '/logout';
+                        authButtonNav.textContent = 'Déconnexion';
+                        authButtonNav.className = 'bg-gradient-to-r from-red-400/70 to-orange-400/70 hover:from-red-500/80 hover:to-orange-500/80 text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg backdrop-blur-sm';
+                    }
+                    if (authButtonMobileNav) {
+                        authButtonMobileNav.href = '/logout';
+                        authButtonMobileNav.textContent = 'Déconnexion';
+                    }
+                } else {
+                    // Bouton Se connecter
+                    if (authButtonNav) {
+                        authButtonNav.href = '#';
+                        authButtonNav.textContent = 'Se connecter';
+                        authButtonNav.className = 'bg-gradient-to-r from-emerald-400/70 to-green-400/70 hover:from-emerald-500/80 hover:to-green-500/80 text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg backdrop-blur-sm';
+                        authButtonNav.onclick = (e) => {
+                            e.preventDefault();
+                            window.location.href = '/index.html?login';
+                        };
+                    }
+                    if (authButtonMobileNav) {
+                        authButtonMobileNav.href = '#';
+                        authButtonMobileNav.textContent = 'Se connecter';
+                        authButtonMobileNav.onclick = (e) => {
+                            e.preventDefault();
+                            window.location.href = '/index.html?login';
+                        };
+                    }
+                }
+            } catch (err) {
+                console.error('❌ Erreur mise à jour navbar:', err);
+            }
+        }
+        
+        // Setup mobile menu toggle
+        function setupMobileMenu() {
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        }
 
         async function checkSession() {
             try {
@@ -360,6 +636,7 @@
                 onlineUsers = new Set(users);
                 updateOnlineCount();
                 updateContactsStatus();
+                console.log('👥 Utilisateurs en ligne:', users);
             });
             
             socket.on('user-connected', (username) => {
@@ -418,6 +695,19 @@
                 document.getElementById('global-chat-section').classList.add('hidden');
             });
             
+            // Onglets de gestion des contacts
+            document.getElementById('tab-contacts').addEventListener('click', () => {
+                switchContactTab('contacts');
+            });
+            
+            document.getElementById('tab-requests-received').addEventListener('click', () => {
+                switchContactTab('requests-received');
+            });
+            
+            document.getElementById('tab-requests-sent').addEventListener('click', () => {
+                switchContactTab('requests-sent');
+            });
+            
             // Chat global - Envoyer message
             document.getElementById('global-message-form').addEventListener('submit', sendGlobalMessage);
             
@@ -431,11 +721,44 @@
                 document.getElementById('add-contact-modal').classList.add('hidden');
             });
             
-            document.getElementById('confirm-add-contact').addEventListener('click', addContact);
+            document.getElementById('confirm-add-contact').addEventListener('click', sendFriendRequest);
             
             document.getElementById('close-private-chat').addEventListener('click', closePrivateChat);
             
             document.getElementById('private-message-form').addEventListener('submit', sendPrivateMessage);
+        }
+
+        function switchContactTab(tabName) {
+            // Désactiver tous les onglets
+            document.querySelectorAll('.tab-contact').forEach(tab => {
+                tab.classList.remove('active', 'text-gray-700', 'border-emerald-600', 'border-b-4', 'bg-emerald-50');
+                tab.classList.add('text-gray-500');
+            });
+            
+            // Masquer tout le contenu
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Activer l'onglet sélectionné
+            if (tabName === 'contacts') {
+                const tab = document.getElementById('tab-contacts');
+                tab.classList.add('active', 'text-gray-700', 'border-b-4', 'border-emerald-600', 'bg-emerald-50');
+                tab.classList.remove('text-gray-500');
+                document.getElementById('contacts-tab-content').classList.remove('hidden');
+            } else if (tabName === 'requests-received') {
+                const tab = document.getElementById('tab-requests-received');
+                tab.classList.add('active', 'text-gray-700', 'border-b-4', 'border-blue-600', 'bg-blue-50');
+                tab.classList.remove('text-gray-500');
+                document.getElementById('requests-received-tab-content').classList.remove('hidden');
+                loadReceivedRequests();
+            } else if (tabName === 'requests-sent') {
+                const tab = document.getElementById('tab-requests-sent');
+                tab.classList.add('active', 'text-gray-700', 'border-b-4', 'border-amber-600', 'bg-amber-50');
+                tab.classList.remove('text-gray-500');
+                document.getElementById('requests-sent-tab-content').classList.remove('hidden');
+                loadSentRequests();
+            }
         }
 
         // === CHAT GLOBAL ===
@@ -454,27 +777,121 @@
         function displayGlobalMessages(messages) {
             const container = document.getElementById('global-messages');
             container.innerHTML = '';
+            lastGlobalMessageDate = null; // Réinitialiser la date pour le chargement initial
+            
+            if (messages.length === 0) {
+                container.innerHTML = `
+                    <div class="flex items-center justify-center h-full min-h-[300px]">
+                        <div class="text-center text-gray-400">
+                            <svg class="w-20 h-20 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                            </svg>
+                            <p class="text-lg font-semibold mb-2">Aucun message pour le moment</p>
+                            <p class="text-sm">Soyez le premier à démarrer la conversation ! 💬</p>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
             messages.forEach(msg => addGlobalMessage(msg, false));
             scrollToBottom(container);
         }
 
+        // Fonction helper pour formater la date
+        function formatDate(date) {
+            const today = new Date();
+            const messageDate = new Date(date);
+            
+            today.setHours(0, 0, 0, 0);
+            messageDate.setHours(0, 0, 0, 0);
+            
+            const diffTime = today - messageDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) {
+                return "Aujourd'hui";
+            } else if (diffDays === 1) {
+                return "Hier";
+            } else if (diffDays < 7) {
+                return messageDate.toLocaleDateString('fr-FR', { weekday: 'long' });
+            } else {
+                return messageDate.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+            }
+        }
+
+        // Fonction helper pour créer un séparateur de date
+        function createDateSeparator(dateString) {
+            const separator = document.createElement('div');
+            separator.className = 'flex items-center justify-center my-4';
+            separator.innerHTML = `
+                <div class="flex items-center w-full">
+                    <div class="flex-1 border-t border-gray-300"></div>
+                    <span class="px-4 py-1 bg-emerald-100 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200">
+                        ${dateString}
+                    </span>
+                    <div class="flex-1 border-t border-gray-300"></div>
+                </div>
+            `;
+            return separator;
+        }
+
         function addGlobalMessage(message, scroll = true) {
             const container = document.getElementById('global-messages');
+            
+            // Vérifier si on doit ajouter un séparateur de date
+            const messageDate = new Date(message.timestamp);
+            const messageDateString = messageDate.toDateString();
+            
+            if (lastGlobalMessageDate !== messageDateString) {
+                const dateSeparator = createDateSeparator(formatDate(message.timestamp));
+                container.appendChild(dateSeparator);
+                lastGlobalMessageDate = messageDateString;
+            }
+            
             const messageDiv = document.createElement('div');
-            messageDiv.className = 'chat-message';
+            messageDiv.className = 'chat-message message-bubble-enter';
             
             const isOwn = message.username === currentUser;
             const time = new Date(message.timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+            const initial = message.username.charAt(0).toUpperCase();
             
-            messageDiv.innerHTML = `
-                <div class="${isOwn ? 'text-right' : 'text-left'} mb-2">
-                    <div class="inline-block ${isOwn ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-800'} rounded-2xl px-4 py-2 max-w-md">
-                        <p class="text-xs font-semibold mb-1 ${isOwn ? 'text-emerald-100' : 'text-gray-600'}">${message.username}</p>
-                        <p>${message.text}</p>
-                        <p class="text-xs mt-1 ${isOwn ? 'text-emerald-100' : 'text-gray-500'}">${time}</p>
+            if (isOwn) {
+                // Message de l'utilisateur actuel (à droite)
+                messageDiv.innerHTML = `
+                    <div class="flex justify-end items-end gap-2 mb-3">
+                        <div class="flex flex-col items-end" style="max-width: 70%; min-width: 120px;">
+                            <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-2xl rounded-br-sm px-4 py-3 shadow-md inline-block">
+                                <p class="text-sm leading-relaxed message-text-justify whitespace-pre-wrap break-words">${message.text}</p>
+                            </div>
+                            <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                                <span>${time}</span>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md flex-shrink-0">
+                            ${initial}
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
+            } else {
+                // Message d'un autre utilisateur (à gauche)
+                messageDiv.innerHTML = `
+                    <div class="flex items-end gap-2 mb-3">
+                        <div class="w-8 h-8 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md flex-shrink-0">
+                            ${initial}
+                        </div>
+                        <div class="flex flex-col items-start" style="max-width: 70%; min-width: 120px;">
+                            <span class="text-xs font-semibold text-gray-700 mb-1 ml-1">${message.username}</span>
+                            <div class="bg-white border-2 border-gray-200 text-gray-800 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm hover:shadow-md transition-shadow inline-block">
+                                <p class="text-sm leading-relaxed message-text-justify whitespace-pre-wrap break-words">${message.text}</p>
+                            </div>
+                            <div class="flex items-center gap-2 mt-1 text-xs text-gray-500 ml-1">
+                                <span>${time}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
             
             container.appendChild(messageDiv);
             if (scroll) scrollToBottom(container);
@@ -580,12 +997,24 @@
         function displayPrivateMessages(messages) {
             const container = document.getElementById('private-messages');
             container.innerHTML = '';
+            lastPrivateMessageDate = null; // Réinitialiser la date pour le chargement initial
             messages.forEach(msg => addPrivateMessage(msg, false));
             scrollToBottom(container);
         }
 
         function addPrivateMessage(message, scroll = true) {
             const container = document.getElementById('private-messages');
+            
+            // Vérifier si on doit ajouter un séparateur de date
+            const messageDate = new Date(message.timestamp);
+            const messageDateString = messageDate.toDateString();
+            
+            if (lastPrivateMessageDate !== messageDateString) {
+                const dateSeparator = createDateSeparator(formatDate(message.timestamp));
+                container.appendChild(dateSeparator);
+                lastPrivateMessageDate = messageDateString;
+            }
+            
             const messageDiv = document.createElement('div');
             messageDiv.className = 'chat-message';
             
@@ -593,10 +1022,10 @@
             const time = new Date(message.timestamp).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
             
             messageDiv.innerHTML = `
-                <div class="${isSent ? 'text-right' : 'text-left'}">
-                    <div class="inline-block ${isSent ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-800'} rounded-2xl px-4 py-2 max-w-xs">
-                        <p>${message.text}</p>
-                        <p class="text-xs mt-1 ${isSent ? 'text-emerald-100' : 'text-gray-500'}">${time}</p>
+                <div class="${isSent ? 'text-right' : 'text-left'} mb-3">
+                    <div class="inline-block ${isSent ? 'bg-emerald-600 text-white' : 'bg-gray-200 text-gray-800'} rounded-2xl px-4 py-3 shadow-md" style="max-width: 70%; min-width: 120px;">
+                        <p class="text-sm leading-relaxed message-text-justify whitespace-pre-wrap break-words">${message.text}</p>
+                        <p class="text-xs mt-2 ${isSent ? 'text-emerald-100' : 'text-gray-500'}">${time}</p>
                     </div>
                 </div>
             `;
@@ -605,8 +1034,9 @@
             if (scroll) scrollToBottom(container);
         }
 
-        async function addContact() {
-            const username = document.getElementById('contact-username').value.trim();
+        async function sendFriendRequest() {
+            const usernameInput = document.getElementById('contact-username');
+            const username = usernameInput.value.trim();
             
             if (!username) {
                 showNotification('Veuillez entrer un nom d\'utilisateur', 'error');
@@ -614,46 +1044,307 @@
             }
             
             if (username === currentUser) {
-                showNotification('Vous ne pouvez pas vous ajouter', 'error');
+                showNotification('Vous ne pouvez pas vous envoyer une demande', 'error');
                 return;
             }
             
+            // Désactiver le bouton pendant le traitement
+            const confirmBtn = document.getElementById('confirm-add-contact');
+            const originalText = confirmBtn.textContent;
+            confirmBtn.disabled = true;
+            confirmBtn.textContent = 'Envoi...';
+            
             try {
                 // Récupérer l'ID du contact
-                const userIdResponse = await fetch(`/api/user-id/${username}`);
+                const userIdResponse = await fetch(`/api/user-id/${encodeURIComponent(username)}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
                 if (!userIdResponse.ok) {
-                    showNotification('Utilisateur non trouvé', 'error');
+                    if (userIdResponse.status === 404) {
+                        showNotification('Utilisateur non trouvé. Vérifiez le nom d\'utilisateur.', 'error');
+                    } else if (userIdResponse.status === 401) {
+                        showNotification('Session expirée. Veuillez vous reconnecter.', 'error');
+                        window.location.href = '/index.html?login';
+                    } else {
+                        showNotification('Erreur lors de la recherche de l\'utilisateur', 'error');
+                    }
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = originalText;
                     return;
                 }
                 
                 const userData = await userIdResponse.json();
                 
-                // Ajouter le contact
-                const response = await fetch(`/api/contacts/${currentUserId}/add`, {
+                if (!userData || !userData.id) {
+                    showNotification('Données utilisateur invalides', 'error');
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = originalText;
+                    return;
+                }
+                
+                // Vérifier si l'utilisateur est déjà un contact
+                const isAlreadyContact = contacts.some(c => c.id === userData.id);
+                if (isAlreadyContact) {
+                    showNotification('Cet utilisateur est déjà dans vos contacts', 'error');
+                    confirmBtn.disabled = false;
+                    confirmBtn.textContent = originalText;
+                    return;
+                }
+                
+                // Envoyer la demande d'ami
+                const response = await fetch('/api/friend-requests/send', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contactId: userData.id })
+                    headers: { 
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        fromUserId: currentUserId,
+                        toUserId: userData.id 
+                    })
                 });
                 
                 if (response.ok) {
-                    contacts.push(userData);
-                    displayContacts();
-                    showNotification(`${username} ajouté !`, 'success');
+                    const result = await response.json();
+                    showNotification(`Demande envoyée à ${username} !`, 'success');
                     document.getElementById('add-contact-modal').classList.add('hidden');
-                    document.getElementById('contact-username').value = '';
+                    usernameInput.value = '';
+                    loadSentRequests();
+                } else {
+                    const error = await response.json().catch(() => ({ error: 'Erreur inconnue' }));
+                    showNotification(error.error || 'Erreur lors de l\'envoi de la demande', 'error');
+                }
+            } catch (err) {
+                console.error('❌ Erreur:', err);
+                if (err.name === 'TypeError' && err.message.includes('fetch')) {
+                    showNotification('Erreur de connexion. Vérifiez votre connexion internet.', 'error');
+                } else {
+                    showNotification('Erreur réseau. Veuillez réessayer.', 'error');
+                }
+            } finally {
+                confirmBtn.disabled = false;
+                confirmBtn.textContent = originalText;
+            }
+        }
+
+        async function loadFriendRequests() {
+            await Promise.all([loadReceivedRequests(), loadSentRequests()]);
+        }
+
+        async function loadReceivedRequests() {
+            try {
+                const response = await fetch(`/api/friend-requests/received/${currentUserId}`);
+                if (response.ok) {
+                    const requests = await response.json();
+                    displayReceivedRequests(requests);
+                    
+                    // Mettre à jour le badge
+                    const badge = document.getElementById('requests-received-badge');
+                    if (requests.length > 0) {
+                        badge.textContent = requests.length;
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                }
+            } catch (err) {
+                console.error('❌ Erreur chargement demandes reçues:', err);
+            }
+        }
+
+        function displayReceivedRequests(requests) {
+            const container = document.getElementById('requests-received-list');
+            const noRequests = document.getElementById('no-requests-received');
+            
+            container.innerHTML = '';
+            
+            if (requests.length === 0) {
+                noRequests.classList.remove('hidden');
+                return;
+            }
+            
+            noRequests.classList.add('hidden');
+            
+            requests.forEach(request => {
+                const requestCard = document.createElement('div');
+                requestCard.className = 'p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border-2 border-blue-200';
+                requestCard.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                                ${request.fromUsername.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">${request.fromUsername}</p>
+                                <p class="text-xs text-gray-600">Vous a envoyé une demande</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="accept-request-btn bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors" data-request-id="${request.id}">
+                                ✓ Accepter
+                            </button>
+                            <button class="reject-request-btn bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors" data-request-id="${request.id}">
+                                ✕ Refuser
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                requestCard.querySelector('.accept-request-btn').addEventListener('click', () => acceptFriendRequest(request.id));
+                requestCard.querySelector('.reject-request-btn').addEventListener('click', () => rejectFriendRequest(request.id));
+                
+                container.appendChild(requestCard);
+            });
+        }
+
+        async function loadSentRequests() {
+            try {
+                const response = await fetch(`/api/friend-requests/sent/${currentUserId}`);
+                if (response.ok) {
+                    const requests = await response.json();
+                    displaySentRequests(requests);
+                }
+            } catch (err) {
+                console.error('❌ Erreur chargement demandes envoyées:', err);
+            }
+        }
+
+        function displaySentRequests(requests) {
+            const container = document.getElementById('requests-sent-list');
+            const noRequests = document.getElementById('no-requests-sent');
+            
+            container.innerHTML = '';
+            
+            if (requests.length === 0) {
+                noRequests.classList.remove('hidden');
+                return;
+            }
+            
+            noRequests.classList.add('hidden');
+            
+            requests.forEach(request => {
+                const requestCard = document.createElement('div');
+                requestCard.className = 'p-4 bg-gradient-to-r from-amber-50 to-orange-50 rounded-lg border-2 border-amber-200';
+                requestCard.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-amber-600 rounded-full flex items-center justify-center text-white font-bold">
+                                ${request.toUsername.charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                                <p class="font-semibold text-gray-800">${request.toUsername}</p>
+                                <p class="text-xs text-gray-600">En attente de réponse</p>
+                            </div>
+                        </div>
+                        <span class="text-xs text-amber-600 font-medium">En attente...</span>
+                    </div>
+                `;
+                
+                container.appendChild(requestCard);
+            });
+        }
+
+        async function acceptFriendRequest(requestId) {
+            try {
+                const response = await fetch('/api/friend-requests/accept', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ requestId })
+                });
+                
+                if (response.ok) {
+                    showNotification('Demande acceptée !', 'success');
+                    loadContacts();
+                    loadFriendRequests();
                 } else {
                     const error = await response.json();
                     showNotification(error.error || 'Erreur', 'error');
                 }
             } catch (err) {
-                console.error('❌ Erreur:', err);
+                console.error('❌ Erreur acceptation:', err);
+                showNotification('Erreur réseau', 'error');
+            }
+        }
+
+        async function rejectFriendRequest(requestId) {
+            try {
+                const response = await fetch('/api/friend-requests/reject', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ requestId })
+                });
+                
+                if (response.ok) {
+                    showNotification('Demande refusée', 'info');
+                    loadFriendRequests();
+                } else {
+                    const error = await response.json();
+                    showNotification(error.error || 'Erreur', 'error');
+                }
+            } catch (err) {
+                console.error('❌ Erreur refus:', err);
                 showNotification('Erreur réseau', 'error');
             }
         }
 
         // === UTILS ===
         function updateOnlineCount() {
-            document.getElementById('online-count').textContent = `${onlineUsers.size} en ligne`;
+            const count = onlineUsers.size;
+            document.getElementById('online-count').textContent = `${count} en ligne`;
+            displayOnlineUsers();
+        }
+
+        function displayOnlineUsers() {
+            const container = document.getElementById('online-users-list');
+            const noUsersMessage = document.getElementById('no-users-online');
+            
+            if (onlineUsers.size === 0) {
+                container.innerHTML = '';
+                noUsersMessage.classList.remove('hidden');
+                return;
+            }
+            
+            noUsersMessage.classList.add('hidden');
+            container.innerHTML = '';
+            
+            // Convertir le Set en tableau et trier alphabétiquement
+            const sortedUsers = Array.from(onlineUsers).sort();
+            
+            sortedUsers.forEach(username => {
+                const isCurrentUser = username === currentUser;
+                const userCard = document.createElement('div');
+                userCard.className = `p-3 rounded-lg transition-all ${
+                    isCurrentUser 
+                        ? 'bg-emerald-100 border-2 border-emerald-500' 
+                        : 'bg-gray-50 hover:bg-gray-100 border-2 border-transparent'
+                }`;
+                
+                userCard.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="relative">
+                            <div class="w-10 h-10 ${isCurrentUser ? 'bg-emerald-600' : 'bg-gradient-to-br from-emerald-500 to-teal-600'} rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                                ${username.charAt(0).toUpperCase()}
+                            </div>
+                            <span class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="font-semibold text-gray-800 truncate ${isCurrentUser ? 'text-emerald-700' : ''}">
+                                ${username}
+                                ${isCurrentUser ? '<span class="text-xs ml-1">(Vous)</span>' : ''}
+                            </p>
+                            <p class="text-xs text-gray-600 flex items-center">
+                                <span class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>
+                                En ligne
+                            </p>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(userCard);
+            });
         }
 
         function updateContactsStatus() {

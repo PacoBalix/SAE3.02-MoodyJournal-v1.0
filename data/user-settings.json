@@ -1,7 +1,39 @@
 {
   "Alix": {
     "trackingCategories": [
-      "tca",
+      "addiction",
+      "mental-health",
+      "productivity"
+    ],
+    "sections": [
+      "mood",
+      "gratitude",
+      "habits",
+      "challenges",
+      "reflections",
+      "consciousness",
+      "intention",
+      "notes"
+    ],
+    "reminderTime": "20:00",
+    "savedAt": "2025-11-16T07:45:13.451Z",
+    "lastUpdated": "2025-11-16T07:45:13.453Z"
+  },
+  "Emmanuel": {
+    "trackingCategories": [
+      "physical-health"
+    ],
+    "sections": [
+      "mood",
+      "goals",
+      "gratitude"
+    ],
+    "reminderTime": "20:00",
+    "savedAt": "2025-10-15T07:44:29.424Z",
+    "lastUpdated": "2025-10-15T07:44:32.211Z"
+  },
+  "Lallie": {
+    "trackingCategories": [
       "addiction",
       "mental-health",
       "physical-health",
@@ -16,20 +48,7 @@
       "notes"
     ],
     "reminderTime": "20:00",
-    "savedAt": "2025-10-16T18:43:28.159Z",
-    "lastUpdated": "2025-10-16T18:43:28.162Z"
-  },
-  "Emmanuel": {
-    "trackingCategories": [
-      "physical-health"
-    ],
-    "sections": [
-      "mood",
-      "goals",
-      "gratitude"
-    ],
-    "reminderTime": "20:00",
-    "savedAt": "2025-10-15T07:44:29.424Z",
-    "lastUpdated": "2025-10-15T07:44:32.211Z"
+    "savedAt": "2025-11-14T19:38:24.813Z",
+    "lastUpdated": "2025-11-14T19:38:24.814Z"
   }
 }

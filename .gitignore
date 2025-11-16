@@ -1,0 +1,282 @@
+# ============================================
+# 🔒 CONFIDENTIALITÉ - MoodyJournal
+# ============================================
+
+# ==========================================
+# 📁 DONNÉES SENSIBLES UTILISATEURS
+# ==========================================
+
+# Tous les fichiers JSON contenant des données utilisateurs
+data/journal.json
+data/users.json
+data/user-settings.json
+data/contacts.json
+data/friend-requests.json
+data/global-chat.json
+data/journal-followup.json
+data/habits.json
+data/addictions.json
+data/badges.json
+data/habit-templates.json
+data/journal-questions.json
+
+# Fichiers HTML/JS temporaires ou de test
+data/old-journal.html
+data/old-journal.js
+
+# Conversations privées
+data/chats/
+data/chats/*.json
+
+# ==========================================
+# 📝 FICHIERS À GARDER (Blog public)
+# ==========================================
+# Les articles du blog sont publics, donc on les garde
+# !data/blog/*.md
+# !data/AppChangesMd/*.md
+
+# ==========================================
+# 🔐 ENVIRONNEMENT & CONFIGURATION
+# ==========================================
+
+# Variables d'environnement
+.env
+.env.local
+.env.production
+.env.development
+.env.test
+
+# Fichiers de configuration sensibles
+config/secrets.js
+config/production.js
+
+# ==========================================
+# 📦 DEPENDENCIES & BUILD
+# ==========================================
+
+# Dependencies Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Package manager lock files (garder package-lock.json ou yarn.lock)
+# yarn.lock
+# pnpm-lock.yaml
+
+# ==========================================
+# 🗂️ FICHIERS SYSTÈME & IDE
+# ==========================================
+
+# MacOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ==========================================
+# 💻 IDE & EDITEURS
+# ==========================================
+
+# VSCode
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+*.code-workspace
+
+# JetBrains (WebStorm, IntelliJ, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+Session.vim
+Sessionx.vim
+.netrwhist
+
+# ==========================================
+# 📊 LOGS & TEMPORAIRES
+# ==========================================
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.npm
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Directory for instrumented libs
+lib-cov/
+coverage/
+.nyc_output/
+.grunt
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.temp/
+tmp/
+
+# ==========================================
+# 🧪 TESTS & COVERAGE
+# ==========================================
+
+# Test coverage
+coverage/
+*.lcov
+.nyc_output/
+
+# Jest
+.jest/
+
+# ==========================================
+# 🚀 BUILD & PRODUCTION
+# ==========================================
+
+# Build directories
+dist/
+build/
+.next/
+out/
+
+# Production
+*.tgz
+.npm
+.eslintcache
+.stylelintcache
+
+# ==========================================
+# 🔒 SESSIONS & CACHE
+# ==========================================
+
+# Session files
+sessions/
+*.session
+
+# Cache
+.cache/
+.parcel-cache/
+
+# ==========================================
+# 📱 MOBILE & AUTRES
+# ==========================================
+
+# React Native
+.expo/
+.expo-shared/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# ==========================================
+# 🎯 FICHIERS DE BACKUP
+# ==========================================
+
+# Backups
+*.bak
+*.backup
+*.old
+*~
+*.swp
+*.swo
+
+# ==========================================
+# 📌 FICHIERS SPÉCIFIQUES AU PROJET
+# ==========================================
+
+# Fichiers de sauvegarde spécifiques
+data/*.backup
+data/*.bak
+
+# Copies de travail
+*- Copie.js
+*- Copie.html
+*- Copie - Copie/
+
+# ==========================================
+# ✅ À INCLURE (Exceptions)
+# ==========================================
+
+# Fichiers importants à garder
+!.gitignore
+!README.md
+!LICENSE
+!package.json
+!package-lock.json
+
+# Structure de données exemple (vide)
+!data/.gitkeep
+!data/blog/.gitkeep
+!data/chats/.gitkeep
+

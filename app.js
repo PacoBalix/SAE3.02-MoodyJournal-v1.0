@@ -6,7 +6,7 @@ const http = require('http');
 const socketIO = require('socket.io');
 const { marked } = require('marked');
 
-const PORT = 3000;
+const PORT = 80;
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
@@ -25,6 +25,8 @@ app.use((req, res, next) => {
 app.use(express.static(path.join(__dirname, 'public'))); // sert le dossier /public
 // Servir les assets
 app.use('/assets', express.static('assets'));
+// Servir le dossier data pour accès aux JSON
+app.use('/data', express.static('data'));
 
 // Middleware pour injecter les données utilisateur dans toutes les vues
 app.use(async (req, res, next) => {
@@ -54,6 +56,7 @@ const ensureDir = async () => {
 
 // === Système de Chat (inspiré de Chat-main) ===
 const CONTACTS_FILE = path.join(__dirname, 'data', 'contacts.json');
+const FRIEND_REQUESTS_FILE = path.join(__dirname, 'data', 'friend-requests.json');
 const CHATS_DIR = path.join(__dirname, 'data', 'chats');
 const GLOBAL_CHAT_FILE = path.join(__dirname, 'data', 'global-chat.json');
 
@@ -71,6 +74,19 @@ function loadContacts() {
 
 function saveContacts(contacts) {
   require('fs').writeFileSync(CONTACTS_FILE, JSON.stringify(contacts, null, 2));
+}
+
+// Helpers pour les demandes d'amis
+function loadFriendRequests() {
+  try {
+    return JSON.parse(require('fs').readFileSync(FRIEND_REQUESTS_FILE, 'utf8'));
+  } catch (err) {
+    return [];
+  }
+}
+
+function saveFriendRequests(requests) {
+  require('fs').writeFileSync(FRIEND_REQUESTS_FILE, JSON.stringify(requests, null, 2));
 }
 
 function getChatFile(userId1, userId2) {
@@ -285,7 +301,15 @@ async function loadUsers() {
   try {
     const data = await fs.readFile(USERS_FILE, 'utf-8');
     users = JSON.parse(data);
-    console.log('✅ Utilisateurs chargés depuis users.json');
+    console.log('✅ Utilisateurs chargés depuis users.json:', users.length, 'utilisateurs');
+    console.log('   Utilisateurs:', users.map(u => `${u.username} (ID: ${u.id})`).join(', '));
+    
+    // Vérifier que tous les utilisateurs ont les champs requis
+    users.forEach(u => {
+      if (!u.id || !u.username || !u.password) {
+        console.warn(`⚠️ Utilisateur invalide détecté:`, u);
+      }
+    });
     
     // Initialiser le mapping username -> id après chargement
     users.forEach(u => {
@@ -368,17 +392,28 @@ app.post('/login', express.urlencoded({ extended: true }), (req, res) => {
 
   // Validation des entrées
   if (!username || !password) {
+    console.log('❌ Connexion échouée: champs manquants');
     return res.redirect('/login?error=1');
   }
 
-  const user = users.find(u => u.username === username && u.password === password);
+  // Normaliser les entrées (trim et recherche insensible à la casse)
+  const normalizedUsername = username.trim();
+  const normalizedPassword = password.trim();
+
+  // Recherche insensible à la casse pour le username
+  const user = users.find(u => {
+    if (!u.username || !u.password) return false;
+    return u.username.toLowerCase() === normalizedUsername.toLowerCase() && 
+           u.password === normalizedPassword;
+  });
   
   if (user) {
-    req.session.user = user.username;
-    console.log(`✅ Connexion réussie pour: ${username}`);
+    req.session.user = user.username; // Utiliser le username original du fichier
+    console.log(`✅ Connexion réussie pour: ${user.username} (ID: ${user.id})`);
     res.redirect('/index.html'); // Redirection vers la page principale
   } else {
-    console.log(`❌ Tentative de connexion échouée pour: ${username}`);
+    console.log(`❌ Tentative de connexion échouée pour: ${normalizedUsername}`);
+    console.log(`   Utilisateurs disponibles: ${users.map(u => u.username).join(', ')}`);
     res.redirect('/login?error=1');
   }
 });
@@ -722,6 +757,442 @@ app.get('/api/followup-answers', requireAuth, async (req, res) => {
   }
 });
 
+// === Routes pour les Habitudes (Habit Tracking) ===
+
+// Sauvegarder les habitudes du jour
+app.post('/api/habits/save', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const { date, habits, stacks } = req.body;
+    
+    console.log(`📝 Sauvegarde des habitudes pour: ${username}`);
+    
+    const habitsFile = path.join(__dirname, 'data', 'habits.json');
+    let allHabits = {};
+    
+    try {
+      const data = await fs.readFile(habitsFile, 'utf-8');
+      allHabits = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Création du fichier habits.json');
+    }
+    
+    if (!allHabits[username]) {
+      allHabits[username] = [];
+    }
+    
+    // Vérifier si une entrée existe déjà pour cette date
+    const existingIndex = allHabits[username].findIndex(h => h.date === date);
+    
+    const habitEntry = {
+      date,
+      habits,
+      stacks: stacks || [],
+      savedAt: new Date().toISOString()
+    };
+    
+    if (existingIndex >= 0) {
+      allHabits[username][existingIndex] = habitEntry;
+    } else {
+      allHabits[username].push(habitEntry);
+    }
+    
+    await fs.writeFile(habitsFile, JSON.stringify(allHabits, null, 2));
+    
+    console.log(`✅ Habitudes sauvegardées pour ${username}`);
+    res.json({ success: true, message: 'Habitudes sauvegardées avec succès' });
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de la sauvegarde des habitudes:', err);
+    res.status(500).json({ error: 'Impossible de sauvegarder les habitudes' });
+  }
+});
+
+// Récupérer les habitudes d'un utilisateur
+app.get('/api/habits', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const habitsFile = path.join(__dirname, 'data', 'habits.json');
+    
+    let allHabits = {};
+    try {
+      const data = await fs.readFile(habitsFile, 'utf-8');
+      allHabits = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Fichier habits.json non trouvé');
+    }
+    
+    const userHabits = allHabits[username] || [];
+    res.json(userHabits);
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de la récupération des habitudes:', err);
+    res.status(500).json({ error: 'Impossible de charger les habitudes' });
+  }
+});
+
+// Récupérer les définitions d'habitudes (templates)
+app.get('/api/habits/templates', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const templatesFile = path.join(__dirname, 'data', 'habit-templates.json');
+    
+    let allTemplates = {};
+    try {
+      const data = await fs.readFile(templatesFile, 'utf-8');
+      allTemplates = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Fichier habit-templates.json non trouvé, utilisation des défauts');
+      // Templates par défaut
+      allTemplates = {};
+    }
+    
+    // Templates par défaut si l'utilisateur n'en a pas
+    const userTemplates = allTemplates[username] || [
+      { id: 'exercise', name: 'Exercice physique', category: 'physical', icon: '🏃' },
+      { id: 'meditation', name: 'Méditation', category: 'mental', icon: '🧘' },
+      { id: 'reading', name: 'Lecture', category: 'growth', icon: '📚' },
+      { id: 'water', name: 'Boire de l\'eau', category: 'health', icon: '💧' },
+      { id: 'sleep', name: 'Dormir 8h', category: 'health', icon: '😴' }
+    ];
+    
+    res.json(userTemplates);
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de la récupération des templates:', err);
+    res.status(500).json({ error: 'Impossible de charger les templates' });
+  }
+});
+
+// Sauvegarder les templates d'habitudes personnalisés
+app.post('/api/habits/templates', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const { templates } = req.body;
+    
+    const templatesFile = path.join(__dirname, 'data', 'habit-templates.json');
+    let allTemplates = {};
+    
+    try {
+      const data = await fs.readFile(templatesFile, 'utf-8');
+      allTemplates = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Création du fichier habit-templates.json');
+    }
+    
+    allTemplates[username] = templates;
+    
+    await fs.writeFile(templatesFile, JSON.stringify(allTemplates, null, 2));
+    
+    res.json({ success: true, message: 'Templates sauvegardés' });
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de la sauvegarde des templates:', err);
+    res.status(500).json({ error: 'Impossible de sauvegarder les templates' });
+  }
+});
+
+// === Routes pour le Suivi des Addictions ===
+
+// Créer/mettre à jour un suivi d'addiction
+app.post('/api/addictions/save', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const addictionData = req.body;
+    
+    console.log(`📝 Sauvegarde du suivi d'addiction pour: ${username}`);
+    
+    const addictionsFile = path.join(__dirname, 'data', 'addictions.json');
+    let allAddictions = {};
+    
+    try {
+      const data = await fs.readFile(addictionsFile, 'utf-8');
+      allAddictions = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Création du fichier addictions.json');
+    }
+    
+    if (!allAddictions[username]) {
+      allAddictions[username] = [];
+    }
+    
+    // Ajouter timestamp et calculer le streak
+    addictionData.savedAt = new Date().toISOString();
+    
+    // Calculer les jours de sobriété
+    if (addictionData.startDate) {
+      const start = new Date(addictionData.startDate);
+      const now = new Date();
+      const diffTime = Math.abs(now - start);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      addictionData.currentStreak = diffDays;
+    }
+    
+    // Vérifier si cette addiction existe déjà
+    const existingIndex = allAddictions[username].findIndex(a => a.addictionId === addictionData.addictionId);
+    
+    if (existingIndex >= 0) {
+      allAddictions[username][existingIndex] = addictionData;
+    } else {
+      allAddictions[username].push(addictionData);
+    }
+    
+    await fs.writeFile(addictionsFile, JSON.stringify(allAddictions, null, 2));
+    
+    console.log(`✅ Addiction sauvegardée pour ${username}`);
+    res.json({ success: true, message: 'Suivi d\'addiction sauvegardé', data: addictionData });
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de la sauvegarde de l\'addiction:', err);
+    res.status(500).json({ error: 'Impossible de sauvegarder le suivi' });
+  }
+});
+
+// Récupérer les suivis d'addictions
+app.get('/api/addictions', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const addictionsFile = path.join(__dirname, 'data', 'addictions.json');
+    
+    let allAddictions = {};
+    try {
+      const data = await fs.readFile(addictionsFile, 'utf-8');
+      allAddictions = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Fichier addictions.json non trouvé');
+    }
+    
+    const userAddictions = allAddictions[username] || [];
+    
+    // Mettre à jour les streaks actuels
+    userAddictions.forEach(addiction => {
+      if (addiction.startDate) {
+        const start = new Date(addiction.startDate);
+        const now = new Date();
+        const diffTime = Math.abs(now - start);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        addiction.currentStreak = diffDays;
+      }
+    });
+    
+    res.json(userAddictions);
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de la récupération des addictions:', err);
+    res.status(500).json({ error: 'Impossible de charger les suivis' });
+  }
+});
+
+// Enregistrer un moment de vulnérabilité/trigger
+app.post('/api/addictions/:addictionId/trigger', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const { addictionId } = req.params;
+    const { triggerType, notes } = req.body;
+    
+    const addictionsFile = path.join(__dirname, 'data', 'addictions.json');
+    let allAddictions = {};
+    
+    try {
+      const data = await fs.readFile(addictionsFile, 'utf-8');
+      allAddictions = JSON.parse(data);
+    } catch (err) {
+      return res.status(404).json({ error: 'Suivi non trouvé' });
+    }
+    
+    const userAddictions = allAddictions[username] || [];
+    const addiction = userAddictions.find(a => a.addictionId === addictionId);
+    
+    if (!addiction) {
+      return res.status(404).json({ error: 'Addiction non trouvée' });
+    }
+    
+    if (!addiction.triggerMap) {
+      addiction.triggerMap = {};
+    }
+    
+    addiction.triggerMap[triggerType] = (addiction.triggerMap[triggerType] || 0) + 1;
+    
+    if (!addiction.triggerLog) {
+      addiction.triggerLog = [];
+    }
+    
+    addiction.triggerLog.push({
+      timestamp: new Date().toISOString(),
+      triggerType,
+      notes
+    });
+    
+    await fs.writeFile(addictionsFile, JSON.stringify(allAddictions, null, 2));
+    
+    res.json({ success: true, message: 'Trigger enregistré' });
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de l\'enregistrement du trigger:', err);
+    res.status(500).json({ error: 'Impossible d\'enregistrer le trigger' });
+  }
+});
+
+// === Routes pour la Gamification (Badges, Streaks) ===
+
+// Récupérer les badges d'un utilisateur
+app.get('/api/badges', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const badgesFile = path.join(__dirname, 'data', 'badges.json');
+    
+    let allBadges = {};
+    try {
+      const data = await fs.readFile(badgesFile, 'utf-8');
+      allBadges = JSON.parse(data);
+    } catch (err) {
+      console.log('📁 Fichier badges.json non trouvé, initialisation...');
+    }
+    
+    if (!allBadges[username]) {
+      // Initialiser les badges pour le nouvel utilisateur
+      allBadges[username] = {
+        unlockedBadges: [],
+        allBadges: [
+          { id: 'first-entry', name: 'Premier Pas', description: 'Votre première entrée !', icon: '🌱', unlocked: false },
+          { id: 'week-streak', name: 'Régularité', description: '7 jours consécutifs', icon: '🔥', unlocked: false },
+          { id: 'month-streak', name: 'Persévérance', description: '30 jours consécutifs', icon: '💪', unlocked: false },
+          { id: 'deep-reflection', name: 'Profondeur', description: 'Entrée de plus de 500 mots', icon: '🌊', unlocked: false },
+          { id: 'pattern-discovered', name: 'Découverte', description: 'Premier pattern émotionnel identifié', icon: '💡', unlocked: false },
+          { id: 'habit-master', name: 'Maître des Habitudes', description: '30 jours de suivi d\'habitudes', icon: '⭐', unlocked: false },
+          { id: 'sobriety-week', name: 'Force Intérieure', description: '1 semaine de sobriété', icon: '🛡️', unlocked: false },
+          { id: 'sobriety-month', name: 'Guerrier', description: '1 mois de sobriété', icon: '🏆', unlocked: false },
+          { id: 'cbt-champion', name: 'Esprit Analytique', description: '10 analyses TCC complétées', icon: '🧠', unlocked: false },
+          { id: 'gratitude-guru', name: 'Cœur Reconnaissant', description: '100 gratitudes enregistrées', icon: '💚', unlocked: false }
+        ]
+      };
+    }
+    
+    res.json(allBadges[username]);
+    
+  } catch (err) {
+    console.error('❌ Erreur lors de la récupération des badges:', err);
+    res.status(500).json({ error: 'Impossible de charger les badges' });
+  }
+});
+
+// Débloquer un badge
+app.post('/api/badges/unlock', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    const { badgeId } = req.body;
+    
+    const badgesFile = path.join(__dirname, 'data', 'badges.json');
+    let allBadges = {};
+    
+    try {
+      const data = await fs.readFile(badgesFile, 'utf-8');
+      allBadges = JSON.parse(data);
+    } catch (err) {
+      allBadges = {};
+    }
+    
+    if (!allBadges[username]) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+    
+    const badge = allBadges[username].allBadges.find(b => b.id === badgeId);
+    
+    if (!badge) {
+      return res.status(404).json({ error: 'Badge non trouvé' });
+    }
+    
+    if (!badge.unlocked) {
+      badge.unlocked = true;
+      badge.unlockedAt = new Date().toISOString();
+      allBadges[username].unlockedBadges.push(badgeId);
+      
+      await fs.writeFile(badgesFile, JSON.stringify(allBadges, null, 2));
+      
+      res.json({ success: true, message: 'Badge débloqué !', badge });
+    } else {
+      res.json({ success: false, message: 'Badge déjà débloqué' });
+    }
+    
+  } catch (err) {
+    console.error('❌ Erreur lors du déblocage du badge:', err);
+    res.status(500).json({ error: 'Impossible de débloquer le badge' });
+  }
+});
+
+// Récupérer les statistiques de streaks
+app.get('/api/streaks', requireAuth, async (req, res) => {
+  try {
+    const username = req.session.user;
+    
+    // Calculer le streak d'écriture
+    const journalEntries = await journalManager.getUserEntries(username);
+    
+    let currentStreak = 0;
+    let longestStreak = 0;
+    let tempStreak = 0;
+    
+    if (journalEntries.length > 0) {
+      // Trier par date décroissante
+      const sortedEntries = journalEntries.sort((a, b) => {
+        const dateA = new Date(a.date || a.savedAt);
+        const dateB = new Date(b.date || b.savedAt);
+        return dateB - dateA;
+      });
+      
+      // Calculer le streak actuel
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      let checkDate = new Date(today);
+      
+      for (let i = 0; i < sortedEntries.length; i++) {
+        const entryDate = new Date(sortedEntries[i].date || sortedEntries[i].savedAt);
+        entryDate.setHours(0, 0, 0, 0);
+        
+        if (entryDate.getTime() === checkDate.getTime()) {
+          currentStreak++;
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+          break;
+        }
+      }
+      
+      // Calculer le streak le plus long
+      tempStreak = 1;
+      for (let i = 0; i < sortedEntries.length - 1; i++) {
+        const currentDate = new Date(sortedEntries[i].date || sortedEntries[i].savedAt);
+        const nextDate = new Date(sortedEntries[i + 1].date || sortedEntries[i + 1].savedAt);
+        
+        currentDate.setHours(0, 0, 0, 0);
+        nextDate.setHours(0, 0, 0, 0);
+        
+        const diffDays = Math.floor((currentDate - nextDate) / (1000 * 60 * 60 * 24));
+        
+        if (diffDays === 1) {
+          tempStreak++;
+        } else {
+          longestStreak = Math.max(longestStreak, tempStreak);
+          tempStreak = 1;
+        }
+      }
+      longestStreak = Math.max(longestStreak, tempStreak);
+    }
+    
+    res.json({
+      journal: {
+        current: currentStreak,
+        longest: longestStreak,
+        totalEntries: journalEntries.length
+      }
+    });
+    
+  } catch (err) {
+    console.error('❌ Erreur lors du calcul des streaks:', err);
+    res.status(500).json({ error: 'Impossible de calculer les streaks' });
+  }
+});
+
 // === Routes pour la gestion des amis ===
 
 // Récupérer la liste des amis
@@ -873,14 +1344,230 @@ app.post('/api/contacts/:userId/add', requireAuth, async (req, res) => {
   }
 });
 
+// === Routes API pour les demandes d'amis ===
+
+// Envoyer une demande d'ami
+app.post('/api/friend-requests/send', requireAuth, async (req, res) => {
+  try {
+    const { fromUserId, toUserId } = req.body;
+    
+    if (!fromUserId || !toUserId) {
+      return res.status(400).json({ error: 'fromUserId et toUserId requis' });
+    }
+    
+    if (fromUserId === toUserId) {
+      return res.status(400).json({ error: 'Vous ne pouvez pas vous envoyer une demande' });
+    }
+    
+    // Vérifier que l'utilisateur existe
+    const toUser = users.find(u => u.id === toUserId);
+    if (!toUser) {
+      return res.status(400).json({ error: 'Utilisateur introuvable' });
+    }
+    
+    // Vérifier qu'ils ne sont pas déjà amis
+    const contactsData = loadContacts();
+    const userContacts = contactsData.find(c => c.userId === fromUserId);
+    if (userContacts && userContacts.contacts.includes(toUserId)) {
+      return res.status(400).json({ error: 'Vous êtes déjà amis' });
+    }
+    
+    // Vérifier qu'une demande n'existe pas déjà
+    let requests = loadFriendRequests();
+    const existingRequest = requests.find(r => 
+      (r.fromUserId === fromUserId && r.toUserId === toUserId) ||
+      (r.fromUserId === toUserId && r.toUserId === fromUserId)
+    );
+    
+    if (existingRequest) {
+      return res.status(400).json({ error: 'Une demande existe déjà' });
+    }
+    
+    // Créer la demande
+    const newRequest = {
+      id: Date.now(),
+      fromUserId,
+      toUserId,
+      status: 'pending',
+      createdAt: new Date().toISOString()
+    };
+    
+    requests.push(newRequest);
+    saveFriendRequests(requests);
+    
+    res.json({ success: true, request: newRequest });
+  } catch (err) {
+    console.error('❌ Erreur envoi demande:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Récupérer les demandes d'amis reçues
+app.get('/api/friend-requests/received/:userId', requireAuth, async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const requests = loadFriendRequests();
+    
+    const receivedRequests = requests
+      .filter(r => r.toUserId === userId && r.status === 'pending')
+      .map(r => {
+        const fromUser = users.find(u => u.id === r.fromUserId);
+        return {
+          ...r,
+          fromUsername: fromUser ? fromUser.username : 'Inconnu'
+        };
+      });
+    
+    res.json(receivedRequests);
+  } catch (err) {
+    console.error('❌ Erreur récupération demandes:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Récupérer les demandes d'amis envoyées
+app.get('/api/friend-requests/sent/:userId', requireAuth, async (req, res) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const requests = loadFriendRequests();
+    
+    const sentRequests = requests
+      .filter(r => r.fromUserId === userId && r.status === 'pending')
+      .map(r => {
+        const toUser = users.find(u => u.id === r.toUserId);
+        return {
+          ...r,
+          toUsername: toUser ? toUser.username : 'Inconnu'
+        };
+      });
+    
+    res.json(sentRequests);
+  } catch (err) {
+    console.error('❌ Erreur récupération demandes:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Accepter une demande d'ami
+app.post('/api/friend-requests/accept', requireAuth, async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    
+    if (!requestId) {
+      return res.status(400).json({ error: 'requestId requis' });
+    }
+    
+    let requests = loadFriendRequests();
+    const request = requests.find(r => r.id === requestId);
+    
+    if (!request) {
+      return res.status(404).json({ error: 'Demande introuvable' });
+    }
+    
+    if (request.status !== 'pending') {
+      return res.status(400).json({ error: 'Demande déjà traitée' });
+    }
+    
+    // Marquer la demande comme acceptée
+    request.status = 'accepted';
+    saveFriendRequests(requests);
+    
+    // Ajouter les contacts mutuellement
+    let contactsData = loadContacts();
+    
+    // Ajouter toUserId dans les contacts de fromUserId
+    let fromUserContacts = contactsData.find(c => c.userId === request.fromUserId);
+    if (!fromUserContacts) {
+      fromUserContacts = { userId: request.fromUserId, contacts: [] };
+      contactsData.push(fromUserContacts);
+    }
+    if (!fromUserContacts.contacts.includes(request.toUserId)) {
+      fromUserContacts.contacts.push(request.toUserId);
+    }
+    
+    // Ajouter fromUserId dans les contacts de toUserId
+    let toUserContacts = contactsData.find(c => c.userId === request.toUserId);
+    if (!toUserContacts) {
+      toUserContacts = { userId: request.toUserId, contacts: [] };
+      contactsData.push(toUserContacts);
+    }
+    if (!toUserContacts.contacts.includes(request.fromUserId)) {
+      toUserContacts.contacts.push(request.fromUserId);
+    }
+    
+    saveContacts(contactsData);
+    
+    // Créer fichier chat vide
+    const chatFile = getChatFile(request.fromUserId, request.toUserId);
+    if (!require('fs').existsSync(chatFile)) {
+      require('fs').writeFileSync(chatFile, '[]');
+    }
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('❌ Erreur acceptation demande:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Refuser une demande d'ami
+app.post('/api/friend-requests/reject', requireAuth, async (req, res) => {
+  try {
+    const { requestId } = req.body;
+    
+    if (!requestId) {
+      return res.status(400).json({ error: 'requestId requis' });
+    }
+    
+    let requests = loadFriendRequests();
+    const request = requests.find(r => r.id === requestId);
+    
+    if (!request) {
+      return res.status(404).json({ error: 'Demande introuvable' });
+    }
+    
+    // Marquer la demande comme refusée
+    request.status = 'rejected';
+    saveFriendRequests(requests);
+    
+    res.json({ success: true });
+  } catch (err) {
+    console.error('❌ Erreur refus demande:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+// Route pour recharger les utilisateurs (utile après modification de users.json)
+app.post('/api/reload-users', requireAuth, async (req, res) => {
+  try {
+    await loadUsers();
+    res.json({ success: true, count: users.length, users: users.map(u => u.username) });
+  } catch (err) {
+    console.error('❌ Erreur rechargement utilisateurs:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
 // Récupérer l'ID utilisateur à partir du username
 app.get('/api/user-id/:username', requireAuth, (req, res) => {
-  const username = req.params.username;
-  const user = users.find(u => u.username === username);
-  if (user) {
-    res.json({ id: user.id, username: user.username });
-  } else {
-    res.status(404).json({ error: 'Utilisateur non trouvé' });
+  try {
+    const username = decodeURIComponent(req.params.username).trim();
+    
+    if (!username) {
+      return res.status(400).json({ error: 'Nom d\'utilisateur requis' });
+    }
+    
+    // Recherche insensible à la casse
+    const user = users.find(u => u.username && u.username.toLowerCase() === username.toLowerCase());
+    
+    if (user && user.id) {
+      res.json({ id: user.id, username: user.username });
+    } else {
+      res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+  } catch (err) {
+    console.error('❌ Erreur récupération user-id:', err);
+    res.status(500).json({ error: 'Erreur serveur' });
   }
 });
 

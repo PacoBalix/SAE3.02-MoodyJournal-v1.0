@@ -38,7 +38,7 @@ class SessionManager {
         // Modifier le titre de bienvenue
         const welcomeTitle = document.getElementById('welcome-title');
         if (welcomeTitle) {
-            welcomeTitle.textContent = `Bienvenue sur MoodyJournal🌿, ${username}!`;
+            welcomeTitle.textContent = `👋 Hello ${username} !`;
         }
     }
 

@@ -18,5 +18,30 @@
     "id": 4,
     "username": "Noa",
     "password": "noapassword"
+  },
+  {
+    "id": 5,
+    "username": "Alex",
+    "password": "alexpassword"
+  },
+  {
+    "id": 6,
+    "username": "Hugo",
+    "password": "hugopassword"
+  },
+  {
+    "id": 7,
+    "username": "Nina",
+    "password": "ninapassword"
+  },
+  {
+    "id": 9,
+    "username": "Mathieu",
+    "password": "mathieupassword"
+  },
+  {
+    "id": 10,
+    "username": "test",
+    "password": "testpassword"
   }
 ]
