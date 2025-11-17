@@ -96,5 +96,26 @@
     "username": "Alix",
     "text": "J'ai amélioré le journal, la page d'affichage des données, le chat et le blog :D",
     "timestamp": "2025-11-16T14:19:01.825Z"
+  },
+  {
+    "id": 1763378350019,
+    "userId": 1,
+    "username": "Alix",
+    "text": "Projet à rendre ce soir !",
+    "timestamp": "2025-11-17T11:19:10.019Z"
+  },
+  {
+    "id": 1763403250092,
+    "userId": 1,
+    "username": "Alix",
+    "text": "Je rends le projet d'ici quelques instants, bonne soirée à vous tous :D",
+    "timestamp": "2025-11-17T18:14:10.092Z"
+  },
+  {
+    "id": 1763403258999,
+    "userId": 1,
+    "username": "Alix",
+    "text": "A+ petit journal",
+    "timestamp": "2025-11-17T18:14:18.999Z"
   }
 ]

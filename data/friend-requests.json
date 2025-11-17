@@ -1,1 +1,16 @@
-[]
+[
+  {
+    "id": 1763378383364,
+    "fromUserId": 10,
+    "toUserId": 1,
+    "status": "accepted",
+    "createdAt": "2025-11-17T11:19:43.364Z"
+  },
+  {
+    "id": 1763402816254,
+    "fromUserId": 11,
+    "toUserId": 1,
+    "status": "accepted",
+    "createdAt": "2025-11-17T18:06:56.254Z"
+  }
+]

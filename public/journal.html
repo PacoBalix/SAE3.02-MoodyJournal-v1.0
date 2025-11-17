@@ -1338,7 +1338,32 @@
             }
             
             const sectionData = journalQuestions.sections[sectionName];
-            const questionsContainer = section.querySelector('.space-y-4');
+            
+            // Chercher le conteneur des questions - plusieurs stratégies
+            let questionsContainer = section.querySelector('.space-y-4');
+            
+            // Si pas trouvé, chercher un conteneur avec grid (pour habits, reflections)
+            if (!questionsContainer) {
+                questionsContainer = section.querySelector('.grid');
+            }
+            
+            // Si toujours pas trouvé, chercher le premier div qui contient des inputs/textarea
+            if (!questionsContainer) {
+                const divs = section.querySelectorAll('div');
+                for (const div of divs) {
+                    if (div.querySelector('input, textarea, select')) {
+                        questionsContainer = div;
+                        break;
+                    }
+                }
+            }
+            
+            // Si toujours pas trouvé, utiliser la section elle-même
+            if (!questionsContainer) {
+                questionsContainer = section;
+            }
+            
+            console.log('   Conteneur trouvé:', questionsContainer);
             
             // Créer un menu temporaire
             const menu = document.createElement('div');
@@ -1357,7 +1382,12 @@
                 </button>
             `;
             
-            questionsContainer.insertBefore(menu, questionsContainer.firstChild);
+            // Insérer le menu au début du conteneur
+            if (questionsContainer.firstChild) {
+                questionsContainer.insertBefore(menu, questionsContainer.firstChild);
+            } else {
+                questionsContainer.appendChild(menu);
+            }
             
             // Event listeners
             menu.querySelectorAll('.add-question-option').forEach(btn => {
@@ -1375,14 +1405,40 @@
         // Ajouter une nouvelle question à une section
         function addQuestionToSection(container, questionData, sectionName) {
             const questionDiv = document.createElement('div');
+            
+            // Détecter si le conteneur utilise un layout grid
+            const isGridLayout = container.classList.contains('grid');
+            
+            // Si c'est un grid, déterminer si la question doit prendre toute la largeur
+            const isFullWidth = questionData.type === 'textarea' && (!questionData.rows || questionData.rows > 2);
+            const gridClass = isGridLayout ? (isFullWidth ? 'md:col-span-2' : '') : '';
+            
+            questionDiv.className = gridClass;
+            // Ajouter l'ID de la question comme attribut pour faciliter la collecte
+            if (questionData.id) {
+                questionDiv.setAttribute('data-question-id', questionData.id);
+            }
             questionDiv.innerHTML = `
                 <label class="block text-sm font-medium text-gray-700 mb-2">${questionData.label}</label>
                 ${generateQuestionInput(questionData, sectionName)}
             `;
             
-            // Insérer avant le dernier élément (bouton ajouter)
-            const lastChild = container.lastElementChild;
-            container.insertBefore(questionDiv, lastChild);
+            // Insérer avant le dernier élément (bouton ajouter ou menu)
+            // Chercher le dernier élément qui n'est pas un menu temporaire
+            let insertBefore = null;
+            const children = Array.from(container.children);
+            for (let i = children.length - 1; i >= 0; i--) {
+                if (!children[i].classList.contains('bg-emerald-50')) {
+                    insertBefore = children[i];
+                    break;
+                }
+            }
+            
+            if (insertBefore) {
+                container.insertBefore(questionDiv, insertBefore);
+            } else {
+                container.appendChild(questionDiv);
+            }
             
             showNotification('Question ajoutée !', 'success');
             
@@ -1437,17 +1493,132 @@
         // Générer l'input pour une question
         function generateQuestionInput(question, sectionName) {
             const commonClasses = 'w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500';
+            // Utiliser l'ID de la question si disponible, sinon générer un ID unique
+            const uniqueId = question.id || `question-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+            // Pour les radio buttons, utiliser le même nom que l'ID pour faciliter la collecte
+            const radioName = uniqueId;
             
-            if (question.type === 'textarea') {
-                return `<textarea id="${question.id}" class="${commonClasses}" rows="${question.rows || 3}" data-category="${sectionName}"></textarea>`;
-            } else if (question.type === 'select') {
-                const options = question.options.map(opt => `<option value="${opt}">${opt}</option>`).join('');
-                return `<select id="${question.id}" class="${commonClasses}" data-category="${sectionName}"><option value="">Sélectionnez...</option>${options}</select>`;
-            } else if (question.type === 'number') {
-                return `<input type="number" id="${question.id}" class="${commonClasses}" min="${question.min || 0}" max="${question.max || 100}" step="${question.step || 1}" data-category="${sectionName}">`;
-            } else {
-                return `<input type="text" id="${question.id}" class="${commonClasses}" data-category="${sectionName}">`;
+            // Type: mood-scale (1-10 avec boutons colorés)
+            if (question.type === 'mood-scale') {
+                const moodColors = {
+                    1: 'bg-red-100 text-red-800',
+                    2: 'bg-red-200 text-red-800',
+                    3: 'bg-orange-200 text-orange-800',
+                    4: 'bg-orange-200 text-orange-800',
+                    5: 'bg-yellow-200 text-yellow-800',
+                    6: 'bg-yellow-200 text-yellow-800',
+                    7: 'bg-green-200 text-green-800',
+                    8: 'bg-green-200 text-green-800',
+                    9: 'bg-green-300 text-green-900',
+                    10: 'bg-green-400 text-green-900'
+                };
+                
+                let moodButtons = '<div class="mood-selector flex justify-between">';
+                for (let i = 1; i <= 10; i++) {
+                    const colorClass = moodColors[i] || 'bg-gray-200 text-gray-800';
+                    moodButtons += `
+                        <input type="radio" id="${uniqueId}-${i}" name="${radioName}" value="${i}" class="hidden" data-question-id="${uniqueId}">
+                        <label for="${uniqueId}-${i}" class="w-8 h-8 flex items-center justify-center rounded-full ${colorClass} cursor-pointer transition-all hover:scale-110">${i}</label>
+                    `;
+                }
+                moodButtons += '</div>';
+                return moodButtons;
             }
+            
+            // Type: radio-select (boutons radio colorés comme nutrition)
+            if (question.type === 'radio-select') {
+                const colorMap = {
+                    '🍎 Bonne': 'bg-green-100 text-green-800',
+                    '⚡ Moyenne': 'bg-yellow-100 text-yellow-800',
+                    '💤 Mauvaise': 'bg-red-100 text-red-800',
+                    'Oui': 'bg-green-100 text-green-800',
+                    'Non': 'bg-red-100 text-red-800',
+                    'Plutôt oui': 'bg-green-100 text-green-800',
+                    'Plutôt non': 'bg-red-100 text-red-800',
+                    'Pas sûr': 'bg-yellow-100 text-yellow-800',
+                    'Très faible': 'bg-red-100 text-red-800',
+                    'Faible': 'bg-orange-100 text-orange-800',
+                    'Modéré': 'bg-yellow-100 text-yellow-800',
+                    'Élevé': 'bg-green-100 text-green-800',
+                    'Très élevé': 'bg-green-200 text-green-900',
+                    'Très faible (isolement complet)': 'bg-red-100 text-red-800',
+                    'Faible (contacts limités)': 'bg-orange-100 text-orange-800',
+                    'Modéré (quelques interactions)': 'bg-yellow-100 text-yellow-800',
+                    'Élevé (nombreuses interactions)': 'bg-green-100 text-green-800',
+                    'Très élevé (activités sociales intenses)': 'bg-green-200 text-green-900'
+                };
+                
+                let radioButtons = '<div class="flex gap-3 flex-wrap">';
+                question.options.forEach((opt, idx) => {
+                    // Extraire la valeur (sans emoji si présent)
+                    const value = opt.replace(/^[^\w\s]*\s*/, '').trim() || opt;
+                    const colorClass = colorMap[opt] || 'bg-gray-100 text-gray-800';
+                    radioButtons += `
+                        <label class="inline-flex items-center px-3 py-1 ${colorClass} rounded-full cursor-pointer transition-all hover:scale-105">
+                            <input type="radio" name="${radioName}" value="${value}" class="hidden" data-question-id="${uniqueId}">
+                            <span>${opt}</span>
+                        </label>
+                    `;
+                });
+                radioButtons += '</div>';
+                return radioButtons;
+            }
+            
+            // Type: words-multiple (plusieurs mots côte à côte)
+            if (question.type === 'words-multiple') {
+                const count = question.count || 3;
+                // Utiliser des classes Tailwind prédéfinies
+                const gridClasses = {
+                    1: 'grid-cols-1',
+                    2: 'grid-cols-1 md:grid-cols-2',
+                    3: 'grid-cols-1 md:grid-cols-3',
+                    4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
+                    5: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-5'
+                };
+                const gridClass = gridClasses[count] || 'grid-cols-1 md:grid-cols-3';
+                let inputs = `<div class="grid ${gridClass} gap-3">`;
+                for (let i = 0; i < count; i++) {
+                    inputs += `<input type="text" class="mood-words ${commonClasses}" placeholder="Mot ${i + 1}" data-category="${sectionName}">`;
+                }
+                inputs += '</div>';
+                return inputs;
+            }
+            
+            // Type: list-multiple (plusieurs inputs en colonne)
+            if (question.type === 'list-multiple') {
+                const count = question.count || 3;
+                const placeholders = question.placeholders || [];
+                let inputs = '<div class="space-y-2">';
+                for (let i = 0; i < count; i++) {
+                    const placeholder = placeholders[i] || `${i + 1}. ...`;
+                    inputs += `<input type="text" class="gratitude-input ${commonClasses}" placeholder="${placeholder}" data-category="${sectionName}">`;
+                }
+                inputs += '</div>';
+                return inputs;
+            }
+            
+            // Type: textarea
+            if (question.type === 'textarea') {
+                return `<textarea id="${uniqueId}" class="${commonClasses}" rows="${question.rows || 3}" data-category="${sectionName}"></textarea>`;
+            }
+            
+            // Type: select
+            if (question.type === 'select') {
+                const options = question.options.map(opt => {
+                    const value = typeof opt === 'string' ? opt : opt.value || opt;
+                    const label = typeof opt === 'string' ? opt : opt.label || opt.value || opt;
+                    return `<option value="${value}">${label}</option>`;
+                }).join('');
+                return `<select id="${uniqueId}" class="${commonClasses}" data-category="${sectionName}"><option value="">Sélectionnez...</option>${options}</select>`;
+            }
+            
+            // Type: number
+            if (question.type === 'number') {
+                return `<input type="number" id="${uniqueId}" class="${commonClasses}" min="${question.min || 0}" max="${question.max || 100}" step="${question.step || 1}" data-category="${sectionName}">`;
+            }
+            
+            // Type: text (par défaut)
+            return `<input type="text" id="${uniqueId}" class="${commonClasses}" data-category="${sectionName}">`;
         }
 
         // Fonction de confirmation personnalisée (remplace confirm())
@@ -1702,6 +1873,59 @@
                 if (nutritionChecked) {
                     journalData.nutrition = nutritionChecked.value;
                 }
+
+                // Collecter toutes les questions dynamiques ajoutées (radio, mood-scale, etc.)
+                const allQuestionDivs = document.querySelectorAll('.section-card > div > div, .section-card .grid > div, .section-card .space-y-4 > div');
+                allQuestionDivs.forEach(div => {
+                    const label = div.querySelector('label');
+                    if (!label) return;
+                    
+                    // Récupérer l'ID de la question depuis le div si disponible
+                    const questionId = div.getAttribute('data-question-id');
+                    
+                    // Chercher les inputs dans ce div
+                    const inputs = div.querySelectorAll('input, select, textarea');
+                    
+                    inputs.forEach(input => {
+                        // Pour les radio buttons (mood-scale, radio-select)
+                        if (input.type === 'radio') {
+                            if (input.checked) {
+                                // Prioriser l'ID de la question, puis data-question-id, puis le name
+                                const key = questionId || input.getAttribute('data-question-id') || input.name;
+                                // Ne pas utiliser les IDs générés dynamiquement
+                                if (!key.startsWith('question-')) {
+                                    journalData[key] = input.value;
+                                } else {
+                                    // Fallback sur le label si ID généré
+                                    const fallbackKey = label.textContent.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 40);
+                                    journalData[fallbackKey] = input.value;
+                                }
+                            }
+                        }
+                        // Pour les inputs texte multiples (mood-words, gratitude-input)
+                        else if (input.classList.contains('mood-words') || input.classList.contains('gratitude-input')) {
+                            const value = input.value?.trim();
+                            if (value && value !== "") {
+                                const fieldName = input.classList.contains('mood-words') ? 'moodWords' : 'gratitude';
+                                if (!journalData[fieldName]) {
+                                    journalData[fieldName] = [];
+                                }
+                                journalData[fieldName].push(value);
+                            }
+                        }
+                        // Pour les autres inputs avec ID (select, textarea, text, number)
+                        else if (input.id) {
+                            const value = input.value?.trim();
+                            if (value && value !== "") {
+                                // Prioriser l'ID de la question, puis l'ID de l'input
+                                const key = questionId || (input.id.startsWith('question-') 
+                                    ? label.textContent.trim().toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-').substring(0, 40)
+                                    : input.id);
+                                journalData[key] = value;
+                            }
+                        }
+                    });
+                });
 
                 // Collecter les données des catégories de suivi complémentaires (seulement si remplies)
                 const trackingData = {};

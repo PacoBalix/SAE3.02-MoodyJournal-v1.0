@@ -38,14 +38,20 @@ function updateNavbar() {
       authButton.onclick = null;
     } else {
       // Bouton Se connecter (vert clair)
-      authButton.href = '#';
+      authButton.href = '/index.html?login';
       authButton.textContent = 'Se connecter';
       authButton.className = 'bg-gradient-to-r from-emerald-400/70 to-green-400/70 hover:from-emerald-500/80 hover:to-green-500/80 text-white font-semibold px-6 py-2 rounded-full transition-all duration-300 shadow-md hover:shadow-lg backdrop-blur-sm';
       authButton.onclick = (e) => {
         e.preventDefault();
+        // Vérifier si le modal existe sur cette page
         const loginModal = document.getElementById('login-modal');
         if (loginModal) {
+          // Ouvrir le modal si on est sur index.html
           loginModal.style.display = 'flex';
+          loginModal.setAttribute('aria-hidden', 'false');
+        } else {
+          // Rediriger vers index.html avec ?login si on est sur une autre page
+          window.location.href = '/index.html?login';
         }
       };
     }
@@ -99,8 +105,11 @@ function generateNavbarHTML(currentPage, options = {}) {
       ? 'bg-emerald-500/70 text-white' 
       : 'bg-white/66 text-gray-700 hover:bg-emerald-300/50 hover:text-emerald-800';
     
+    // Utiliser des chemins absolus pour éviter les problèmes de navigation depuis /blog/
+    const pagePath = page.startsWith('/') ? page : `/${page}`;
+    
     navLinks += `
-      <a href="${page}" class="${activeClass} font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
+      <a href="${pagePath}" class="${activeClass} font-medium px-5 py-2 rounded-full transition-all duration-300 backdrop-blur-sm shadow-sm hover:shadow-md">
         ${label}
       </a>
     `;
@@ -120,8 +129,8 @@ function generateNavbarHTML(currentPage, options = {}) {
       <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3">
         <div class="flex items-center justify-between">
           <!-- Logo -->
-          <a href="index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <img src="../assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-12 sm:h-14">
+          <a href="/index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+            <img src="/assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-12 sm:h-14">
             <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
           </a>
 
@@ -132,7 +141,7 @@ function generateNavbarHTML(currentPage, options = {}) {
             ${customButtons}
             
             <!-- Bouton Paramètres (si connecté) -->
-            <a id="settings-button" href="settings.html" class="${settingsClass}">
+            <a id="settings-button" href="/settings.html" class="${settingsClass}">
               Paramètres
             </a>
             
@@ -160,8 +169,10 @@ function generateNavbarHTML(currentPage, options = {}) {
             const activeClass = isActive 
               ? 'bg-emerald-500/70 text-white' 
               : 'bg-white/66 text-gray-700 hover:bg-emerald-300/50';
+            // Utiliser des chemins absolus pour éviter les problèmes de navigation depuis /blog/
+            const pagePath = page.startsWith('/') ? page : `/${page}`;
             return `
-              <a href="${page}" class="${activeClass} block font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+              <a href="${pagePath}" class="${activeClass} block font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
                 ${label}
               </a>
             `;
@@ -170,7 +181,7 @@ function generateNavbarHTML(currentPage, options = {}) {
           ${options.customButtonsMobile || ''}
           
           <!-- Bouton Paramètres Mobile (si connecté) -->
-          <a id="settings-button-mobile" href="settings.html" class="${settingsActive ? 'hidden block bg-emerald-500/70 text-white' : 'hidden block bg-gray-500/70 hover:bg-gray-600/80 text-white'} font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
+          <a id="settings-button-mobile" href="/settings.html" class="${settingsActive ? 'hidden block bg-emerald-500/70 text-white' : 'hidden block bg-gray-500/70 hover:bg-gray-600/80 text-white'} font-medium px-4 py-3 rounded-lg transition-all duration-300 backdrop-blur-sm shadow-sm text-center">
             Paramètres
           </a>
           
@@ -222,7 +233,13 @@ function initNavbar(currentPage, options = {}) {
         authButtonMobile.href = authButton.href;
         authButtonMobile.textContent = authButton.textContent;
         authButtonMobile.className = authButton.className.replace('rounded-full', 'rounded-lg') + ' block text-center';
-        authButtonMobile.onclick = authButton.onclick;
+        // Copier le gestionnaire d'événement onclick
+        if (authButton.onclick) {
+          authButtonMobile.onclick = authButton.onclick;
+        } else {
+          // Si pas de onclick (déconnexion), laisser le href fonctionner normalement
+          authButtonMobile.onclick = null;
+        }
       }
     }
     

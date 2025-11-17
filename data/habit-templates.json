@@ -1,1 +1,46 @@
-{}
+{
+  "Alix": [
+    {
+      "id": "exercise",
+      "name": "Exercice physique",
+      "category": "physical",
+      "icon": "🏃"
+    },
+    {
+      "id": "meditation",
+      "name": "Méditation",
+      "category": "mental",
+      "icon": "🧘"
+    },
+    {
+      "id": "reading",
+      "name": "Lecture",
+      "category": "growth",
+      "icon": "📚"
+    },
+    {
+      "id": "water",
+      "name": "Boire de l'eau",
+      "category": "health",
+      "icon": "💧"
+    },
+    {
+      "id": "sleep",
+      "name": "Dormir 8h",
+      "category": "health",
+      "icon": "😴"
+    },
+    {
+      "id": "habit-1763400306956",
+      "name": "Lire quelques pages",
+      "icon": "📚",
+      "category": "growth"
+    },
+    {
+      "id": "habit-1763400337681",
+      "name": "Écouter de la musique",
+      "icon": "🎵",
+      "category": "social"
+    }
+  ]
+}

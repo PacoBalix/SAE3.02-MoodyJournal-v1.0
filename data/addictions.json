@@ -1,1 +1,31 @@
-{}
+{
+  "Alix": [
+    {
+      "addictionId": "addiction-1763400226771",
+      "name": "Cannabis",
+      "startDate": "2025-11-10",
+      "dailyCost": 4,
+      "dailyTime": 120,
+      "currentStreak": 8,
+      "longestStreak": 0,
+      "milestones": [],
+      "triggerMap": {
+        "stress": 1,
+        "night": 1
+      },
+      "triggerLog": [
+        {
+          "timestamp": "2025-11-17T17:24:21.130Z",
+          "triggerType": "stress",
+          "notes": "Hier soir je n'arrivais pas à dormir et j'aurais voulu fumer, mais j'ai préféré me résigner à ne pas le faire, et ça m'a plus servis :)"
+        },
+        {
+          "timestamp": "2025-11-17T17:24:32.332Z",
+          "triggerType": "night",
+          "notes": "Pour dormir c'était dur"
+        }
+      ],
+      "savedAt": "2025-11-17T17:23:46.773Z"
+    }
+  ]
+}

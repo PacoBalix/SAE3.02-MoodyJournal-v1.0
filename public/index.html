@@ -72,6 +72,80 @@
             border: none;
             cursor: pointer;
         }
+
+        .modal-form {
+            display: block;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .modal-form.hidden {
+            display: none;
+        }
+
+        .modal-link {
+            color: #16a34a;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 0.8rem;
+            display: block;
+            text-align: center;
+        }
+
+        .modal-link:hover {
+            color: #15803d;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #991b1b;
+            padding: 0.6rem;
+            border-radius: 8px;
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            border: 1px solid #fecaca;
+        }
+
+        .success-message {
+            background: #d1fae5;
+            color: #065f46;
+            padding: 0.6rem;
+            border-radius: 8px;
+            margin-top: 0.6rem;
+            font-size: 0.85rem;
+            border: 1px solid #86efac;
+        }
+
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 0.8rem;
+            border-radius: 8px;
+            margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-size: 0.85rem;
+        }
+
+        .category-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .category-badge.selected {
+            border-color: #065f46;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .categories-container {
+            margin-top: 0.6rem;
+            max-height: 150px;
+            overflow-y: auto;
+            padding: 0.5rem;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
     </style>
     <script src="js/navbar.js"></script>
 </head>
@@ -623,59 +697,280 @@
         </div>
     </footer>
 
-    <!-- Modal de connexion -->
+    <!-- Modal de connexion/inscription -->
     <div id="login-modal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="modal" role="document" aria-labelledby="login-title">
-            <h3 id="login-title">Se connecter</h3>
-            <form method="post" action="/login" id="login-form">
-                <label for="username">Nom d'utilisateur</label>
-                <input id="username" name="username" type="text" required autocomplete="username" />
-                <label for="password">Mot de passe</label>
-                <input id="password" name="password" type="password" required autocomplete="current-password" />
-                <div style="margin-top:.6rem;font-size:.85rem;color:#475569;">
-                    <p>Utilisateurs disponibles : Alix, Lallie, Emmanuel, Noa, Alex, Hugo, Nina, Mathieu</p>
-                </div>
-                <div class="actions">
-                    <button type="button" class="btn-secondary" id="cancel-login">Annuler</button>
-                    <button type="submit" class="btn-primary">Se connecter</button>
-                </div>
-            </form>
+        <div class="modal" role="document">
+            <!-- Formulaire de connexion -->
+            <div id="login-form-container" class="modal-form">
+                <h3 id="login-title">Se connecter</h3>
+                <form method="post" action="/login" id="login-form">
+                    <label for="username">Nom d'utilisateur</label>
+                    <input id="username" name="username" type="text" required autocomplete="username" />
+                    <label for="password">Mot de passe</label>
+                    <input id="password" name="password" type="password" required autocomplete="current-password" />
+                    <div id="login-error" class="error-message hidden"></div>
+                    <div class="actions">
+                        <button type="button" class="btn-secondary" id="cancel-login">Annuler</button>
+                        <button type="submit" class="btn-primary">Se connecter</button>
+                    </div>
+                </form>
+                <a href="#" id="switch-to-register" class="modal-link">Créer un compte</a>
+            </div>
+
+            <!-- Formulaire d'inscription -->
+            <div id="register-form-container" class="modal-form hidden">
+                <h3 id="register-title">Créer un compte</h3>
+                <form id="register-form">
+                    <label for="register-username">Nom d'utilisateur (3+ caractères)</label>
+                    <input id="register-username" name="username" type="text" required autocomplete="username" minlength="3" />
+                    <label for="register-password">Mot de passe (6+ caractères)</label>
+                    <input id="register-password" name="password" type="password" required autocomplete="new-password" minlength="6" />
+                    <label for="register-categories">Catégories de suivi (optionnel)</label>
+                    <div class="categories-container">
+                        <div class="category-badge" data-category="tca" style="background: #fee2e2; color: #991b1b;">
+                            🍎 TCA
+                        </div>
+                        <div class="category-badge" data-category="addiction" style="background: #fef3c7; color: #92400e;">
+                            ⚠️ Addictions
+                        </div>
+                        <div class="category-badge" data-category="mental-health" style="background: #dbeafe; color: #1e40af;">
+                            🧠 Santé Mentale
+                        </div>
+                        <div class="category-badge" data-category="physical-health" style="background: #d1fae5; color: #065f46;">
+                            💪 Santé Physique
+                        </div>
+                        <div class="category-badge" data-category="social" style="background: #ede9fe; color: #5b21b6;">
+                            👥 Relations
+                        </div>
+                        <div class="category-badge" data-category="productivity" style="background: #fed7aa; color: #9a3412;">
+                            📈 Productivité
+                        </div>
+                    </div>
+                    <div id="register-error" class="error-message hidden"></div>
+                    <div id="register-success" class="success-message hidden"></div>
+                    <div class="actions">
+                        <button type="button" class="btn-secondary" id="cancel-register">Annuler</button>
+                        <button type="submit" class="btn-primary">S'inscrire</button>
+                    </div>
+                </form>
+                <a href="#" id="switch-to-login" class="modal-link">Déjà un compte ? Se connecter</a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Contrôle du modal de connexion
+        // Gestion des catégories de suivi sélectionnées
+        let selectedCategories = [];
+
+        // Contrôle du modal de connexion/inscription
         (function () {
             const loginBtn = document.getElementById('login-btn');
             const modal = document.getElementById('login-modal');
             const cancelBtn = document.getElementById('cancel-login');
+            const cancelRegisterBtn = document.getElementById('cancel-register');
             const usernameInput = document.getElementById('username');
+            const loginFormContainer = document.getElementById('login-form-container');
+            const registerFormContainer = document.getElementById('register-form-container');
+            const switchToRegister = document.getElementById('switch-to-register');
+            const switchToLogin = document.getElementById('switch-to-login');
 
-            function openModal() {
+            function openModal(showRegister = false) {
                 modal.style.display = 'flex';
                 modal.setAttribute('aria-hidden', 'false');
-                // focus sur le premier champ
-                setTimeout(() => usernameInput.focus(), 50);
+                
+                if (showRegister) {
+                    showRegisterForm();
+                } else {
+                    showLoginForm();
+                }
+                
                 document.addEventListener('keydown', onKeyDown);
             }
+
             function closeModal() {
                 modal.style.display = 'none';
                 modal.setAttribute('aria-hidden', 'true');
                 document.removeEventListener('keydown', onKeyDown);
+                // Réinitialiser les formulaires
+                resetForms();
             }
+
+            function showLoginForm() {
+                loginFormContainer.classList.remove('hidden');
+                registerFormContainer.classList.add('hidden');
+                setTimeout(() => usernameInput.focus(), 50);
+            }
+
+            function showRegisterForm() {
+                loginFormContainer.classList.add('hidden');
+                registerFormContainer.classList.remove('hidden');
+                const registerUsernameInput = document.getElementById('register-username');
+                setTimeout(() => registerUsernameInput.focus(), 50);
+            }
+
+            function resetForms() {
+                // Réinitialiser le formulaire de connexion
+                document.getElementById('login-form').reset();
+                document.getElementById('login-error').classList.add('hidden');
+                
+                // Réinitialiser le formulaire d'inscription
+                document.getElementById('register-form').reset();
+                document.getElementById('register-error').classList.add('hidden');
+                document.getElementById('register-success').classList.add('hidden');
+                selectedCategories = [];
+                updateCategoryBadges();
+            }
+
             function onKeyDown(e) {
                 if (e.key === 'Escape') closeModal();
             }
 
-            loginBtn.addEventListener('click', openModal);
+            loginBtn.addEventListener('click', () => openModal(false));
             cancelBtn.addEventListener('click', closeModal);
+            cancelRegisterBtn.addEventListener('click', closeModal);
+            switchToRegister.addEventListener('click', (e) => {
+                e.preventDefault();
+                showRegisterForm();
+            });
+            switchToLogin.addEventListener('click', (e) => {
+                e.preventDefault();
+                showLoginForm();
+            });
             modal.addEventListener('click', function (e) {
                 if (e.target === modal) closeModal(); // clic sur le backdrop ferme
             });
 
             // accessibilité: ouvrir modal si url contient ?login
-            if (location.search.includes('login')) openModal();
+            if (location.search.includes('login')) openModal(false);
         })();
+
+        // Gestion des catégories de suivi
+        function updateCategoryBadges() {
+            const badges = document.querySelectorAll('.category-badge');
+            badges.forEach(badge => {
+                const category = badge.dataset.category;
+                if (selectedCategories.includes(category)) {
+                    badge.classList.add('selected');
+                } else {
+                    badge.classList.remove('selected');
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const badges = document.querySelectorAll('.category-badge');
+            badges.forEach(badge => {
+                badge.addEventListener('click', () => {
+                    const category = badge.dataset.category;
+                    const index = selectedCategories.indexOf(category);
+                    if (index > -1) {
+                        selectedCategories.splice(index, 1);
+                    } else {
+                        selectedCategories.push(category);
+                    }
+                    updateCategoryBadges();
+                });
+            });
+        });
+
+        // Validation et soumission du formulaire d'inscription
+        document.getElementById('register-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('register-username').value.trim();
+            const password = document.getElementById('register-password').value;
+            const errorDiv = document.getElementById('register-error');
+            const successDiv = document.getElementById('register-success');
+            
+            // Masquer les messages précédents
+            errorDiv.classList.add('hidden');
+            successDiv.classList.add('hidden');
+            
+            // Validation côté client
+            if (username.length < 3) {
+                errorDiv.textContent = 'Le nom d\'utilisateur doit contenir au moins 3 caractères.';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            if (password.length < 6) {
+                errorDiv.textContent = 'Le mot de passe doit contenir au moins 6 caractères.';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+            
+            // Envoyer la requête d'inscription
+            try {
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password,
+                        trackingCategories: selectedCategories
+                    })
+                });
+                
+                // Gérer les erreurs HTTP
+                if (response.status === 404) {
+                    errorDiv.textContent = 'Erreur : La route d\'inscription n\'est pas disponible. Veuillez redémarrer le serveur.';
+                    errorDiv.classList.remove('hidden');
+                    console.error('❌ Route /register non trouvée (404). Le serveur doit être redémarré.');
+                    return;
+                }
+                
+                // Lire le texte de la réponse
+                const text = await response.text();
+                
+                // Essayer de parser en JSON
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (parseErr) {
+                    // Si ce n'est pas du JSON, c'est une erreur serveur
+                    console.error('Erreur parsing JSON:', parseErr);
+                    console.error('Réponse reçue:', text);
+                    
+                    if (response.status >= 500) {
+                        errorDiv.textContent = 'Erreur serveur. Veuillez réessayer dans quelques instants.';
+                    } else {
+                        errorDiv.textContent = 'Erreur de communication avec le serveur. Veuillez réessayer.';
+                    }
+                    errorDiv.classList.remove('hidden');
+                    return;
+                }
+                
+                // Traiter la réponse
+                if (response.ok && data.success) {
+                    // Inscription réussie
+                    successDiv.textContent = 'Inscription réussie ! Connexion en cours...';
+                    successDiv.classList.remove('hidden');
+                    
+                    // Attendre un peu puis rediriger
+                    setTimeout(() => {
+                        window.location.href = '/index.html';
+                    }, 1500);
+                } else {
+                    // Erreur d'inscription - afficher le message d'erreur du serveur
+                    const errorMessage = data.error || 'Une erreur est survenue lors de l\'inscription.';
+                    errorDiv.textContent = errorMessage;
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (err) {
+                console.error('Erreur lors de l\'inscription:', err);
+                
+                // Messages d'erreur spécifiques selon le type d'erreur
+                if (err.name === 'TypeError' && err.message.includes('fetch')) {
+                    errorDiv.textContent = 'Erreur de connexion. Vérifiez que le serveur est bien démarré.';
+                } else {
+                    errorDiv.textContent = err.message || 'Une erreur est survenue. Veuillez réessayer.';
+                }
+                errorDiv.classList.remove('hidden');
+            }
+        });
 
         // Vérifier la session et afficher/masquer le bouton de déconnexion
         async function checkSessionAndUpdateNav() {
@@ -690,19 +985,20 @@
                 
                 if (data.authenticated) {
                     // Utilisateur connecté
-                    logoutBtn.classList.remove('hidden');
-                    loginBtn.classList.add('hidden');
-                    loginMessage.classList.add('hidden');
-                    personalDashboard.classList.remove('hidden');
-                    
-                    // Charger le dashboard personnalisé
-                    await loadPersonalDashboard(data.username);
+                    if (logoutBtn) logoutBtn.classList.remove('hidden');
+                    if (loginBtn) loginBtn.classList.add('hidden');
+                    if (loginMessage) loginMessage.classList.add('hidden');
+                    if (personalDashboard) {
+                        personalDashboard.classList.remove('hidden');
+                        // Charger le dashboard personnalisé
+                        await loadPersonalDashboard(data.username);
+                    }
                 } else {
                     // Utilisateur non connecté
-                    logoutBtn.classList.add('hidden');
-                    loginBtn.classList.remove('hidden');
-                    loginMessage.classList.remove('hidden');
-                    personalDashboard.classList.add('hidden');
+                    if (logoutBtn) logoutBtn.classList.add('hidden');
+                    if (loginBtn) loginBtn.classList.remove('hidden');
+                    if (loginMessage) loginMessage.classList.remove('hidden');
+                    if (personalDashboard) personalDashboard.classList.add('hidden');
                 }
             } catch (err) {
                 console.error('Erreur vérification session:', err);

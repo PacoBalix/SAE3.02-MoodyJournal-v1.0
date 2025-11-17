@@ -8,9 +8,7 @@ category: mental-health
 
 # Santé Mentale et Image du Corps Chez les Jeunes : Au-Delà des Apparences
 
-**"Elle est grosse, tu trouves pas ?"**  
-**"Son maquillage c'est nul."**  
-**"Il a pas les abdos qu'il faudrait."**
+**"Elle est grosse, tu trouves pas ?" "Son maquillage est moche." "Il a pas les abdos qu'il faudrait."**
 
 Ces commentaires, les jeunes les entendent. De leurs pairs, des réseaux, des pubs. Et surtout, **ils commencent à se les répéter à eux-mêmes.**
 

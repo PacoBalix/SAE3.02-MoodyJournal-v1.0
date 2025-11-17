@@ -144,6 +144,51 @@ async function ensureBlogDir() {
   }
 }
 
+// Helper pour parser les dates des articles blog
+function parseBlogDate(dateString) {
+  if (!dateString) return new Date(0);
+  try {
+    // Format: DDMMYYYY (8 chiffres)
+    if (dateString.length === 8 && /^\d+$/.test(dateString)) {
+      const day = dateString.substring(0, 2);
+      const month = dateString.substring(2, 4);
+      const year = dateString.substring(4, 8);
+      const date = new Date(year, month - 1, day);
+      // Vérifier que la date est valide et que l'année est raisonnable
+      if (date.getFullYear() == year && date.getMonth() == month - 1 && date.getDate() == day && parseInt(year) > 1900) {
+        return date;
+      }
+    }
+    // Format: YYYYMMDD (8 chiffres)
+    if (dateString.length === 8 && /^\d+$/.test(dateString)) {
+      const year = dateString.substring(0, 4);
+      const month = dateString.substring(4, 6);
+      const day = dateString.substring(6, 8);
+      const date = new Date(year, month - 1, day);
+      // Vérifier que la date est valide
+      if (date.getFullYear() == year && date.getMonth() == month - 1 && date.getDate() == day) {
+        return date;
+      }
+    }
+    // Format DD/MM/YYYY ou autre
+    if (dateString.includes('/')) {
+      const parts = dateString.split('/');
+      if (parts.length === 3) {
+        const date = new Date(parts[2], parts[1] - 1, parts[0]);
+        if (!isNaN(date.getTime())) return date;
+      }
+    }
+    // Format ISO ou autre format standard
+    const date = new Date(dateString);
+    if (!isNaN(date.getTime())) {
+      return date;
+    }
+    return new Date(0);
+  } catch (e) {
+    return new Date(0);
+  }
+}
+
 async function getBlogArticles() {
   try {
     await ensureBlogDir();
@@ -216,9 +261,9 @@ async function getBlogArticles() {
     
     // Trier par date (plus récent en premier)
     return articles.sort((a, b) => {
-      const dateA = new Date(b.date.split('/').reverse().join('-'));
-      const dateB = new Date(a.date.split('/').reverse().join('-'));
-      return dateA - dateB;
+      const dateA = parseBlogDate(a.date);
+      const dateB = parseBlogDate(b.date);
+      return dateB - dateA;
     });
   } catch (err) {
     console.error('Erreur lecture articles blog:', err);
@@ -336,6 +381,17 @@ async function loadUsers() {
   }
 }
 
+async function saveUsers() {
+  try {
+    await ensureDir();
+    await fs.writeFile(USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
+    console.log('✅ Utilisateurs sauvegardés dans users.json');
+  } catch (err) {
+    console.error('❌ Erreur lors de la sauvegarde des utilisateurs:', err);
+    throw err;
+  }
+}
+
 // Configuration de la session utilisateur
 app.use(session({
   secret: 'unSecretTresLongEtUnique',
@@ -423,6 +479,148 @@ app.get('/logout', (req, res) => {
   req.session.destroy(() => {
     res.redirect('/index.html');
   });
+});
+
+// Route d'inscription
+app.post('/register', async (req, res) => {
+  // S'assurer que la réponse est en JSON
+  res.setHeader('Content-Type', 'application/json');
+  
+  try {
+    console.log('📝 Tentative d\'inscription reçue');
+    console.log('📝 Content-Type:', req.headers['content-type']);
+    console.log('📝 Body reçu:', req.body);
+    console.log('📝 Type de body:', typeof req.body);
+    
+    // Vérifier que le body est bien parsé
+    if (!req.body || Object.keys(req.body).length === 0) {
+      console.log('❌ Body vide ou non parsé');
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Données invalides. Veuillez réessayer.' 
+      });
+    }
+    
+    const { username, password, trackingCategories } = req.body;
+    console.log('📝 Données extraites:', { username: username ? 'présent' : 'absent', password: password ? 'présent' : 'absent', trackingCategories });
+
+    // Validation des champs
+    if (!username || !password) {
+      console.log('❌ Validation échouée: champs manquants');
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Le nom d\'utilisateur et le mot de passe sont requis.' 
+      });
+    }
+
+    // Normaliser les entrées
+    const normalizedUsername = username.trim();
+    const normalizedPassword = password.trim();
+
+    // Validation renforcée
+    if (normalizedUsername.length < 3) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Le nom d\'utilisateur doit contenir au moins 3 caractères.' 
+      });
+    }
+
+    if (normalizedPassword.length < 6) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Le mot de passe doit contenir au moins 6 caractères.' 
+      });
+    }
+
+    // Vérifier l'unicité du pseudo (insensible à la casse)
+    console.log(`🔍 Vérification unicité pour: ${normalizedUsername}`);
+    console.log(`🔍 Nombre d'utilisateurs actuels: ${users.length}`);
+    const existingUser = users.find(u => 
+      u.username && u.username.toLowerCase() === normalizedUsername.toLowerCase()
+    );
+
+    if (existingUser) {
+      console.log(`❌ Nom d'utilisateur déjà pris: ${normalizedUsername}`);
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Ce nom d\'utilisateur est déjà pris.' 
+      });
+    }
+
+    // Générer un nouvel ID (max des IDs existants + 1)
+    const maxId = users.length > 0 ? Math.max(...users.map(u => u.id || 0)) : 0;
+    const newId = maxId + 1;
+
+    // Créer le nouvel utilisateur
+    const newUser = {
+      id: newId,
+      username: normalizedUsername,
+      password: normalizedPassword
+    };
+
+    // Ajouter l'utilisateur à la liste
+    users.push(newUser);
+    
+    // Mettre à jour le mapping username -> id
+    usernameToId.set(normalizedUsername, newId);
+
+    // Sauvegarder les utilisateurs
+    try {
+      await saveUsers();
+      console.log(`✅ Utilisateurs sauvegardés avec succès`);
+    } catch (saveErr) {
+      console.error('❌ Erreur lors de la sauvegarde des utilisateurs:', saveErr);
+      // Retirer l'utilisateur de la liste en cas d'erreur
+      users.pop();
+      usernameToId.delete(normalizedUsername);
+      throw saveErr;
+    }
+
+    console.log(`✅ Nouvel utilisateur créé: ${normalizedUsername} (ID: ${newId})`);
+
+    // Sauvegarder les paramètres (catégories de suivi) si fournies
+    if (trackingCategories && Array.isArray(trackingCategories) && trackingCategories.length > 0) {
+      const settingsFile = path.join(__dirname, 'data', 'user-settings.json');
+      let allSettings = {};
+
+      try {
+        const data = await fs.readFile(settingsFile, 'utf-8');
+        allSettings = JSON.parse(data);
+      } catch (err) {
+        console.log('📁 Création du fichier de paramètres');
+      }
+
+      // Sauvegarder les catégories de suivi
+      allSettings[normalizedUsername] = {
+        trackingCategories: trackingCategories,
+        lastUpdated: new Date().toISOString()
+      };
+
+      await fs.writeFile(settingsFile, JSON.stringify(allSettings, null, 2));
+      console.log(`✅ Paramètres sauvegardés pour ${normalizedUsername}`);
+    }
+
+    // Créer une session pour l'utilisateur
+    req.session.user = normalizedUsername;
+
+    // Retourner une réponse de succès
+    res.json({ 
+      success: true, 
+      message: 'Inscription réussie !',
+      user: {
+        id: newId,
+        username: normalizedUsername
+      }
+    });
+
+  } catch (err) {
+    console.error('❌ Erreur lors de l\'inscription:', err);
+    console.error('❌ Stack trace:', err.stack);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Une erreur est survenue lors de l\'inscription. Veuillez réessayer.' 
+    });
+  }
 });
 
 // Route pour vérifier l'état de la session
@@ -1615,7 +1813,41 @@ app.get('/blog/:slug', async (req, res) => {
     // Convertir le markdown en HTML
     const htmlContent = marked(article.content);
     
-    // Générer la page HTML
+    // Formater la date
+    let formattedDate = article.date || 'Récemment';
+    try {
+      if (article.date && article.date.length === 8 && /^\d+$/.test(article.date)) {
+        // Essayer d'abord le format DDMMYYYY
+        const day = article.date.substring(0, 2);
+        const month = article.date.substring(2, 4);
+        const year = article.date.substring(4, 8);
+        let date = new Date(year, month - 1, day);
+        
+        // Vérifier si c'est une date valide (format DDMMYYYY)
+        if (date.getFullYear() == year && date.getMonth() == month - 1 && date.getDate() == day && parseInt(year) > 1900) {
+          formattedDate = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+        } else {
+          // Essayer le format YYYYMMDD
+          const year2 = article.date.substring(0, 4);
+          const month2 = article.date.substring(4, 6);
+          const day2 = article.date.substring(6, 8);
+          date = new Date(year2, month2 - 1, day2);
+          if (date.getFullYear() == year2 && date.getMonth() == month2 - 1 && date.getDate() == day2) {
+            formattedDate = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+          }
+        }
+      } else {
+        // Format ISO ou autre
+        const date = new Date(article.date);
+        if (!isNaN(date.getTime())) {
+          formattedDate = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+      }
+    } catch (e) {
+      // Garder la date originale si erreur
+    }
+    
+    // Générer la page HTML avec rendu amélioré
     const html = `
 <!DOCTYPE html>
 <html lang="fr">
@@ -1624,113 +1856,217 @@ app.get('/blog/:slug', async (req, res) => {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${article.title} - MoodyJournal</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/js/navbar.js"></script>
     <style>
+        /* Variables CSS */
+        :root {
+            --primary-color: #10b981;
+            --primary-dark: #059669;
+            --primary-light: #d1fae5;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --bg-light: #f9fafb;
+        }
+
+        /* Typographie améliorée */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
         }
-        
-        .article-content {
-            max-width: 750px;
+
+        /* Header immersif */
+        .article-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .article-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .article-hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
             margin: 0 auto;
-            font-size: 1.125rem;
-            line-height: 1.85;
-            color: #1f2937;
         }
-        
+
+        .article-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.02em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .article-meta {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            font-size: 1rem;
+            opacity: 0.95;
+            margin-top: 2rem;
+        }
+
+        .article-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Contenu de l'article */
+        .article-wrapper {
+            max-width: 960px;
+            margin: -60px auto 0;
+            padding: 0 1.5rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .article-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            margin-bottom: 3rem;
+        }
+
+        /* Styles markdown améliorés */
         .article-content h1 {
             font-size: 2.75rem;
             font-weight: 800;
-            color: #065f46;
+            color: var(--text-primary);
             margin: 3rem 0 1.5rem;
             line-height: 1.2;
             letter-spacing: -0.02em;
+            border-bottom: 3px solid var(--primary-light);
+            padding-bottom: 1rem;
         }
-        
+
         .article-content h2 {
             font-size: 2.25rem;
             font-weight: 700;
-            color: #047857;
+            color: var(--primary-dark);
             margin: 2.5rem 0 1.25rem;
             line-height: 1.3;
             letter-spacing: -0.015em;
-            padding-top: 0.5rem;
-            border-top: 1px solid #d1fae5;
+            padding-top: 1rem;
+            border-top: 2px solid var(--primary-light);
         }
-        
+
         .article-content h3 {
             font-size: 1.75rem;
             font-weight: 600;
-            color: #059669;
+            color: var(--primary-color);
             margin: 2rem 0 1rem;
             line-height: 1.4;
         }
-        
+
         .article-content h4 {
             font-size: 1.375rem;
             font-weight: 600;
-            color: #10b981;
+            color: var(--primary-color);
             margin: 1.5rem 0 0.75rem;
         }
-        
+
         .article-content p {
             margin: 1.5rem 0;
             line-height: 1.85;
-            color: #374151;
+            color: var(--text-primary);
+            font-size: 1.125rem;
             text-align: justify;
         }
-        
-        .article-content ul, .article-content ol {
+
+        .article-content ul,
+        .article-content ol {
             margin: 1.5rem 0;
             padding-left: 2.5rem;
-            color: #374151;
+            color: var(--text-primary);
         }
-        
+
         .article-content li {
             margin: 0.75rem 0;
             line-height: 1.75;
+            font-size: 1.125rem;
         }
-        
+
         .article-content li::marker {
-            color: #10b981;
+            color: var(--primary-color);
             font-weight: 600;
         }
-        
-        .article-content strong, .article-content b {
-            color: #059669;
+
+        .article-content strong,
+        .article-content b {
+            color: var(--primary-dark);
             font-weight: 700;
         }
-        
+
         .article-content em {
             font-style: italic;
-            color: #4b5563;
+            color: var(--text-secondary);
         }
-        
+
         .article-content blockquote {
-            border-left: 5px solid #10b981;
+            border-left: 5px solid var(--primary-color);
             padding: 1.5rem 2rem;
             margin: 2rem 0;
-            background: linear-gradient(to right, #ecfdf5, #f0fdf4);
-            font-size: 1.2rem;
+            background: linear-gradient(to right, var(--primary-light), #f0fdf4);
+            font-size: 1.25rem;
             font-style: italic;
-            color: #065f46;
+            color: var(--primary-dark);
             border-radius: 0 8px 8px 0;
             box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1);
+            position: relative;
+            transition: all 0.3s ease;
         }
-        
+
+        .article-content blockquote:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .article-content blockquote::before {
+            content: '"';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            font-size: 4rem;
+            color: var(--primary-color);
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+
         .article-content blockquote p {
             margin: 0.5rem 0;
+            position: relative;
+            z-index: 1;
         }
-        
+
         .article-content code {
             background: #f3f4f6;
             padding: 0.25rem 0.5rem;
             border-radius: 0.375rem;
             font-family: 'Monaco', 'Courier New', monospace;
             font-size: 0.95em;
-            color: #059669;
+            color: var(--primary-dark);
             border: 1px solid #e5e7eb;
         }
-        
+
         .article-content pre {
             background: #1f2937;
             color: #f9fafb;
@@ -1741,7 +2077,7 @@ app.get('/blog/:slug', async (req, res) => {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             line-height: 1.6;
         }
-        
+
         .article-content pre code {
             background: transparent;
             color: inherit;
@@ -1749,141 +2085,274 @@ app.get('/blog/:slug', async (req, res) => {
             border: none;
             font-size: 0.95rem;
         }
-        
+
         .article-content a {
-            color: #10b981;
+            color: var(--primary-color);
             text-decoration: underline;
             text-decoration-thickness: 2px;
             text-underline-offset: 3px;
             transition: all 0.2s ease;
+            font-weight: 500;
         }
-        
+
         .article-content a:hover {
-            color: #059669;
+            color: var(--primary-dark);
             text-decoration-thickness: 3px;
         }
-        
+
         .article-content hr {
             border: none;
-            border-top: 3px solid #d1fae5;
+            border-top: 3px solid var(--primary-light);
             margin: 3rem 0;
             border-radius: 2px;
         }
-        
+
         .article-content img {
             max-width: 100%;
             height: auto;
             border-radius: 0.75rem;
             margin: 2rem 0;
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
         }
-        
-        /* Amélioration de la lecture */
+
+        .article-content img:hover {
+            transform: scale(1.02);
+        }
+
+        /* Tags */
+        .article-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin: 2rem 0;
+        }
+
+        .article-tag {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .article-tag:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Navigation */
+        .article-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: var(--bg-light);
+            border-radius: 1rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            background: white;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .nav-link:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        /* Actions */
+        .article-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+        }
+
+        .action-btn.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .action-btn.primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .action-btn.secondary {
+            background: white;
+            color: var(--primary-dark);
+            border: 2px solid var(--primary-color);
+        }
+
+        .action-btn.secondary:hover {
+            background: var(--primary-light);
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
-            .article-content {
-                font-size: 1rem;
-                line-height: 1.75;
+            .article-hero {
+                padding: 3rem 1.5rem;
             }
-            
+
+            .article-wrapper {
+                margin-top: -40px;
+                padding: 0 1rem;
+            }
+
+            .article-content {
+                padding: 2rem 1.5rem;
+            }
+
             .article-content h1 {
                 font-size: 2rem;
             }
-            
+
             .article-content h2 {
                 font-size: 1.75rem;
             }
-            
+
             .article-content h3 {
                 font-size: 1.5rem;
             }
+
+            .article-content p {
+                font-size: 1rem;
+                text-align: left;
+            }
+
+            .article-navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-link {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Intro accrocheuse */
+        .article-intro {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--primary-light);
+            border-left: 4px solid var(--primary-color);
+            border-radius: 0.5rem;
+            font-style: italic;
         }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-100">
-    <!-- Header -->
-    <header class="bg-white/90 backdrop-blur-md shadow-lg border-b-2 border-emerald-200">
-        <div class="max-w-7xl mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <a href="/index.html" class="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-                    <img src="/assets/moodyjournal.svg" alt="Logo MoodyJournal" class="h-14">
-                    <span class="text-sm text-gray-600 hidden sm:block">Votre compagnon bien-être</span>
-                </a>
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
 
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="/index.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Accueil</a>
-                    <a href="/journal.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Écrire</a>
-                    <a href="/view.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Consulter</a>
-                    <a href="/blog.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Blog</a>
-                    <a href="/chat.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Discuter</a>
-                    <a href="/settings.html" class="text-gray-700 hover:text-emerald-600 font-medium transition-colors">Paramètres</a>
-                    <a href="/logout" class="text-red-600 hover:text-red-700 font-medium transition-colors">Déconnexion</a>
-                </nav>
+    <!-- Header immersif -->
+    <header class="article-hero">
+        <div class="article-hero-content">
+            ${article.tags && article.tags.length > 0 ? `
+            <div class="flex items-center justify-center gap-2 mb-4 flex-wrap">
+                ${article.tags.map(tag => `
+                    <span class="bg-white/20 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-semibold">
+                        ${tag}
+                    </span>
+                `).join('')}
+            </div>
+            ` : ''}
+            
+            <h1 class="article-title">${article.title}</h1>
+            
+            ${article.excerpt ? `
+            <p class="article-intro" style="background: rgba(255,255,255,0.1); border: none; color: rgba(255,255,255,0.95);">${article.excerpt}</p>
+            ` : ''}
+            
+            <div class="article-meta">
+                <div class="article-meta-item">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <span>MoodyJournal</span>
+                </div>
+                <div class="article-meta-item">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>${formattedDate}</span>
+                </div>
+                <div class="article-meta-item">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>${article.readingTime || '5 min'}</span>
+                </div>
             </div>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-6 py-12">
-        <!-- Breadcrumb -->
-        <div class="mb-8">
-            <a href="/blog.html" class="text-emerald-600 hover:text-emerald-700 font-medium flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Retour au blog
-            </a>
-        </div>
-
-        <!-- Article Header -->
-        <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-8">
-            <div class="bg-gradient-to-r from-emerald-600 to-emerald-700 px-8 md:px-12 py-6">
-                ${article.tags && article.tags.length > 0 ? `
-                <div class="flex items-center gap-2 mb-4">
-                    ${article.tags.map(tag => `
-                        <span class="bg-white/20 backdrop-blur-sm text-white px-4 py-1.5 rounded-full text-sm font-semibold">
-                            ${tag}
-                        </span>
-                    `).join('')}
-                </div>
-                ` : ''}
-                
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 leading-tight">${article.title}</h1>
-                
-                ${article.excerpt ? `
-                <p class="text-xl text-emerald-50 mb-6 leading-relaxed">${article.excerpt}</p>
-                ` : ''}
-                
-                <div class="flex items-center gap-6 text-emerald-100 text-sm">
-                    <span class="flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        ${article.date}
-                    </span>
-                    <span class="flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        ${article.readingTime}
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Article Content -->
-        <article class="bg-white rounded-3xl shadow-xl p-8 md:p-16">
-            <div class="article-content">
+    <!-- Contenu de l'article -->
+    <main>
+        <div class="article-wrapper">
+            <article class="article-content">
                 ${htmlContent}
-            </div>
-        </article>
+            </article>
 
-        <!-- Navigation -->
-        <div class="mt-12 text-center">
-            <a href="/blog.html" class="inline-flex items-center bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold transition-colors">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                </svg>
-                Voir tous les articles
-            </a>
+            <!-- Tags -->
+            ${article.tags && article.tags.length > 0 ? `
+            <div class="article-tags">
+                ${article.tags.map(tag => `
+                    <a href="/blog.html?tag=${tag}" class="article-tag">#${tag}</a>
+                `).join('')}
+            </div>
+            ` : ''}
+
+            <!-- Actions -->
+            <div class="article-actions">
+                <a href="/blog.html" class="action-btn primary">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Retour au blog
+                </a>
+                <button class="action-btn secondary" onclick="shareArticle()">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                    </svg>
+                    Partager
+                </button>
+            </div>
         </div>
     </main>
 
@@ -1899,6 +2368,45 @@ app.get('/blog/:slug', async (req, res) => {
             </div>
         </div>
     </footer>
+
+    <script>
+        // Initialiser la navbar
+        if (typeof initNavbar !== 'undefined') {
+            initNavbar('blog.html');
+        }
+
+        // Fonction de partage
+        function shareArticle() {
+            const url = window.location.href;
+            const title = '${article.title}';
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: title,
+                    text: '${article.excerpt || ''}',
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert('Lien copié dans le presse-papier !');
+            }
+        }
+
+        // Animation d'entrée pour les éléments
+        document.addEventListener('DOMContentLoaded', () => {
+            const content = document.querySelector('.article-content');
+            if (content) {
+                content.style.opacity = '0';
+                content.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    content.style.transition = 'all 0.6s ease-out';
+                    content.style.opacity = '1';
+                    content.style.transform = 'translateY(0)';
+                }, 100);
+            }
+        });
+    </script>
+    <script src="/js/session-check.js"></script>
 </body>
 </html>
     `;
@@ -2032,6 +2540,82 @@ io.on('connection', (socket) => {
   });
 });
 
+// === Documentation des routes ===
+function displayRoutes() {
+  console.log('\n📋 ========== ROUTES DISPONIBLES ==========\n');
+  
+  console.log('🔐 AUTHENTIFICATION:');
+  console.log('  GET  /                    → Redirige vers /index.html');
+  console.log('  GET  /login                → Redirige vers /index.html?login');
+  console.log('  POST /login                → Connexion utilisateur (username, password)');
+  console.log('  POST /register             → Inscription utilisateur (username, password, trackingCategories)');
+  console.log('  GET  /logout               → Déconnexion et destruction de session');
+  console.log('  GET  /api/session          → Vérifie l\'état de la session (authenticated, user)');
+  
+  console.log('\n📄 PAGES PRINCIPALES:');
+  console.log('  GET  /journal              → Redirige vers /journal.html (nécessite auth)');
+  console.log('  GET  /view                 → Redirige vers /view.html (nécessite auth)');
+  console.log('  GET  /settings             → Redirige vers /settings.html (nécessite auth)');
+  
+  console.log('\n👤 UTILISATEURS:');
+  console.log('  GET  /api/users            → Liste tous les utilisateurs');
+  console.log('  GET  /api/user-id/:username → Récupère l\'ID d\'un utilisateur par son username');
+  console.log('  POST /api/create-user      → Crée un nouvel utilisateur (admin)');
+  console.log('  POST /api/reload-users     → Recharge les utilisateurs depuis users.json');
+  
+  console.log('\n⚙️ PARAMÈTRES UTILISATEUR:');
+  console.log('  GET  /api/user-preferences → Récupère les préférences par défaut');
+  console.log('  GET  /api/user-settings    → Récupère les paramètres de l\'utilisateur connecté');
+  console.log('  POST /api/save-settings    → Sauvegarde les paramètres utilisateur');
+  
+  console.log('\n📝 JOURNAL:');
+  console.log('  GET  /api/journal-entries  → Récupère toutes les entrées du journal de l\'utilisateur');
+  console.log('  POST /api/save-journal     → Sauvegarde une nouvelle entrée de journal');
+  console.log('  POST /api/save-followup    → Sauvegarde les réponses au suivi');
+  console.log('  GET  /api/followup-answers → Récupère les réponses au suivi');
+  
+  console.log('\n💪 HABITUDES:');
+  console.log('  GET  /api/habits           → Récupère les habitudes de l\'utilisateur');
+  console.log('  POST /api/habits/save      → Sauvegarde une habitude');
+  console.log('  GET  /api/habits/templates → Récupère les modèles d\'habitudes');
+  console.log('  POST /api/habits/templates → Crée un nouveau modèle d\'habitude');
+  
+  console.log('\n⚠️ ADDICTIONS:');
+  console.log('  GET  /api/addictions                    → Récupère les addictions de l\'utilisateur');
+  console.log('  POST /api/addictions/save               → Sauvegarde une addiction');
+  console.log('  POST /api/addictions/:addictionId/trigger → Enregistre un déclenchement d\'addiction');
+  
+  console.log('\n🏆 BADGES & STREAKS:');
+  console.log('  GET  /api/badges           → Récupère les badges de l\'utilisateur');
+  console.log('  POST /api/badges/unlock    → Débloque un badge');
+  console.log('  GET  /api/streaks          → Récupère les séries (streaks) de l\'utilisateur');
+  
+  console.log('\n👥 AMIS & CONTACTS:');
+  console.log('  GET  /api/friends                        → Liste les amis de l\'utilisateur');
+  console.log('  POST /api/add-friend                    → Ajoute un ami');
+  console.log('  GET  /api/contacts/:userId               → Récupère les contacts d\'un utilisateur');
+  console.log('  POST /api/contacts/:userId/add           → Ajoute un contact');
+  console.log('  POST /api/friend-requests/send           → Envoie une demande d\'ami');
+  console.log('  GET  /api/friend-requests/received/:userId → Récupère les demandes reçues');
+  console.log('  GET  /api/friend-requests/sent/:userId  → Récupère les demandes envoyées');
+  console.log('  POST /api/friend-requests/accept        → Accepte une demande d\'ami');
+  console.log('  POST /api/friend-requests/reject        → Rejette une demande d\'ami');
+  
+  console.log('\n💬 CHAT:');
+  console.log('  GET  /api/global-chat      → Récupère les messages du chat global');
+  console.log('  (Socket.IO)                → Chat en temps réel via WebSocket');
+  
+  console.log('\n📚 BLOG:');
+  console.log('  GET  /api/blog/articles    → Liste tous les articles du blog');
+  console.log('  GET  /api/blog/:slug       → Récupère un article par son slug (JSON)');
+  console.log('  GET  /blog/:slug           → Affiche un article du blog (HTML)');
+  
+  console.log('\n🧪 TEST:');
+  console.log('  GET  /api/test             → Route de test pour vérifier que les API fonctionnent');
+  
+  console.log('\n📋 ===========================================\n');
+}
+
 // === Démarrage du serveur ===
 async function startServer() {
   await loadUsers(); // Charger les utilisateurs AVANT de démarrer le serveur
@@ -2042,6 +2626,9 @@ async function startServer() {
     console.log(`📂 Assure-toi que les pages HTML soit dans /public`);
     console.log(`💬 Socket.IO activé pour le chat en temps réel`);
     console.log(`👥 ${users.length} utilisateurs chargés`);
+    
+    // Afficher toutes les routes disponibles
+    displayRoutes();
   });
 }
 
